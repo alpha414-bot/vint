@@ -1,16 +1,14 @@
 // Import the functions you need from the SDKs you need
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { getStorage } from "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCIdRVESOrRuy-MkOawsemsZqcYw5TvQSQ",
   authDomain: "vint-ecommerce.firebaseapp.com",
+  databaseURL: "https://vint-ecommerce-default-rtdb.firebaseio.com",
   projectId: "vint-ecommerce",
   storageBucket: "vint-ecommerce.appspot.com",
   messagingSenderId: "875924243691",
@@ -20,9 +18,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getDatabase(app);
+const firestore = getFirestore(app);
 const analytics = getAnalytics(app);
-const storage = getStorage(app);
 
-export { analytics, app, db, storage };
+export { analytics, app, auth, db, firestore };
 

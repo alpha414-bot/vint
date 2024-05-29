@@ -1,7 +1,22 @@
+import AwsImage from "@/Components/AwsImage";
 import ProductList from "@/Components/ProductList";
 import MainLayout from "@/Layouts/MainLayout";
+import { useProductsData } from "@/Services/Hook";
+import { auth } from "@/firebase-config";
+import { signInAnonymously } from "firebase/auth";
+import { useEffect } from "react";
 
 const Home = () => {
+  const { data } = useProductsData() as { data: ProductItemType[] };
+  useEffect(() => {
+    signInAnonymously(auth)
+      .then((data) => {
+        console.log("user is sign in", data);
+      })
+      .catch(() => {
+        console.log("throw an error page");
+      });
+  }, []);
   return (
     <MainLayout
       title="Vint - Gadget Enterprise"
@@ -22,39 +37,30 @@ const Home = () => {
             </p>
           </div>
           <div className="absolute z-30 right-0">
-            <img
-              src="/hero.svg"
-              alt="hero laptop image"
-              className="w-full h-[30rem]"
-            />
+            <AwsImage path="hero.svg" className="w-full h-[30rem]" />
           </div>
         </div>
         <hr />
         <div>
           <p className="text-lg font-medium">Best Selling Products</p>
           <div className="mt-4">
-            <ProductList
-              products={[
-                {
-                  name: "Dell Latitude",
-                  description: "Nothing",
-                },
-                {
-                  name: "HP 456",
-                  description:
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur harum expedita exercitationem rerum architecto aspernatur nulla deserunt. Optio eum, numquam sit quidem quasi ipsa, sapiente cum quod sequi repellat dolor?",
-                },
-                {
-                  name: "HP 456",
-                  description: "Nothing",
-                },
-              ]}
-            />
+            {/* {JSON.str} */}
+            <ProductList products={data || []} />
           </div>
         </div>
+        {/* <Button
+          onClick={() =>
+            addCollectionDoc("Products", DummyData).then((data) => {
+              console.log("data is added", data);
+            })
+          }
+        >
+          Add product data
+        </Button> */}
         <hr />
         <div>
           <p className="text-lg font-medium">You Might Like This</p>
+          <div className="mt-4"></div>
         </div>
       </div>
     </MainLayout>

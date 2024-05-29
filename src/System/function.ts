@@ -19,6 +19,174 @@ export const getErrorMessageViaStatus = (error: RouteErrorInterface) => {
       };
   }
 };
+/**
+ * Function to convert value to human readable output
+ *
+ * @param value the number to convert valid displayable price
+ * @returns string
+ */
+export const price = (
+  value: any,
+  style: "currency" | "decimal" | "percent" | "unit" = "currency",
+  minimumFractionDigits: number = 2,
+  maximumFractionDigits: number = 2
+): string => {
+  let format = new Intl.NumberFormat("en-US", {
+    style: style,
+    currency: "USD",
+    minimumFractionDigits: minimumFractionDigits,
+    maximumFractionDigits: maximumFractionDigits,
+  }).format(value);
+  return isNaN(value) ? "0" : format;
+};
+
+/**
+ *
+ * Percentage calculation and refixing...
+ *
+ * @param value the actual value of number undergoing calculation
+ * @param percentage the percentage of calculation
+ * @param operation the type of operation being done in percentage calculation either substraction or addition
+ * @returns number
+ */
+export const priceInPerct = (
+  value: number,
+  percentage: number,
+  operation: "-" | "+"
+) => {
+  let percentagePrice = (percentage / 100) * value;
+  switch (operation) {
+    case "+":
+      return (value + percentagePrice).toFixed(2);
+    case "-":
+      return (value - percentagePrice).toFixed(2);
+    default:
+      return value - percentagePrice;
+  }
+};
+
+/**
+ * react query keys for identifying queries
+ */
+export const keys = {
+  product_data: (product_id: string) => ["product_data", product_id || "all"],
+  amazon_media: (key: string) => ["image_gallery_from_amazon", key],
+};
+
+export interface ProductItemInterface {
+  title: string;
+  price: number;
+  rating: number;
+  total_rate: number;
+  discountPercentage?: number;
+  images: string[];
+}
+
+export const DummyData: ProductItemType[] = [
+  {
+    name: "Super Laptop 3000",
+    description: "A high-performance laptop with the latest features.",
+    category: "laptop",
+    sku: "LAP12345",
+    price: 1500,
+    salePrice: 1299.99,
+    available: true,
+    stock: 25,
+    variants: [
+      {
+        color: "Black",
+        size: "15 inch",
+        material: "Aluminum",
+        additionalPrice: 0,
+        stock: 10,
+      },
+      {
+        color: "Silver",
+        size: "13 inch",
+        material: "Aluminum",
+        additionalPrice: -50,
+        stock: 15,
+      },
+    ],
+    weight: 1.5,
+    dimensions: { length: 35, width: 25, height: 2, unit: "cm" },
+  },
+  {
+    name: "Smartphone Pro X",
+    description: "A flagship smartphone with cutting-edge technology.",
+    category: "mobile",
+    sku: "MOB67890",
+    price: 999.99,
+    salePrice: 899.99,
+    available: true,
+    stock: 100,
+    variants: [
+      { color: "Blue", size: "6.5 inch", stock: 50 },
+      { color: "Black", size: "6.5 inch", stock: 50 },
+    ],
+    createdAt: "2023-03-20T08:00:00Z",
+    updatedAt: "2024-05-10T10:00:00Z",
+    weight: 0.2,
+    dimensions: { length: 16, width: 7, height: 0.8, unit: "cm" },
+  },
+  {
+    name: "Wireless Earbuds",
+    description: "Compact and powerful wireless earbuds.",
+    category: "gadgets",
+    sku: "GAD54321",
+    price: 199.99,
+    available: true,
+    stock: 200,
+    variants: [
+      { color: "White", stock: 100 },
+      { color: "Black", stock: 100 },
+    ],
+    createdAt: "2023-05-01T08:00:00Z",
+    updatedAt: "2024-05-15T11:00:00Z",
+    weight: 0.05,
+    dimensions: { length: 2, width: 2, height: 3, unit: "cm" },
+  },
+  {
+    name: "Gaming Laptop XT",
+    description: "A laptop designed for gaming with high-end specifications.",
+    category: "laptop",
+    sku: "LAP09876",
+    price: 2000,
+    available: false,
+    stock: 0,
+    variants: [
+      {
+        color: "Red",
+        size: "17 inch",
+        material: "Carbon Fiber",
+        additionalPrice: 200,
+        stock: 0,
+      },
+    ],
+    createdAt: "2022-11-25T08:00:00Z",
+    updatedAt: "2023-12-10T12:00:00Z",
+    weight: 2.5,
+    dimensions: { length: 40, width: 28, height: 3, unit: "cm" },
+  },
+  {
+    name: "Fitness Tracker",
+    description:
+      "A sleek fitness tracker with multiple health monitoring features.",
+    category: "gadgets",
+    sku: "GAD65432",
+    price: 149.99,
+    available: true,
+    stock: 500,
+    variants: [
+      { color: "Black", size: "Standard", stock: 300 },
+      { color: "Pink", size: "Standard", stock: 200 },
+    ],
+    createdAt: "2023-09-10T08:00:00Z",
+    updatedAt: "2024-04-30T13:00:00Z",
+    weight: 0.1,
+    dimensions: { length: 22, width: 2, height: 0.5, unit: "cm" },
+  },
+];
 
 export const importScript = (resourceUrl: string) => {
   useEffect(() => {
@@ -30,4 +198,15 @@ export const importScript = (resourceUrl: string) => {
       document.body.removeChild(script);
     };
   }, [resourceUrl]);
+};
+
+/**
+ * function to check if a pass string is valid and absolute URL address
+ *
+ * @param url the string to cross check if it is valid url
+ * @returns boolean true/false
+ */
+export const isURL = (url: string): boolean => {
+  const pattern = new RegExp("^(?:[a-z]+:)?//", "i");
+  return pattern.test(url);
 };

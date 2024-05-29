@@ -1,19 +1,21 @@
 // Sample React Component for Navbar
 
+import { Link } from "react-router-dom";
 import Button from "./Button";
 
 function Navbar() {
   return (
     // Example of using TailwindCSS in the Navbar Component
     <nav className="flex items-center justify-between bg-gray-800 shadow-md w-full shadow-gray-700/50 px-10 py-3">
-      <div>
+      <Link to="/">
         <p>Logo is here</p>
-      </div>
+      </Link>
       <div className="flex items-center gap-4">
-        <ul className="flex space-x-4">
-          <li className="hover:bg-gray-700">Home</li>
-          <li className="hover:bg-gray-700">About</li>
-          <li className="hover:bg-gray-700">Contact</li>
+        <ul className="inline-flex items-center space-x-4">
+          <li className="hover:text-gray-100 font-medium">About</li>
+          <li>
+            <Link to="/login" className="underline underline-offset-4 tracking-wide decoration-dotted">Sign In/Sign Up</Link>
+          </li>
         </ul>
         <div>
           <Button

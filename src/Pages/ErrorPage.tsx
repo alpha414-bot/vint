@@ -9,13 +9,13 @@ const ErrorPage = () => {
     getErrorMessageViaStatus(error);
   return (
     <MainLayout title={statusText} description={message}>
-      <div className="container maincontent">
-        <div className="jumbotron overview owners backyard">
-          <h1>Whoops!</h1>
+      <div className="p-12">
+        <div className="space-y-9">
+          <h1 className="text-6xl font-extrabold">Whoops!</h1>
           <div className="row">
             <div className="col-md-12 manuals">
-              <h2>{statusText}</h2>
-              <p>{message}</p>
+              <h2 className="text-bold text-lg">{statusText}</h2>
+              <p className="text-sm">{message}</p>
             </div>
           </div>
         </div>

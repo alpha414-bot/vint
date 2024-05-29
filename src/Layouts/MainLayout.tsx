@@ -9,13 +9,15 @@ const MainLayout: React.FC<{
 }> = ({ children, title, description }) => {
   return (
     <>
-      <meta name="description" content={description} />
-      <title>{title}</title>
-      <Navbar />
-      <div id="page">
-        <div id="wrapper">{children}</div>
+      <div className="inline-flex flex-col justify-between w-full min-h-screen ">
+        <meta name="description" content={description} />
+        <title>{title}</title>
+        <Navbar />
+        <div id="page">
+          <div id="wrapper">{children}</div>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };
