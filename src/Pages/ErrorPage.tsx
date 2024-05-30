@@ -14,7 +14,7 @@ const ErrorPage = () => {
           <h1 className="text-6xl font-extrabold">Whoops!</h1>
           <div className="row">
             <div className="col-md-12 manuals">
-              <h2 className="text-bold text-lg">{statusText}</h2>
+              <h2 className="font-bold text-lg">{statusText}</h2>
               <p className="text-sm">{message}</p>
             </div>
           </div>

@@ -4,7 +4,12 @@ import Home from "@/Pages/Home";
 import { auth } from "@/firebase-config";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { createBrowserRouter, redirect, useLocation, useNavigate } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import {
+  createBrowserRouter,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 // Creating a higher-order component to wrap the router with scroll-to-top functionality
 const withScrollToTop = (routerConfig?: any) => {
@@ -17,23 +22,20 @@ const withScrollToTop = (routerConfig?: any) => {
 };
 
 // Implementing a middleware guard in your route component
-const ProtectedRoute = ({ children, middlewares }: ProtectedRouteProps) => {
-  const user = useMiddleware(middlewares || []);
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  middlewares,
+}) => {
+  const { user, loading } = useMiddleware(middlewares || []);
   const navigate = useNavigate();
-  const loading = true;
-  const middleware = false;
-  if (!loading) {
-    return (
-      <div>
-        Loading...
-      </div>
-    );
+  if (loading) {
+    return <div>Loading...</div>;
   }
   if (middlewares?.includes("guest")) {
-    if (user.user?.uid || user.user?.isAnonymous) {
-      // user is authenticated or user is anonymous
-      // redirect to home page
-      navigate("/alpha");
+    if (user?.uid && !user?.isAnonymous) {
+      // user is authenticated or user is not anonymous
+      // redirect to dashboard
+      navigate("/dashboard");
     }
   }
 
@@ -42,6 +44,7 @@ const ProtectedRoute = ({ children, middlewares }: ProtectedRouteProps) => {
 
 // The useMiddleware hook is used to access the middleware state
 export const useMiddleware = (middleware: MiddlewareItems[]) => {
+  const queryClient = useQueryClient();
   const [state, setState] = useState<{
     loading: boolean;
     user?: User;
@@ -63,6 +66,7 @@ export const useMiddleware = (middleware: MiddlewareItems[]) => {
             user: user,
             middleware: middleware,
           });
+          queryClient.setQueryData("auth_user", user);
           // ...
         } else {
           // User is signed out

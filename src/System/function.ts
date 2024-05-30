@@ -73,15 +73,6 @@ export const keys = {
   amazon_media: (key: string) => ["image_gallery_from_amazon", key],
 };
 
-export interface ProductItemInterface {
-  title: string;
-  price: number;
-  rating: number;
-  total_rate: number;
-  discountPercentage?: number;
-  images: string[];
-}
-
 export const DummyData: ProductItemType[] = [
   {
     name: "Super Laptop 3000",
@@ -210,3 +201,7 @@ export const isURL = (url: string): boolean => {
   const pattern = new RegExp("^(?:[a-z]+:)?//", "i");
   return pattern.test(url);
 };
+
+export const NumberPattern = /^[0-9]*$/;
+export const PasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+export const EmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

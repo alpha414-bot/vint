@@ -8,7 +8,7 @@ interface RouteErrorInterface {
 
 type MiddlewareItems = "admin" | "guest_admin" | "auth" | "guest";
 
-interface ProtectedRouteProps {
+interface ProtectedRouteProps extends HtmlHTMLAttributes<HTMLDivElement> {
   children?: ReactNode | undefined;
   middlewares?: MiddlewareItems[];
 }

@@ -14,7 +14,7 @@ const AwsImage: React.FC<ImagePropsType> = ({ path, className }) => {
       {(imageIsLoading && (
         <div className={`${className} flex items-center justify-center`}>
           <Spinner
-            text="Loading..."
+            text="loading..."
             className="fill-palma-700 w-10 h-10"
           />
         </div>
@@ -27,7 +27,7 @@ const AwsImage: React.FC<ImagePropsType> = ({ path, className }) => {
                   className={`${className} flex items-center justify-center`}
                 >
                   <Spinner
-                    text="Image is being fetched.."
+                    text="loading.."
                     className="fill-palma-700 w-10 h-10"
                   />
                 </div>
@@ -56,7 +56,7 @@ const AwsImage: React.FC<ImagePropsType> = ({ path, className }) => {
               />
             </svg>
             <p className="font-medium text-white underline underline-offset-2 decoration-dotted tracking-wide">
-              Error on loading image
+              Error. Contact administrator
             </p>
           </div>
         )}

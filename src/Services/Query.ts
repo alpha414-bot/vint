@@ -1,14 +1,18 @@
 import { isURL } from "@/System/function";
 import { firestore } from "@/firebase-config";
 import { getUrl } from "aws-amplify/storage";
+import { User } from "firebase/auth";
 import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 export const getProductData = (listener: any, product_id?: any) =>
@@ -60,6 +64,71 @@ export const addCollectionDoc = (
         addDoc(ProductCollection, DataObject).then(resolve).catch(reject);
       });
       // batch.commit().then(resolve).catch(reject);
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+type CartProductItem = { products: { productID: string; quantity: number }[] };
+export const addToCartQuery = (
+  user: User | null | undefined,
+  product: ProductItemType
+) =>
+  new Promise((resolve, reject) => {
+    try {
+      if (user?.uid) {
+        // there is an authenticated user
+        const CartCollection = collection(firestore, "Carts");
+        const UserCartDoc = doc(CartCollection, user.uid);
+        getDoc(UserCartDoc).then((UserProductItems) => {
+          if (UserProductItems.exists()) {
+            // the user has made use of "Add to cart"
+            const UserCartProducts = UserProductItems.data() as CartProductItem;
+            const UpdateInUserProducts = UserCartProducts.products.map(
+              (item) => {
+                // check if about to be added products is already there
+                return item.productID === product.id
+                  ? {
+                      ...item,
+                      quantity: item.quantity + 1,
+                      updatedAt: new Date(),
+                    }
+                  : item;
+              }
+            ); // this might not be necessary
+            const NewUserProducts = UserCartProducts.products.some(
+              (item) => item.productID === product.id
+            )
+              ? UpdateInUserProducts // no new products, work still on old products added
+              : [
+                  ...UpdateInUserProducts,
+                  {
+                    productID: product.id,
+                    quantity: 1,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  },
+                ];
+            updateDoc(UserCartDoc, { products: NewUserProducts })
+              .then(resolve)
+              .catch(reject);
+          } else {
+            setDoc(UserCartDoc, {
+              products: [
+                {
+                  productID: product.id,
+                  quantity: 1,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                },
+              ],
+            })
+              .then(resolve)
+              .catch(reject);
+          }
+        });
+        // setDoc(doc(firestore, "Carts", user?.uid), ...);
+      }
     } catch (error) {
       reject(error);
     }
