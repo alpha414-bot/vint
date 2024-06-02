@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className="px-10 pt-8 pb-2">
+    <div className="px-6 pt-8 pb-2 md:px-10">
       <div>Logo is here</div>
       <p className="text-xs font-normal">
         Power Up Your Life: The Latest in Laptops, Gadgets, and Software

@@ -23,6 +23,16 @@ type QueryUseType = {
   isLoading: boolean;
 };
 
+type CartProductItem = {
+  products: {
+    productID: string;
+    quantity: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    metadata?: ProductItemType
+  }[];
+};
+
 interface ProductItemType {
   id?: string;
   name: string;
@@ -79,4 +89,15 @@ interface ProductReviewType {
 interface ProductSpecificationType {
   specName: string;
   specValue: string;
+}
+
+interface UserDataLoaderInterface {
+  orders?: any;
+  carts?: any;
+  profile?: any;
+}
+
+interface ToastWrapperProps {
+  title?: any;
+  text: any;
 }

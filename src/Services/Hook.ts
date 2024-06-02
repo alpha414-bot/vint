@@ -1,28 +1,36 @@
 import { keys } from "@/System/function";
+import { AuthUserType } from "@/Types/Auth";
+import { auth } from "@/firebase-config";
+import { notify } from "@/notify";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { useCallback } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { getAwsMedia, getProductData } from "./Query";
-import { User, onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase-config";
+import { getAwsMedia, getCartProducts, getProductData } from "./Query";
 
 export const useAuthUser = () => {
-  const queryClient = useQueryClient();
-  // snapshot: realtime update
-  onAuthStateChanged(auth, (user) => {
-    queryClient.setQueryData("auth_user", user);
-  });
   return useQuery(
     "auth_user",
-    (): Promise<User | null> =>
+    (): Promise<AuthUserType> =>
       new Promise((resolve, reject) =>
         onAuthStateChanged(auth, (user) => {
           try {
+            if (user?.uid) {
+              // if user is not signed, sign in user anonymously
+              signInAnonymously(auth)
+                .then((new_user) => {
+                  resolve(new_user.user);
+                })
+                .catch((error) => {
+                  notify.error({
+                    title: "Error",
+                    text: "[Error %gBF]: Authentication instance unmet.<br/> Contact administrator or try to login",
+                  });
+                  reject(error);
+                });
+            }
             resolve(user);
           } catch (error) {
-            reject({
-              error: true,
-              message: `Error when retrieving authenticated user: ${error}`,
-            });
+            reject(error);
           }
         })
       )
@@ -45,10 +53,25 @@ export const useProductsData = (product_id?: any) => {
 
 export const useCartProducts = () => {
   const queryClient = useQueryClient();
-  onAuthStateChanged(auth, (user) => {
-    queryClient.setQueryData("auth_user", user);
+  const AuthUser: AuthUserType = queryClient.getQueryData("auth_user");
 
-  });
+  const snapshotListener = useCallback(
+    (data: any) => {
+      console.log(data);
+      queryClient.setQueryData(keys.cart_data(AuthUser?.uid), data);
+      return data;
+    },
+    [AuthUser]
+  );
+
+  return useQuery(
+    keys.cart_data(AuthUser?.uid),
+    (): Promise<ProductItemType[]> =>
+      getCartProducts(snapshotListener, AuthUser),
+    {
+      initialData: []
+    }
+  );
 };
 
 export const useGetImage = (key: any) => {

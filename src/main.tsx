@@ -1,13 +1,15 @@
 import { Amplify } from "aws-amplify";
-import React, { HtmlHTMLAttributes, useEffect, useRef } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { RouterProvider, useLocation } from "react-router-dom";
-import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
+import { RouterProvider } from "react-router-dom";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Assets/index.css";
 import router from "./Services/router";
 import amplifyconfig from "./amplifyconfiguration.json";
+import { AppProvider } from "./Services/Module";
 
 const Client = new QueryClient({
   defaultOptions: { queries: { refetchInterval: false, staleTime: Infinity } },
@@ -19,9 +21,24 @@ Amplify.configure(amplifyconfig);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={Client}>
-      <RouterProvider router={router} />
-      {/*<ReactQueryDevtools />*/}
-      <ReactQueryDevtools />
+      <AppProvider>
+        <ToastContainer
+          position="top-left"
+          autoClose={6000}
+          limit={3}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Slide}
+        />
+        <RouterProvider router={router} />
+        <ReactQueryDevtools />
+      </AppProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

@@ -3,11 +3,10 @@ import { Control, Controller, RegisterOptions } from "react-hook-form";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  type?: "text" | "password" | "email" | "tel"; // Add other types if needed
   className?: string;
   isFocused?: boolean;
   control: Control;
-  rules: RegisterOptions;
+  rules?: RegisterOptions;
 }
 
 const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
@@ -19,6 +18,8 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
     control,
     name,
     rules,
+    defaultValue,
+    ...props
   },
   ref: any
 ) {
@@ -32,6 +33,9 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
     if (isFocused && input?.current) {
       input?.current.focus();
     }
+    if (defaultValue) {
+      setFocus(true);
+    }
   }, []);
 
   return (
@@ -41,6 +45,7 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
         name={name}
         control={control}
         rules={rules}
+        defaultValue={defaultValue}
         render={({
           field: { value, onChange, onBlur },
           fieldState: { error },
@@ -65,7 +70,9 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
                 type={type}
                 className={`block w-full ${
                   FieldValue ? "pt-3.5 pb-1" : "py-2"
-                } px-3 pr-10 mb-0.5 bg-white text-gray-600 placeholder:text-gray-400 text-lg placeholder:text-base border border-gray-300 rounded-md shadow-sm focus:pt-3.5 focus:pb-1 focus:outline-none focus:ring-1 focus:ring-palma-700 focus:border-palma-700 ${className}`}
+                } ${
+                  placeholder ? "focus:pt-3.5 focus:pb-1" : "focus:py-2"
+                } px-3 pr-10 mb-0.5 bg-white text-gray-600 placeholder:text-gray-400 text-lg placeholder:text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-palma-700 focus:border-palma-700 disabled:bg-gray-300/90 ${className}`}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 placeholder={
@@ -74,6 +81,8 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
                     : undefined
                 }
                 onChange={onChange}
+                defaultValue={defaultValue}
+                {...props}
               />
               {error && (
                 <span
@@ -87,14 +96,16 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
           );
         }}
       />
-      <label
-        htmlFor={name}
-        className={`absolute mb-0 text-gray-700 bg-white pl-4 pr-6 py-0.5 rounded-md origin-left transform scale-75 -top-4 left-1.5 transition-all duration-400 text-lg font-semibold shadow-md ${
-          focus ? "opacity-100 -top-4" : "top-8 opacity-0"
-        }`}
-      >
-        {placeholder} {rules?.required ? "(*)" : ""}
-      </label>
+      {placeholder && (
+        <label
+          htmlFor={name}
+          className={`absolute mb-0 text-gray-700 bg-white pl-4 pr-6 py-0.5 rounded-md origin-left transform scale-75 -top-4 left-1.5 transition-all duration-400 text-lg font-semibold shadow-md ${
+            focus ? "opacity-100 -top-4" : "top-8 opacity-0"
+          }`}
+        >
+          {placeholder} {rules?.required ? "(*)" : ""}
+        </label>
+      )}
     </div>
   );
 });

@@ -41,7 +41,7 @@ const AwsImage: React.FC<ImagePropsType> = ({ path, className }) => {
             className={`${className} flex flex-col items-center justify-center gap-3`}
           >
             <svg
-              className="w-20 h-20 text-rose-500"
+              className="w-20 h-20 text-rose-700"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

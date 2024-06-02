@@ -1,15 +1,18 @@
 // Sample React Component for Navbar
 
-import { Link } from "react-router-dom";
-import Button from "./Button";
+import { useCartProducts } from "@/Services/Hook";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [showSideBarMenu, setShowSideBarMenu] = useState<boolean>(false);
+  const { data: CartProducts } = useCartProducts() as {
+    data: ProductItemType[];
+  };
   return (
     // Example of using TailwindCSS in the Navbar Component
     <>
-      <nav className="flex items-center justify-between bg-gray-800 shadow-md w-full shadow-gray-700/50 px-4 py-2 md:px-10 md:py-3">
+      <nav className="sticky top-0 z-50 flex items-center justify-between bg-gray-800 shadow-md w-full shadow-gray-700/50 px-3 py-1 md:px-10 md:py-3">
         <Link to="/">
           <p>Logo is here</p>
         </Link>
@@ -17,7 +20,7 @@ function Navbar() {
           <ul className="hidden md:inline-flex items-center space-x-4">
             <li>
               <Link
-                to="/about"
+                to="/user/orders"
                 className="underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 font-medium"
               >
                 About
@@ -32,14 +35,14 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-1 md:gap-x-2">
             {/* Cart viewer */}
-            <Button
-              custom={true}
+            <Link
+              to="/user/carts"
               className="relative inline-flex items-center px-1 py-1 rounded-full"
             >
               <svg
-                className="w-10 h-10 md:w-8 md:h-8 text-white"
+                className="w-8 h-8 md:w-8 md:h-8 text-white"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -53,17 +56,17 @@ function Navbar() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="inline-flex items-center justify-center w-4 h-4 ms-2 absolute top-0 right-0 text-xs font-medium text-gray-800 bg-white rounded-full">
-                2
+              <span className="inline-flex items-center justify-center w-4 h-4 ms-2 absolute top-0 right-0 text-xs font-bold text-rose-700 bg-white rounded-full">
+                {CartProducts?.length}
               </span>
-            </Button>
+            </Link>
             {/* Mobile: Toggle side bar menu */}
             <button
               className="block md:hidden"
               onClick={() => setShowSideBarMenu(!showSideBarMenu)}
             >
               <svg
-                className="w-12 h-12 text-rose-700"
+                className="w-9 h-9 text-rose-700"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -83,13 +86,13 @@ function Navbar() {
         </div>
       </nav>
       <div
-        className={`fixed top-0 right-0 bg-gray-700 bg-opacity-95 w-2/3 h-screen z-50 md:hidden ${
+        className={`fixed top-0 right-0 bg-gray-800/95 shadow-lg shadow-gray-700 bg-opacity-95 w-2/3 h-screen z-50 sm:w-2/5 md:hidden ${
           showSideBarMenu ? "block" : "hidden"
         }`}
       >
         <div className="flex items-center justify-end p-4">
           {/* Close Side bar Menu */}
-          <button className="group" onClick={()=>setShowSideBarMenu(false)}>
+          <button className="group" onClick={() => setShowSideBarMenu(false)}>
             <svg
               className="w-10 h-10 text-white group-hover:text-rose-700"
               aria-hidden="true"
@@ -110,8 +113,8 @@ function Navbar() {
         <ul className="flex flex-col items-start gap-7 mt-4">
           <li>
             <Link
-              to="/about"
-              className="px-4 underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 text-xl font-medium"
+              to="/user/orders"
+              className="px-8 underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 text-xl font-medium"
             >
               About
             </Link>
@@ -119,7 +122,7 @@ function Navbar() {
           <li>
             <Link
               to="/login"
-              className="px-4 underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 text-xl font-medium"
+              className="px-8 underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 text-xl font-medium"
             >
               Sign In/Sign Up
             </Link>

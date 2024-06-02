@@ -1,15 +1,23 @@
+import Button from "@/Components/Button";
+import MainLayout from "@/Layouts/MainLayout";
 import AuthPage from "@/Pages/AuthPage";
+import Dashboard from "@/Pages/Dashboard";
 import ErrorPage from "@/Pages/ErrorPage";
 import Home from "@/Pages/Home";
-import { auth } from "@/firebase-config";
-import { User, onAuthStateChanged } from "firebase/auth";
+import Carts from "@/Pages/Subpages/Carts";
+import Orders from "@/Pages/Subpages/Orders";
+import Profile from "@/Pages/Subpages/Profile";
+import { DummyData } from "@/System/function";
+import { AuthUserType } from "@/Types/Auth";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useQueryClient } from "react-query";
 import {
+  RouteObject,
   createBrowserRouter,
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { useAuthUser } from "./Hook";
+import { addCollectionDoc, getUserDataLoader } from "./Query";
 
 // Creating a higher-order component to wrap the router with scroll-to-top functionality
 const withScrollToTop = (routerConfig?: any) => {
@@ -31,11 +39,20 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (loading) {
     return <div>Loading...</div>;
   }
-  if (middlewares?.includes("guest")) {
-    if (user?.uid && !user?.isAnonymous) {
-      // user is authenticated or user is not anonymous
-      // redirect to dashboard
-      navigate("/dashboard");
+  if (middlewares && middlewares?.length > 0) {
+    if (middlewares?.includes("guest")) {
+      if (user?.uid || user?.isAnonymous) {
+        // user is authenticated or user is not anonymous
+        // redirect to dashboard
+        navigate("/user/orders");
+      }
+    }
+
+    if (middlewares?.includes("auth")) {
+      if (!(user?.uid || user?.isAnonymous)) {
+        // user is not authenticated
+        // navigate("/login");
+      }
     }
   }
 
@@ -44,10 +61,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 // The useMiddleware hook is used to access the middleware state
 export const useMiddleware = (middleware: MiddlewareItems[]) => {
-  const queryClient = useQueryClient();
+  const { data: user } = useAuthUser();
   const [state, setState] = useState<{
     loading: boolean;
-    user?: User;
+    user?: AuthUserType;
     middleware: MiddlewareItems[];
   }>({
     loading: true,
@@ -57,28 +74,19 @@ export const useMiddleware = (middleware: MiddlewareItems[]) => {
     // Step 3: Perform your middleware tasks here, e.g., checking authentication status
     const fetchUser = async () => {
       // Fetch user data from an API
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/auth.user
-          setState({
-            loading: false,
-            user: user,
-            middleware: middleware,
-          });
-          queryClient.setQueryData("auth_user", user);
-          // ...
-        } else {
-          // User is signed out
-          setState({
-            loading: false,
-            user: undefined,
-            middleware: middleware,
-          });
-        }
-      });
-
-      // Update the state
+      if (user) {
+        setState({
+          loading: false,
+          user: user,
+          middleware: middleware,
+        });
+      } else {
+        setState({
+          loading: false,
+          user: undefined,
+          middleware: middleware,
+        });
+      }
     };
 
     fetchUser();
@@ -97,7 +105,7 @@ const ScrollToTop = ({ children }: { children?: any }) => {
 };
 
 // all pages route
-const routes = [
+const routes: RouteObject[] = [
   {
     path: "/",
     element: (
@@ -105,8 +113,31 @@ const routes = [
         <Home />
       </ProtectedRoute>
     ),
-    loader: () => <p>create a spinner</p>,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/user",
+    element: (
+      <ProtectedRoute middlewares={["auth"]}>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+    loader: getUserDataLoader,
+    children: [
+      {
+        path: "orders",
+        element: <Orders />,
+      },
+      {
+        path: "carts",
+        element: <Carts />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -115,10 +146,29 @@ const routes = [
         <AuthPage />
       </ProtectedRoute>
     ),
-    loader: () => <p>create a spinner</p>,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/help",
+    element: (
+      <MainLayout
+        title="Help"
+        description="Reach to us for help concerning our site"
+      >
+        <Button
+          onClick={() =>
+            addCollectionDoc("Products", DummyData).then((data) => {
+              console.log("data is added", data);
+            })
+          }
+        >
+          Add product data
+        </Button>
+      </MainLayout>
+    ),
   },
 ];
 
+// const router = createBrowserRouter(routes);
 const router = createBrowserRouter(withScrollToTop(routes));
 export default router;

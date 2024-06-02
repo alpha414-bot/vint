@@ -69,7 +69,12 @@ export const priceInPerct = (
  * react query keys for identifying queries
  */
 export const keys = {
-  product_data: (product_id: string) => ["product_data", product_id || "all"],
+  product_data: (product_id?: string) => ["product_data", product_id || "all"],
+  cart_data: (user_id?: string, cart_id?: string) => [
+    "cart_data",
+    user_id || "no_user",
+    cart_id || "all",
+  ],
   amazon_media: (key: string) => ["image_gallery_from_amazon", key],
 };
 

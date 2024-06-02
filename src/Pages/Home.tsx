@@ -2,29 +2,31 @@ import AwsImage from "@/Components/AwsImage";
 import ProductList from "@/Components/ProductList";
 import MainLayout from "@/Layouts/MainLayout";
 import { useProductsData } from "@/Services/Hook";
-import { useEffect } from "react";
 
 const Home = () => {
   const { data } = useProductsData() as { data: ProductItemType[] };
-  useEffect(() => {
-    // onAuthStateChanged(auth, (user) => {
-    //   if (!user?.uid) {
-    //     signInAnonymously(auth)
-    //       .then((data) => {
-    //         console.log("user is sign in", data.user);
-    //       })
-    //       .catch(() => {
-    //         console.log("throw an error page");
-    //       });
-    //   }
-    //   console.log(user)
-    // });
-  }, []);
+  // const [vantaEffect, setVantaEffect] = useState<{ destroy: any } | null>(null);
+  // const myRef = useRef(null);
+  // useEffect(() => {
+  //   if (!vantaEffect) {
+  //     setVantaEffect(
+  //       RIPPLE({
+  //         el: myRef.current,
+  //         THREE,
+  //         mouseControl: false,
+  //       })
+  //     );
+  //   }
+  //   return () => {
+  //     if (vantaEffect) vantaEffect?.destroy();
+  //   };
+  // }, [vantaEffect]);
   return (
     <MainLayout
       title="Vint - Gadget Enterprise"
       description="The enterprise with the latest in laptops, mobile and gadgets"
     >
+      {/* {JSON.stringify(CartProducts)} */}
       <div className="px-5 py-10 space-y-5 md:px-10">
         <div className="relative flex items-center justify-between py-10 gap-8 md:py-28">
           <div className="relative z-50 space-y-2 w-full md:w-3/4">
@@ -34,6 +36,7 @@ const Home = () => {
                 Mobile . Gadgets .
               </p>
             </div>
+
             <div className="block md:hidden ml-2 space-y-6">
               <p className="text-5xl font-extrabold whitespace-nowrap">
                 Laptop{" "}
@@ -63,15 +66,6 @@ const Home = () => {
             <ProductList products={data || []} />
           </div>
         </div>
-        {/* <Button
-          onClick={() =>
-            addCollectionDoc("Products", DummyData).then((data) => {
-              console.log("data is added", data);
-            })
-          }
-        >
-          Add product data
-        </Button> */}
         <hr />
         <div>
           <p className="text-lg font-medium">You Might Like This</p>

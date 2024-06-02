@@ -4,7 +4,7 @@ import ProductItem from "./ProductItem";
 
 const ProductList: React.FC<ProductListInterface> = ({ products }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.map((product, index) => (
         <ProductItem key={product.id || index} product={product} />
       ))}

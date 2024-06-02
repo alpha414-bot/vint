@@ -22,9 +22,10 @@
 
     /* Path aliasing */
     "baseUrl": ".",
+    "typeRoots": ["./src/types"],
     "paths": {
       "@/*": ["src/*"],
-      "@services/*": ["src/services/*"],
+      "@services/*": ["src/services/*"]
     }
   },
   "include": ["src/**/*.d.ts", "src/**/*.tsx", "src/**/*.ts"],

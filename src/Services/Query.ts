@@ -1,7 +1,9 @@
 import { isURL } from "@/System/function";
-import { firestore } from "@/firebase-config";
+import { AuthUserType } from "@/Types/Auth";
+import { auth, firestore } from "@/firebase-config";
+import { notify } from "@/notify";
 import { getUrl } from "aws-amplify/storage";
-import { User } from "firebase/auth";
+import { signInAnonymously } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -30,7 +32,15 @@ export const getProductData = (listener: any, product_id?: any) =>
               async (singleSnap) => {
                 resolve(listener(singleSnap.data()));
               },
-              reject
+              (error) => {
+                notify.error({
+                  title: "Error",
+                  text: `[Error #BtG]: ON_SNAPSHOT_ERROR: ${JSON.stringify(
+                    error
+                  )}. <br/>Contact administrator.`,
+                });
+                reject(error);
+              }
             );
           } else {
             // return all the products in the ProductCollection
@@ -39,16 +49,57 @@ export const getProductData = (listener: any, product_id?: any) =>
             );
           }
         },
-        reject
+        (error) => {
+          // snapshot error
+          notify.error({
+            title: "Error",
+            text: `[Error ^doon]: SNAPSHOT_ERROR_WHILE_RETRIEVING_PRODUCTS: ${JSON.stringify(
+              error
+            )}. <br/>Contact administrator`,
+          });
+          reject(error);
+        }
       );
     } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #BnH]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
       reject(error);
     }
   });
 
+export const signInUserIfNotSign = (listener: any) =>
+  new Promise((resolve, reject) => {
+    signInAnonymously(auth)
+      .then((new_user) => {
+        if (!new_user.user.uid) {
+          // failed to authenticate
+          notify.error({
+            title: "Error",
+            text: "[Error #ProblemSignInA]: There was a problem with authorization instance.<br/> Contact administrator or try to login",
+          });
+          reject("No authorized user found.");
+        } else {
+          resolve(new_user);
+          return listener();
+        }
+      })
+      .catch((error) => {
+        notify.error({
+          title: "Error",
+          text: "[Error #ProblemSignInB]: There was a problem with authorization instance.<br/> Contact administrator or try to login",
+        });
+        reject(error);
+      });
+  });
+
 export const addCollectionDoc = (
   CollectionName: any,
-  data: ProductItemType[]
+  data: ProductItemType[],
+  successMessage?: string
 ) =>
   new Promise((resolve, reject) => {
     try {
@@ -61,19 +112,33 @@ export const addCollectionDoc = (
             updatedAt: new Date(),
           },
         };
-        addDoc(ProductCollection, DataObject).then(resolve).catch(reject);
+        addDoc(ProductCollection, DataObject)
+          .then((data) => {
+            notify.success({
+              text: successMessage || `${CollectionName} successfully added.`,
+            });
+            resolve(data);
+          })
+          .catch((error) => {
+            notify.error({
+              title: "Error",
+              text: "[Error &fjH]: Error while adding doc to collection. <br/>Contact administrator",
+            });
+            reject(error);
+          });
       });
-      // batch.commit().then(resolve).catch(reject);
     } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #DnG]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
       reject(error);
     }
   });
 
-type CartProductItem = { products: { productID: string; quantity: number }[] };
-export const addToCartQuery = (
-  user: User | null | undefined,
-  product: ProductItemType
-) =>
+export const addToCartQuery = (user: AuthUserType, product: ProductItemType) =>
   new Promise((resolve, reject) => {
     try {
       if (user?.uid) {
@@ -110,8 +175,21 @@ export const addToCartQuery = (
                   },
                 ];
             updateDoc(UserCartDoc, { products: NewUserProducts })
-              .then(resolve)
-              .catch(reject);
+              .then((data) => {
+                notify.success({
+                  text: `<strong class="underline underline-offset-2 decoration-dotted">${product.name}</strong> added to cart.`,
+                });
+                resolve(data);
+              })
+              .catch((error) => {
+                notify.error({
+                  title: "Error",
+                  text: `[Error @Kmop]: Error while configuring products ${JSON.stringify(
+                    error
+                  )}.<br/> Contact administrator`,
+                });
+                reject(error);
+              });
           } else {
             setDoc(UserCartDoc, {
               products: [
@@ -123,13 +201,70 @@ export const addToCartQuery = (
                 },
               ],
             })
-              .then(resolve)
-              .catch(reject);
+              .then((data) => {
+                notify.success({
+                  text: `<strong class="underline underline-offset-2 decoration-dotted">${product.name}</strong> added to cart.`,
+                });
+                resolve(data);
+              })
+              .catch((error) => {
+                notify.error({
+                  title: "Error",
+                  text: `[Error /&GNm]: ${JSON.stringify(
+                    error
+                  )}. <br/> Contact administrator`,
+                });
+                reject(error);
+              });
           }
         });
-        // setDoc(doc(firestore, "Carts", user?.uid), ...);
+      } else {
+        notify.error({
+          title: "Error",
+          text: "[Error #ProblemSignInc]: There was a problem with authorization instance.<br/> Contact administrator or try to login",
+        });
       }
     } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #Capi]: try/catch: ${JSON.stringify(
+          error
+        )}.<br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const getCartProducts = (
+  listener: any,
+  User?: AuthUserType
+): Promise<ProductItemType[]> =>
+  new Promise((resolve, reject) => {
+    try {
+      const CartCollection = collection(firestore, "Carts");
+      // const q = query(CartCollection, orderBy("createdAt"));
+      if (User?.uid) {
+        const UserDocs = doc(CartCollection, User?.uid);
+        onSnapshot(
+          UserDocs,
+          async (snap) => {
+            const DocData = snap.data() as CartProductItem;
+            const DocDataProducts = DocData.products;
+            resolve(listener(DocDataProducts || []));
+          },
+          (error) => {
+            notify.error({
+              text: `[Error #DbG]: Problem fetching cart collection. ${error}. <br/> Contact Administrator`,
+            });
+          }
+        );
+      } else {
+        resolve([]);
+      }
+    } catch (error) {
+      notify.error({
+        text: `[Error #bhs]: Try/catch. <br/> Contact Administrator.`,
+      });
       reject(error);
     }
   });
@@ -201,6 +336,18 @@ export const getAwsMedia = (key: any) =>
           resolve(result.url.href);
           return result.url.href;
         })
-        .catch(reject);
+        .catch((error) => {
+          // notify.error({
+          //   text: `[Error xBaA]: Failed to connect to aws.<br/> Contact administrator`,
+          // });
+          reject(error);
+        });
     }
   });
+
+export const getUserDataLoader = async (): Promise<UserDataLoaderInterface> => {
+  // fetching data from firebase and etc...
+  const orders: any = await getProductData((data: any) => data);
+  // const orders: any = await getAwsMedia("/public/hero.svg");
+  return { orders: orders, carts: "my-carts", profile: "my-profile" };
+};
