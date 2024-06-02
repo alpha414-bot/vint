@@ -15,6 +15,7 @@ interface ProtectedRouteProps extends HtmlHTMLAttributes<HTMLDivElement> {
 
 interface ProductListInterface {
   products: ProductItemType[];
+  type?: "carts_listing" | "order_listing" | "product_listing";
 }
 
 type QueryUseType = {
@@ -23,14 +24,16 @@ type QueryUseType = {
   isLoading: boolean;
 };
 
+type CartMetaItem = {
+  productID: string;
+  quantity: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  metadata?: ProductItemType;
+};
+
 type CartProductItem = {
-  products: {
-    productID: string;
-    quantity: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-    metadata?: ProductItemType
-  }[];
+  products: CartMetaItem[];
 };
 
 interface ProductItemType {
@@ -51,6 +54,7 @@ interface ProductItemType {
   // createdAt?: Date;
   // updatedAt?: Date;
   weight?: number;
+  cartQuantity?: number;
   dimensions?: ProductDimensionsType;
   reviews?: ProductReviewType[];
   specifications?: ProductSpecificationType[];

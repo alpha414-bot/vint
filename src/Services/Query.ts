@@ -30,7 +30,7 @@ export const getProductData = (listener: any, product_id?: any) =>
             onSnapshot(
               ProductListDocs,
               async (singleSnap) => {
-                resolve(listener(singleSnap.data()));
+                resolve(listener({ ...singleSnap.data(), id: product_id }));
               },
               (error) => {
                 notify.error({
@@ -146,10 +146,10 @@ export const addToCartQuery = (user: AuthUserType, product: ProductItemType) =>
         const CartCollection = collection(firestore, "Carts");
         const UserCartDoc = doc(CartCollection, user.uid);
         getDoc(UserCartDoc).then((UserProductItems) => {
-          if (UserProductItems.exists()) {
-            // the user has made use of "Add to cart"
-            const UserCartProducts = UserProductItems.data() as CartProductItem;
-            const UpdateInUserProducts = UserCartProducts.products.map(
+          const UserCartProducts = UserProductItems.data() as CartProductItem;
+          if (UserProductItems.exists() && UserCartProducts.products) {
+            // the user has made use of "Add to cart" and there is 'products'
+            const UpdateInUserProducts = UserCartProducts?.products.map(
               (item) => {
                 // check if about to be added products is already there
                 return item.productID === product.id
@@ -161,7 +161,7 @@ export const addToCartQuery = (user: AuthUserType, product: ProductItemType) =>
                   : item;
               }
             ); // this might not be necessary
-            const NewUserProducts = UserCartProducts.products.some(
+            const NewUserProducts = UserCartProducts?.products.some(
               (item) => item.productID === product.id
             )
               ? UpdateInUserProducts // no new products, work still on old products added
@@ -235,14 +235,90 @@ export const addToCartQuery = (user: AuthUserType, product: ProductItemType) =>
     }
   });
 
+export const removeCartProduct = (
+  user: AuthUserType,
+  product: ProductItemType
+) =>
+  new Promise((resolve, reject) => {
+    const CartCollection = collection(firestore, "Carts");
+    const UserCartDoc = doc(CartCollection, user?.uid);
+    getDoc(UserCartDoc).then((UserProductItems) => {
+      const UserCartProducts = UserProductItems.data() as CartProductItem;
+      if (UserProductItems.exists() && UserCartProducts.products) {
+        const RemainingProductAfterDel = UserCartProducts?.products.filter(
+          (item) => item.productID !== product?.id
+        );
+        updateDoc(UserCartDoc, { products: RemainingProductAfterDel })
+          .then((data) => {
+            notify.success({
+              text: `<strong class="underline underline-offset-2 decoration-dotted">${product.name}</strong> removed from cart.`,
+            });
+            resolve(data);
+          })
+          .catch((error) => {
+            notify.error({
+              title: "Error",
+              text: `[Error @Psnx]: Error while configuring products ${JSON.stringify(
+                error
+              )}.<br/> Contact administrator`,
+            });
+            reject(error);
+          });
+      }
+    });
+  });
+
+export const updateCartQuantity = (
+  user: AuthUserType,
+  product: ProductItemType,
+  quantity?: number,
+  operator?: "insert"
+) =>
+  new Promise((resolve, reject) => {
+    const CartCollection = collection(firestore, "Carts");
+    const UserCartDoc = doc(CartCollection, user?.uid);
+    getDoc(UserCartDoc).then((UserProductItems) => {
+      const UserCartProducts = UserProductItems.data() as CartProductItem;
+      if (UserProductItems.exists() && UserCartProducts.products) {
+        const UpdateInUserProducts = UserCartProducts?.products.map((item) => {
+          // check if about to be added products is already there
+          const NewQuantity = Number(
+            operator != "insert"
+              ? Number(item.quantity + (quantity || 0))
+              : quantity
+          );
+          return item.productID === product.id
+            ? {
+                ...item,
+                quantity: NewQuantity < 2 ? 1 : NewQuantity,
+                updatedAt: new Date(),
+              }
+            : item;
+        });
+        updateDoc(UserCartDoc, { products: UpdateInUserProducts })
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            notify.error({
+              title: "Error",
+              text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
+                error
+              )}.<br/> Contact administrator`,
+            });
+            reject(error);
+          });
+      }
+    });
+  });
+
 export const getCartProducts = (
   listener: any,
   User?: AuthUserType
-): Promise<ProductItemType[]> =>
+): Promise<CartMetaItem[]> =>
   new Promise((resolve, reject) => {
     try {
       const CartCollection = collection(firestore, "Carts");
-      // const q = query(CartCollection, orderBy("createdAt"));
       if (User?.uid) {
         const UserDocs = doc(CartCollection, User?.uid);
         onSnapshot(
@@ -250,7 +326,43 @@ export const getCartProducts = (
           async (snap) => {
             const DocData = snap.data() as CartProductItem;
             const DocDataProducts = DocData.products;
-            resolve(listener(DocDataProducts || []));
+            // if (DocDataProducts) {
+            //   DocDataProducts.map((item) => {
+            //     // const ProductCollection = collection(firestore, "Products");
+            //     const Products = getProductData(item.productID);
+            //     RefetchProductsMetadata.push({
+            //       ...item,
+            //       ...{ metadata: Products },
+            //     });
+            //   });
+            //   console.log(
+            //     "products are",
+            //     RefetchProductsMetadata,
+            //     DocDataProducts
+            //   );
+            // }
+            if (DocDataProducts) {
+              // Map products to an array of promises
+              const productPromises = DocDataProducts.map(async (item) => {
+                const productData = await getProductData(
+                  (data: any) => listener(data, "product"),
+                  item.productID
+                );
+                return {
+                  ...item,
+                  metadata: productData,
+                };
+              });
+              // Wait for all promises to resolve
+              Promise.all(productPromises)
+                .then((RefetchProductsMetadata) => {
+                  resolve(listener(RefetchProductsMetadata || []));
+                })
+                .catch((error) => {
+                  console.error("Error fetching product data:", error);
+                });
+            }
+            // resolve(listener(DocDataProducts || []));
           },
           (error) => {
             notify.error({

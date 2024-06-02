@@ -14,7 +14,7 @@ export const useAuthUser = () => {
       new Promise((resolve, reject) =>
         onAuthStateChanged(auth, (user) => {
           try {
-            if (user?.uid) {
+            if (!user?.uid) {
               // if user is not signed, sign in user anonymously
               signInAnonymously(auth)
                 .then((new_user) => {
@@ -27,8 +27,9 @@ export const useAuthUser = () => {
                   });
                   reject(error);
                 });
+            } else {
+              resolve(user);
             }
-            resolve(user);
           } catch (error) {
             reject(error);
           }
@@ -56,20 +57,39 @@ export const useCartProducts = () => {
   const AuthUser: AuthUserType = queryClient.getQueryData("auth_user");
 
   const snapshotListener = useCallback(
-    (data: any) => {
-      console.log(data);
-      queryClient.setQueryData(keys.cart_data(AuthUser?.uid), data);
-      return data;
+    (data: any, type?: "product") => {
+      if (type == "product") {
+        // the listener is meant for a single product inside the carts, so it can be updated
+        const ProductsData = data as ProductItemType;
+        const CartData = queryClient.getQueryData(
+          keys.cart_data(AuthUser?.uid)
+        ) as CartMetaItem[];
+        if (CartData) {
+          const CartUpdatedData = CartData.map((item) =>
+            item.productID === ProductsData?.id
+              ? { ...item, ...{ metadata: ProductsData } }
+              : item
+          );
+          queryClient.setQueryData(
+            keys.cart_data(AuthUser?.uid),
+            CartUpdatedData
+          );
+        }
+        return data;
+      } else {
+        queryClient.setQueryData(keys.cart_data(AuthUser?.uid), data);
+        return data;
+      }
     },
     [AuthUser]
   );
 
   return useQuery(
     keys.cart_data(AuthUser?.uid),
-    (): Promise<ProductItemType[]> =>
+    (): Promise<CartMetaItem[]> =>
       getCartProducts(snapshotListener, AuthUser),
     {
-      initialData: []
+      placeholderData: [],
     }
   );
 };

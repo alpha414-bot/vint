@@ -2,11 +2,20 @@
 import React from "react";
 import ProductItem from "./ProductItem";
 
-const ProductList: React.FC<ProductListInterface> = ({ products }) => {
+const ProductList: React.FC<ProductListInterface> = ({
+  products,
+  type = "product_listing",
+}) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div
+      className={`grid ${
+        type === "carts_listing"
+          ? "grid-cols-1"
+          : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
+      } gap-6`}
+    >
       {products.map((product, index) => (
-        <ProductItem key={product.id || index} product={product} />
+        <ProductItem key={product.id || index} product={product} type={type} />
       ))}
     </div>
   );

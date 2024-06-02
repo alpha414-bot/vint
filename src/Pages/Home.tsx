@@ -30,13 +30,14 @@ const Home = () => {
       <div className="px-5 py-10 space-y-5 md:px-10">
         <div className="relative flex items-center justify-between py-10 gap-8 md:py-28">
           <div className="relative z-50 space-y-2 w-full md:w-3/4">
+            {/* for bigger screen */}
             <div className="hidden md:block space-y-6">
-              <p className="text-8xl font-extrabold">Laptop .</p>
-              <p className="text-8xl font-extrabold whitespace-nowrap">
+              <p className="text-6xl font-extrabold lg:text-8xl">Laptop .</p>
+              <p className="text-6xl font-extrabold whitespace-nowrap lg:text-8xl">
                 Mobile . Gadgets .
               </p>
             </div>
-
+            {/* For mobile */}
             <div className="block md:hidden ml-2 space-y-6">
               <p className="text-5xl font-extrabold whitespace-nowrap">
                 Laptop{" "}
