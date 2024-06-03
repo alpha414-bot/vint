@@ -6,7 +6,7 @@ const Dashboard = () => {
   const { data: carts } = useCartProducts() as { data: CartMetaItem[] };
 
   return (
-    <MainLayout title="__" description="__">
+    <MainLayout title="User - View orders, profile and checkout  - Vint" description="__">
       <div className="px-4 py-10 md:py-20 md:px-8 lg:px-12">
         <div className="flex flex-col border boder-white px-3 py-5 rounded-lg justify-between gap-12 lg:flex-row">
           {/* Sidebar */}
@@ -47,7 +47,7 @@ const Dashboard = () => {
           </div>
           {/* Display */}
           <div className="grow h-auto border-t border-gray-500 py-8 md:px-4 lg:px-12 lg:py-0 lg:border-t-0 lg:border-l">
-            <Outlet context={{ data: carts }} />
+            <Outlet />
           </div>
         </div>
       </div>

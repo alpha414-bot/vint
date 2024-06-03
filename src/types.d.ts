@@ -6,7 +6,7 @@ interface RouteErrorInterface {
   error?: Object;
 }
 
-type MiddlewareItems = "admin" | "guest_admin" | "auth" | "guest";
+type MiddlewareItems = "auth" | "guest";
 
 interface ProtectedRouteProps extends HtmlHTMLAttributes<HTMLDivElement> {
   children?: ReactNode | undefined;
@@ -27,6 +27,7 @@ type QueryUseType = {
 type CartMetaItem = {
   productID: string;
   quantity: number;
+  discount?: { name: string; value: number };
   createdAt?: Date;
   updatedAt?: Date;
   metadata?: ProductItemType;
@@ -49,12 +50,11 @@ interface ProductItemType {
   variants?: ProductVariantType[];
   images?: string;
   image?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  // createdAt?: Date;
-  // updatedAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   weight?: number;
   cartQuantity?: number;
+  discount?: { name: "#chameleon" | "#hackathonchameleon"; value: number };
   dimensions?: ProductDimensionsType;
   reviews?: ProductReviewType[];
   specifications?: ProductSpecificationType[];
@@ -105,3 +105,9 @@ interface ToastWrapperProps {
   title?: any;
   text: any;
 }
+
+type DropdownOptionsType = {
+  key: string;
+  value: string;
+  description?: string;
+};

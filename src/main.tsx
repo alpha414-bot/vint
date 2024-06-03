@@ -7,9 +7,9 @@ import { RouterProvider } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Assets/index.css";
+import { AppProvider } from "./Services/Module";
 import router from "./Services/router";
 import amplifyconfig from "./amplifyconfiguration.json";
-import { AppProvider } from "./Services/Module";
 
 const Client = new QueryClient({
   defaultOptions: { queries: { refetchInterval: false, staleTime: Infinity } },

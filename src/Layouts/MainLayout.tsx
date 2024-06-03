@@ -6,8 +6,10 @@ import LoadingBar from "react-top-loading-bar";
 const MainLayout: React.FC<{
   children: React.ReactNode;
   title: string;
-  description: string;
-}> = ({ children, title, description }) => {
+  description?: string;
+  no_navbar?: boolean;
+  no_footer?: boolean;
+}> = ({ children, title, description, no_navbar, no_footer }) => {
   const [showLoadingBar, setShowLoadingBar] = useState<boolean>(false);
   useLayoutEffect(() => {
     setShowLoadingBar(true);
@@ -25,12 +27,13 @@ const MainLayout: React.FC<{
 
       <meta name="description" content={description} />
       <title>{title}</title>
-      <div className="inline-flex flex-col justify-between w-full min-h-screen ">
-        <Navbar />
+      <div>
+        {/* <div className="inline-flex flex-col justify-between w-full min-h-screen "> */}
+        {!no_navbar && <Navbar />}
         <div id="page" className="relative z-10">
           <div id="wrapper">{children}</div>
         </div>
-        <Footer />
+        {!no_footer && <Footer />}
       </div>
     </>
   );

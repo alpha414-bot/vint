@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
 
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextAreaProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   name: string;
   className?: string;
   isFocused?: boolean;
@@ -9,9 +9,8 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   rules?: RegisterOptions;
 }
 
-const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
+const TextArea = forwardRef<HTMLInputElement, TextAreaProps>(function TextInput(
   {
-    type = "text",
     className = "",
     isFocused = false,
     placeholder,
@@ -64,10 +63,9 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
           };
           return (
             <>
-              <input
+              <textarea
                 ref={input}
                 id={name}
-                type={type}
                 className={`${FieldValue ? "pt-4 pb-1" : "py-2"} ${
                   placeholder ? "focus:pt-4 focus:pb-1" : "focus:py-2"
                 } px-3 pr-10 mb-0.5 bg-gray-700 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${className} `}
@@ -108,4 +106,4 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
   );
 });
 
-export default Input;
+export default TextArea;

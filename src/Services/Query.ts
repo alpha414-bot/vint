@@ -312,6 +312,88 @@ export const updateCartQuantity = (
     });
   });
 
+export const updateCartProductDiscount = (
+  user: AuthUserType,
+  product: ProductItemType,
+  discount: { name: string; value: number }
+) =>
+  new Promise((resolve, reject) => {
+    const CartCollection = collection(firestore, "Carts");
+    const UserCartDoc = doc(CartCollection, user?.uid);
+    getDoc(UserCartDoc).then((UserProductItems) => {
+      const UserCartProducts = UserProductItems.data() as CartProductItem;
+      if (UserProductItems.exists() && UserCartProducts.products) {
+        const UpdateInUserProducts = UserCartProducts?.products.map((item) => {
+          // check if about to be added products is already there
+          return item.productID === product.id
+            ? {
+                ...item,
+                discount: discount,
+                updatedAt: new Date(),
+              }
+            : item;
+        });
+
+        updateDoc(UserCartDoc, { products: UpdateInUserProducts })
+          .then((data) => {
+            notify.success({
+              text: `<strong class="underline underline-offset-4 decoration-dotted">${discount.name}</strong> discount offer has been applied on <strong class="underline underline-offset-4 decoration-dotted">${product.name}</strong> in cart.`,
+            });
+            resolve(data);
+          })
+          .catch((error) => {
+            notify.error({
+              title: "Error",
+              text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
+                error
+              )}.<br/> Contact administrator`,
+            });
+            reject(error);
+          });
+      }
+    });
+  });
+
+export const removeCartProductDiscount = (
+  user: AuthUserType,
+  product: ProductItemType
+) =>
+  new Promise((resolve, reject) => {
+    const CartCollection = collection(firestore, "Carts");
+    const UserCartDoc = doc(CartCollection, user?.uid);
+    getDoc(UserCartDoc).then((UserProductItems) => {
+      const UserCartProducts = UserProductItems.data() as CartProductItem;
+      if (UserProductItems.exists() && UserCartProducts.products) {
+        const UpdateInUserProducts = UserCartProducts?.products.map((item) => {
+          // check if about to be added products is already there
+          if (item.productID === product.id) {
+            delete item.discount;
+          }
+          return item.productID === product.id
+            ? {
+                ...item,
+                updatedAt: new Date(),
+              }
+            : item;
+        });
+
+        updateDoc(UserCartDoc, { products: UpdateInUserProducts })
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            notify.error({
+              title: "Error",
+              text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
+                error
+              )}.<br/> Contact administrator`,
+            });
+            reject(error);
+          });
+      }
+    });
+  });
+
 export const getCartProducts = (
   listener: any,
   User?: AuthUserType
@@ -371,7 +453,7 @@ export const getCartProducts = (
           }
         );
       } else {
-        resolve([]);
+        resolve(listener([]));
       }
     } catch (error) {
       notify.error({

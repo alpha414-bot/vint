@@ -54,7 +54,7 @@ export const useProductsData = (product_id?: any) => {
 
 export const useCartProducts = () => {
   const queryClient = useQueryClient();
-  const AuthUser: AuthUserType = queryClient.getQueryData("auth_user");
+  const { data: AuthUser } = useAuthUser();
 
   const snapshotListener = useCallback(
     (data: any, type?: "product") => {
@@ -86,8 +86,7 @@ export const useCartProducts = () => {
 
   return useQuery(
     keys.cart_data(AuthUser?.uid),
-    (): Promise<CartMetaItem[]> =>
-      getCartProducts(snapshotListener, AuthUser),
+    (): Promise<CartMetaItem[]> => getCartProducts(snapshotListener, AuthUser),
     {
       placeholderData: [],
     }

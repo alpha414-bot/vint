@@ -31,9 +31,9 @@ export const price = (
   minimumFractionDigits: number = 2,
   maximumFractionDigits: number = 2
 ): string => {
-  let format = new Intl.NumberFormat("en-US", {
+  let format = new Intl.NumberFormat("en-NG", {
     style: style,
-    currency: "USD",
+    currency: "NGN",
     minimumFractionDigits: minimumFractionDigits,
     maximumFractionDigits: maximumFractionDigits,
   }).format(value);
@@ -120,8 +120,6 @@ export const DummyData: ProductItemType[] = [
       { color: "Blue", size: "6.5 inch", stock: 50 },
       { color: "Black", size: "6.5 inch", stock: 50 },
     ],
-    createdAt: "2023-03-20T08:00:00Z",
-    updatedAt: "2024-05-10T10:00:00Z",
     weight: 0.2,
     dimensions: { length: 16, width: 7, height: 0.8, unit: "cm" },
   },
@@ -137,8 +135,6 @@ export const DummyData: ProductItemType[] = [
       { color: "White", stock: 100 },
       { color: "Black", stock: 100 },
     ],
-    createdAt: "2023-05-01T08:00:00Z",
-    updatedAt: "2024-05-15T11:00:00Z",
     weight: 0.05,
     dimensions: { length: 2, width: 2, height: 3, unit: "cm" },
   },
@@ -159,8 +155,6 @@ export const DummyData: ProductItemType[] = [
         stock: 0,
       },
     ],
-    createdAt: "2022-11-25T08:00:00Z",
-    updatedAt: "2023-12-10T12:00:00Z",
     weight: 2.5,
     dimensions: { length: 40, width: 28, height: 3, unit: "cm" },
   },
@@ -177,8 +171,6 @@ export const DummyData: ProductItemType[] = [
       { color: "Black", size: "Standard", stock: 300 },
       { color: "Pink", size: "Standard", stock: 200 },
     ],
-    createdAt: "2023-09-10T08:00:00Z",
-    updatedAt: "2024-04-30T13:00:00Z",
     weight: 0.1,
     dimensions: { length: 22, width: 2, height: 0.5, unit: "cm" },
   },
@@ -210,3 +202,46 @@ export const isURL = (url: string): boolean => {
 export const NumberPattern = /^[0-9]*$/;
 export const PasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
 export const EmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const NOAUTOCOMPLETE =
+  "no-quicks" + Math.random() * 299 * Math.random() + " countries randon";
+
+export const NigeriaState = [
+  { key: "abia", value: "Abia" },
+  { key: "adamawa", value: "Adamawa" },
+  { key: "akwa_ibom", value: "Akwa Ibom" },
+  { key: "anambra", value: "Anambra" },
+  { key: "bauchi", value: "Bauchi" },
+  { key: "bayelsa", value: "Bayelsa" },
+  { key: "benue", value: "Benue" },
+  { key: "borno", value: "Borno" },
+  { key: "cross_river", value: "Cross River" },
+  { key: "delta", value: "Delta" },
+  { key: "ebonyi", value: "Ebonyi" },
+  { key: "edo", value: "Edo" },
+  { key: "ekiti", value: "Ekiti" },
+  { key: "enugu", value: "Enugu" },
+  { key: "gombe", value: "Gombe" },
+  { key: "imo", value: "Imo" },
+  { key: "jigawa", value: "Jigawa" },
+  { key: "kaduna", value: "Kaduna" },
+  { key: "kano", value: "Kano" },
+  { key: "katsina", value: "Katsina" },
+  { key: "kebbi", value: "Kebbi" },
+  { key: "kogi", value: "Kogi" },
+  { key: "kwara", value: "Kwara" },
+  { key: "lagos", value: "Lagos" },
+  { key: "nasarawa", value: "Nasarawa" },
+  { key: "niger", value: "Niger" },
+  { key: "ogun", value: "Ogun" },
+  { key: "ondo", value: "Ondo" },
+  { key: "osun", value: "Osun" },
+  { key: "oyo", value: "Oyo" },
+  { key: "plateau", value: "Plateau" },
+  { key: "rivers", value: "Rivers" },
+  { key: "sokoto", value: "Sokoto" },
+  { key: "taraba", value: "Taraba" },
+  { key: "yobe", value: "Yobe" },
+  { key: "zamfara", value: "Zamfara" },
+  { key: "fct", value: "Federal Capital Territory" },
+] as DropdownOptionsType[];

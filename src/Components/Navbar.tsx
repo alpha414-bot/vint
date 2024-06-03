@@ -3,18 +3,17 @@
 import { useCartProducts } from "@/Services/Hook";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./Logo";
 
 function Navbar() {
   const [showSideBarMenu, setShowSideBarMenu] = useState<boolean>(false);
-  const { data: CartProducts } = useCartProducts() as {
-    data: ProductItemType[];
-  };
+  const { data: CartProducts } = useCartProducts() as { data: CartMetaItem[] };
   return (
     // Example of using TailwindCSS in the Navbar Component
     <>
       <nav className="sticky top-0 z-50 flex items-center justify-between bg-gray-800 shadow-md w-full shadow-gray-700/50 px-3 py-1 md:px-10 md:py-3">
         <Link to="/">
-          <p>Logo is here</p>
+          <Logo type="navbar-logo" />
         </Link>
         <div className="flex items-center gap-4">
           <ul className="hidden md:inline-flex items-center space-x-4">

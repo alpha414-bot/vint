@@ -1,24 +1,13 @@
-import Button from "@/Components/Button";
 import ProductList from "@/Components/ProductList";
 import { useCartProducts } from "@/Services/Hook";
 import { price } from "@/System/function";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
+// Require the library
 const Carts: React.FC<UserDataLoaderInterface> = () => {
   const { data } = useCartProducts() as { data: CartMetaItem[] };
-  const [productData, setProductData] = useState<ProductItemType[]>([]);
-  useEffect(() => {
-    setProductData(
-      data.map((item) => {
-        let data = {
-          ...{ cartQuantity: item.quantity },
-          ...item.metadata,
-        } as ProductItemType;
-        return data;
-      })
-    );
-  }, [data]);
   return (
     <>
       <h3 className="text-4xl font-bold tracking-wider">
@@ -27,7 +16,19 @@ const Carts: React.FC<UserDataLoaderInterface> = () => {
       {(data.length > 0 && (
         <>
           <div className="mt-9">
-            <ProductList type="carts_listing" products={productData} />
+            <ProductList
+              type="carts_listing"
+              products={data.map((item) => {
+                let data = {
+                  ...{
+                    cartQuantity: item.quantity,
+                    discount: item.discount,
+                  },
+                  ...item.metadata,
+                } as ProductItemType;
+                return data;
+              })}
+            />
           </div>
           <div className="flex mt-2 items-center justify-end gap-2">
             <p className="text-lg font-semibold">Total:</p>
@@ -35,15 +36,25 @@ const Carts: React.FC<UserDataLoaderInterface> = () => {
               {price(
                 _.sumBy(data, (item): any => {
                   if (item.metadata) {
-                    return Number(item.metadata.price * (item.quantity || 1));
+                    let discountedPrice = item.metadata.price;
+                    if (item.discount?.value) {
+                      discountedPrice =
+                        item.metadata.price *
+                        (1 - (item.discount?.value || 1) / 100);
+                    }
+                    return discountedPrice * item.quantity;
                   }
-                }),
-                "currency"
+                })
               )}
             </p>
           </div>
           <div className="flex flex-col items-end mt-8">
-            <Button>Checkout</Button>
+            <Link
+              to="/checkout"
+              className="inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-rose-700 hover:bg-rose-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-rose-600"
+            >
+              Checkout
+            </Link>
           </div>
         </>
       )) || (

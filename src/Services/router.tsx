@@ -1,6 +1,7 @@
 import Button from "@/Components/Button";
 import MainLayout from "@/Layouts/MainLayout";
 import AuthPage from "@/Pages/AuthPage";
+import Checkout from "@/Pages/Checkout";
 import Dashboard from "@/Pages/Dashboard";
 import ErrorPage from "@/Pages/ErrorPage";
 import Home from "@/Pages/Home";
@@ -106,6 +107,7 @@ const ScrollToTop = ({ children }: { children?: any }) => {
 
 // all pages route
 const routes: RouteObject[] = [
+  // root
   {
     path: "/",
     element: (
@@ -115,6 +117,7 @@ const routes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
   },
+  // user <main pages>
   {
     path: "/user",
     element: (
@@ -139,6 +142,7 @@ const routes: RouteObject[] = [
       },
     ],
   },
+  // login
   {
     path: "/login",
     element: (
@@ -148,6 +152,26 @@ const routes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
   },
+  // register
+  {
+    path: "/register",
+    element: (
+      <ProtectedRoute middlewares={["guest"]}>
+        <AuthPage />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  // checkout
+  {
+    path: "/checkout",
+    element: (
+      <ProtectedRoute>
+        <Checkout />
+      </ProtectedRoute>
+    ),
+  },
+  // help
   {
     path: "/help",
     element: (

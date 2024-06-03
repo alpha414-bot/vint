@@ -4,6 +4,8 @@ import { useAuthUser } from "@/Services/Hook";
 import {
   addToCartQuery,
   removeCartProduct,
+  removeCartProductDiscount,
+  updateCartProductDiscount,
   updateCartQuantity,
 } from "@/Services/Query";
 import { price } from "@/System/function";
@@ -32,7 +34,7 @@ const ProductItem: React.FC<{
         <div
           className={`bg-no-repeat bg-contain bg-center ${
             type === "carts_listing"
-              ? "w-full h-60 rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-40 md:h-52"
+              ? "w-full h-60 rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-40 md:min-h-52"
               : "w-full h-80 rounded-t-xl"
           } bg-white/95 bg-[url('/favicon.svg')]`}
         ></div>
@@ -60,6 +62,14 @@ const ProductItem: React.FC<{
                   "currency",
                   0
                 )}
+                {product?.discount && (
+                  <span
+                    className="align-super ml-1 text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: `-${product.discount.value}%`,
+                    }}
+                  />
+                )}
               </p>
               {product.salePrice && (
                 <p className="text-sm text-left text-rose-600 font-semibold line-through lg:text-right">
@@ -72,12 +82,122 @@ const ProductItem: React.FC<{
             <p className="text-gray-200 text-sm">{product.description}</p>
           )}
         </div>
+        {type === "carts_listing" && (
+          <div className="border-b border-dotted py-2">
+            {/* Discount page */}
+            <p className="text-xs py-2 italic font-medium border-y border-dotted decoration-dotted md:py-1">
+              Use any of the discount code below to receive promo on this
+              product price
+            </p>
+            <div className="flex gap-8 items-start justify-start py-2 md:gap-2">
+              {/* Dicount group button */}
+              <div
+                className="inline-flex flex-col gap-y-3 items-start rounded-md shadow-sm md:flex-row"
+                role="group"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (product.discount?.name !== "#chameleon") {
+                      updateCartProductDiscount(AuthUser, product, {
+                        name: "#chameleon",
+                        value: 5,
+                      });
+                    }
+                  }}
+                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-sm font-medium text-chameleon border border-gray-200 rounded-s-lg rounded-e-lg md:rounded-s-lg md:rounded-e-none ${
+                    product.discount?.name == "#chameleon"
+                      ? "bg-white"
+                      : "bg-gray-700"
+                  }`}
+                >
+                  {product.discount?.name == "#chameleon" && (
+                    <svg
+                      className="w-4 h-4 text-chameleon"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="4"
+                        d="M5 11.917 9.724 16.5 19 7.5"
+                      />
+                    </svg>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <span className="italic text-xs">#chameleon</span>
+                    <div className="border text-xs border-chameleon px-1 py-0.5 rounded">
+                      5%
+                    </div>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  className={`inline-flex items-center gap-2 px-1.5 py-0.5 text-sm font-medium text-chameleon border border-gray-200 rounded-s-lg rounded-e-lg md:rounded-s-none md:rounded-e-lg  ${
+                    product.discount?.name == "#hackathonchameleon"
+                      ? "bg-white"
+                      : "bg-gray-700"
+                  }`}
+                  onClick={() => {
+                    if (product.discount?.name !== "#hackathonchameleon") {
+                      updateCartProductDiscount(AuthUser, product, {
+                        name: "#hackathonchameleon",
+                        value: 10,
+                      });
+                    }
+                  }}
+                >
+                  {product.discount?.name == "#hackathonchameleon" && (
+                    <svg
+                      className="w-4 h-4 text-chameleon"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="4"
+                        d="M5 11.917 9.724 16.5 19 7.5"
+                      />
+                    </svg>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <span className="italic text-xs">#hackathonchameleon</span>
+                    <div className="border text-xs border-chameleon px-1 py-0.5 rounded">
+                      10%
+                    </div>
+                  </div>
+                </button>
+              </div>
+              {product?.discount && (
+                <div
+                  onClick={() => removeCartProductDiscount(AuthUser, product)}
+                  className="flex items-center gap-0.5 text-sm p-0 cursor-pointer underline underline-offset-2 decoration-dotted"
+                >
+                  &times;
+                  <span>clear</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         <div
           className={`mt-3 flex ${
             type === "carts_listing" ? "justify-between" : "justify-end"
           } flex-wrap items-start gap-y-2`}
         >
-          {/* Product Quantity */}
+          {/* Product Quantity reading */}
           {type === "carts_listing" && (
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-x-1.5">
@@ -87,6 +207,7 @@ const ProductItem: React.FC<{
                 <p>{product.cartQuantity}</p>
               </div>
               <div className="inline-flex rounded-md shadow-sm" role="group">
+                {/* decrement */}
                 <button
                   type="button"
                   onClick={() => {
@@ -96,7 +217,7 @@ const ProductItem: React.FC<{
                     updateCartQuantity(AuthUser, product, -1);
                     setQuantity((count) => count - 1);
                   }}
-                  className="inline-flex items-center px-2 py-1 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-s-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
                 >
                   <svg
                     className="w-5 h-5 text-white"
@@ -146,7 +267,7 @@ const ProductItem: React.FC<{
                     updateCartQuantity(AuthUser, product, 1);
                     setQuantity((count) => count + 1);
                   }}
-                  className="inline-flex items-center px-2 py-1 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-e-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
                 >
                   <svg
                     className="w-5 h-5 text-white"

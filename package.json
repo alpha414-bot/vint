@@ -1,8 +1,11 @@
 {
   "name": "vint",
   "private": true,
-  "version": "0.0.0",
+  "development": true,
+  "version": "1.0.0",
   "type": "module",
+  "PaySecretKey": "sk_test_1434e5dbc7e87043ff8661f66dcb5f2da85f1f4d",
+  "PayPublicKey": "pk_test_c39acfcb77401d556afda0db1342f9ff951346e9",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -18,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.5",
     "react-image": "^4.1.0",
+    "react-paystack": "^5.0.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
