@@ -5,25 +5,9 @@ import { useProductsData } from "@/Services/Hook";
 
 const Home = () => {
   const { data } = useProductsData() as { data: ProductItemType[] };
-  // const [vantaEffect, setVantaEffect] = useState<{ destroy: any } | null>(null);
-  // const myRef = useRef(null);
-  // useEffect(() => {
-  //   if (!vantaEffect) {
-  //     setVantaEffect(
-  //       RIPPLE({
-  //         el: myRef.current,
-  //         THREE,
-  //         mouseControl: false,
-  //       })
-  //     );
-  //   }
-  //   return () => {
-  //     if (vantaEffect) vantaEffect?.destroy();
-  //   };
-  // }, [vantaEffect]);
   return (
     <MainLayout
-      title="Vint - Gadget Enterprise"
+      title="Gadget Enterprise"
       description="The enterprise with the latest in laptops, mobile and gadgets"
     >
       {/* {JSON.stringify(CartProducts)} */}
@@ -57,11 +41,12 @@ const Home = () => {
             <AwsImage
               path="hero.svg"
               className="w-full h-[16rem] md:h-[30rem]"
+              displayCanva
             />
           </div>
         </div>
         <hr />
-        <div>
+        <div id="shop">
           <p className="text-lg font-medium">Best Selling Products</p>
           <div className="mt-4">
             <ProductList products={data || []} />

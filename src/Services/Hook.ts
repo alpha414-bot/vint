@@ -3,11 +3,23 @@ import { AuthUserType } from "@/Types/Auth";
 import { auth } from "@/firebase-config";
 import { notify } from "@/notify";
 import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { getAwsMedia, getCartProducts, getProductData } from "./Query";
+import {
+  getAwsMedia,
+  getCartProducts,
+  getOrders,
+  getProductData,
+} from "./Query";
 
 export const useAuthUser = () => {
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      // for syncing all query data if auth user is changed
+      queryClient.setQueryData("auth_user", user);
+    });
+  }, []);
   return useQuery(
     "auth_user",
     (): Promise<AuthUserType> =>
@@ -55,7 +67,6 @@ export const useProductsData = (product_id?: any) => {
 export const useCartProducts = () => {
   const queryClient = useQueryClient();
   const { data: AuthUser } = useAuthUser();
-
   const snapshotListener = useCallback(
     (data: any, type?: "product") => {
       if (type == "product") {
@@ -86,7 +97,27 @@ export const useCartProducts = () => {
 
   return useQuery(
     keys.cart_data(AuthUser?.uid),
-    (): Promise<CartMetaItem[]> => getCartProducts(snapshotListener, AuthUser),
+    (): Promise<CartMetaItem[]> => getCartProducts(snapshotListener),
+    {
+      placeholderData: [],
+    }
+  );
+};
+
+export const useOrders = () => {
+  const queryClient = useQueryClient();
+  const { data: AuthUser } = useAuthUser();
+  const snapshotListener = useCallback(
+    (data: any) => {
+      queryClient.setQueryData(keys.order_data(AuthUser?.uid), data);
+      return data;
+    },
+    [AuthUser]
+  );
+
+  return useQuery(
+    keys.order_data(AuthUser?.uid),
+    (): Promise<OrderDataInterface[]> => getOrders(snapshotListener),
     {
       placeholderData: [],
     }

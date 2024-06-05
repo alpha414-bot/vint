@@ -1,65 +1,69 @@
-import { Img } from "react-image";
-import Spinner from "./Spinner";
 import { useGetImage } from "@/Services/Hook";
+import { useEffect, useRef, useState } from "react";
+import { Img } from "react-image";
+import HALO from "vanta/dist/vanta.halo.min";
+import Spinner from "./Spinner";
 
 interface ImagePropsType {
   path: string;
   className?: string | undefined;
+  displayCanva?: boolean;
 }
 
-const AwsImage: React.FC<ImagePropsType> = ({ path, className }) => {
-  const { data, isLoading: imageIsLoading } = useGetImage(path) as QueryUseType;
+const AwsImage: React.FC<ImagePropsType> = ({
+  path,
+  className,
+  displayCanva,
+}) => {
+  const { data } = useGetImage(path) as QueryUseType;
+  const [vantaEffect, setVantaEffect] = useState<{ destroy: any } | null>(null);
+  const myRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!vantaEffect) {
+      setVantaEffect(
+        HALO({
+          el: myRef.current,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          // minHeight: 500.0,
+          // minWidth: 100.0,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          color1: 0xffffff,
+          backgroundColor: 0x1f2937,
+          size: 1.1,
+          yOffset: 0.16,
+        } as VantaEffectOptions)
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
+
   return (
     <>
-      {(imageIsLoading && (
-        <div className={`${className} flex items-center justify-center`}>
-          <Spinner
-            text="loading..."
-            className="fill-palma-700 w-10 h-10"
-          />
+      <div
+        className={`${
+          !data || displayCanva ? "block" : "hidden"
+        } rounded-3xl overflow-hidden w-96 h-[20rem] md:h-[30rem]`}
+      >
+        <div ref={myRef} className="rounded-lg min-w-[25rem] min-h-[50rem]">
+          <></>
         </div>
-      )) ||
-        (data && (
-          <>
-            <Img
-              loader={
-                <div
-                  className={`${className} flex items-center justify-center`}
-                >
-                  <Spinner
-                    text="loading.."
-                    className="fill-palma-700 w-10 h-10"
-                  />
-                </div>
-              }
-              src={data}
-              className={className}
-            />
-          </>
-        )) || (
-          <div
-            className={`${className} flex flex-col items-center justify-center gap-3`}
-          >
-            <svg
-              className="w-20 h-20 text-rose-700"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-            <p className="font-medium text-white underline underline-offset-2 decoration-dotted tracking-wide">
-              Error. Contact administrator
-            </p>
-          </div>
-        )}
+      </div>
+      <div className={`${!data || displayCanva ? "hidden" : "block"}`}>
+        <Img
+          loader={
+            <div className={`${className} flex items-center justify-center`}>
+              <Spinner text="loading..." className="fill-palma-700 w-10 h-10" />
+            </div>
+          }
+          src={data}
+          className={className}
+        />
+      </div>
     </>
   );
 };

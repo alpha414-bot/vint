@@ -1,3 +1,4 @@
+import { AuthError } from "firebase/auth";
 import { useEffect } from "react";
 
 export const getErrorMessageViaStatus = (error: RouteErrorInterface) => {
@@ -74,6 +75,11 @@ export const keys = {
     "cart_data",
     user_id || "no_user",
     cart_id || "all",
+  ],
+  order_data: (user_id?: string, order_id?: string) => [
+    "order_data",
+    user_id || "no_user",
+    order_id || "all",
   ],
   amazon_media: (key: string) => ["image_gallery_from_amazon", key],
 };
@@ -245,3 +251,32 @@ export const NigeriaState = [
   { key: "zamfara", value: "Zamfara" },
   { key: "fct", value: "Federal Capital Territory" },
 ] as DropdownOptionsType[];
+
+export const ErrorFilter = (
+  error: AuthError,
+  operation: "forgot-password" | "sign-in" = "sign-in"
+) => {
+  switch (true) {
+    case error.code == "auth/invalid-email":
+      return "Email is an invalid format. Please try another.";
+    case error.code == "auth/user-disabled":
+      return "Your account has been disabled and unable login.";
+    case (error as unknown) == "Problem sign in" ||
+      error.code == "auth/user-not-found":
+      return operation == "sign-in"
+        ? "User does not exists in our records. Please crosscheck your credentials."
+        : "No registered user with this email.";
+    case error.code == "auth/wrong-password" ||
+      error.code == "auth/invalid-credential":
+      return "The provided credentials are incorrect, Retry with a correct credential or reset your password.";
+    case error.code == "auth/email-already-in-use":
+      return "The email address is already in use. Please try another.";
+    case (error as unknown) == "auth/operation-not-allowed" ||
+      error.code == "auth/operation-not-allowed":
+      return "Failed to sign in due to restriction. Pleast try again later or contact administrator.";
+    case error.code == "auth/weak-password":
+      return "Password is too weak to complete sign up. Try again with a stronger password.";
+    default:
+      return "Failed to complete operation. Pleast try again later, if issue persist, please contact administrator.";
+  }
+};

@@ -1,20 +1,31 @@
 import Button from "@/Components/Button";
 import Input from "@/Components/Input";
 import MainLayout from "@/Layouts/MainLayout";
+import { createUser, loginUser } from "@/Services/Query";
 import {
   EmailPattern,
   NumberPattern,
-  PasswordPattern
+  PasswordPattern,
 } from "@/System/function";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
-  const { control: SignInControl } = useForm({
-    mode: "all",
-  });
-  const { control: SignUpControl } = useForm({
-    mode: "all",
-  });
+  const navigate = useNavigate();
+  const { control: SignInControl, handleSubmit: SignInHandleSubmit } =
+    useForm<UserSignInFormInput>({
+      mode: "all",
+    });
+  const { control: SignUpControl, handleSubmit: SignUpHandleSubmit } =
+    useForm<UserSignUpFormInput>({
+      mode: "all",
+    });
+  const onSignUpFormSubmit: SubmitHandler<UserSignUpFormInput> = (data) => {
+    createUser(data).then(() => navigate("/"));
+  };
+  const onSignInFormSubmit: SubmitHandler<UserSignInFormInput> = (data) => {
+    loginUser(data).then(() => navigate("/"));
+  };
   return (
     <MainLayout
       title="Login to your dashboard"
@@ -22,10 +33,13 @@ const AuthPage = () => {
     >
       <div className="px-6 py-12 flex flex-col items-start gap-12 md:flex-row">
         {/* SignIn Section */}
-        <div className="border-2 border-gray-200 rounded-lg px-6 py-5 w-full md:w-1/2">
+        <form
+          onSubmit={SignInHandleSubmit(onSignInFormSubmit)}
+          className="border-2 border-gray-200 rounded-lg px-6 py-5 w-full md:w-1/2"
+        >
           <p className="text-3xl font-extrabold tracking-wider">Sign In</p>
           <p className="text-xs">
-            Sigin to your account to explore and track your orders in realtime
+            Login to your account to explore and track your orders in realtime
           </p>
           <div className="pt-4 pb-3 space-y-7">
             <div>
@@ -53,12 +67,21 @@ const AuthPage = () => {
               />
             </div>
           </div>
+          <Link
+            to="/forgot-password"
+            className="text-base tracking-wide underline underline-offset-1 decoration-dotted"
+          >
+            Forgot password?
+          </Link>
           <div className="flex flex-col items-end">
             <Button>Sign In</Button>
           </div>
-        </div>
+        </form>
         {/* SignUp Section */}
-        <div className="border-2 border-gray-200 rounded-lg px-6 py-5 w-full md:w-1/2">
+        <form
+          onSubmit={SignUpHandleSubmit(onSignUpFormSubmit)}
+          className="border-2 border-gray-200 rounded-lg px-6 py-5 w-full md:w-1/2"
+        >
           <p className="text-3xl font-extrabold tracking-wider">Sign Up</p>
           <p className="text-xs">
             Join us today and get to implement our app full feature
@@ -82,6 +105,19 @@ const AuthPage = () => {
                 }}
                 name="last_name"
                 placeholder="Last Name"
+              />
+            </div>
+            <div>
+              <Input
+                control={SignUpControl}
+                name="username"
+                placeholder="Username"
+                rules={{
+                  required: "Username field is required",
+                }}
+                // updateOnChange={(e: BaseSyntheticEvent) => {
+                //   return { ...e, ...{ value: "ola" } };
+                // }}
               />
             </div>
             <div>
@@ -130,15 +166,15 @@ const AuthPage = () => {
                   },
                 }}
                 name="password"
-                // type="password"
+                type="password"
                 placeholder="Password"
               />
             </div>
           </div>
           <div className="flex flex-col items-end">
-            <Button>Sign Up</Button>
+            <Button type="submit">Sign Up</Button>
           </div>
-        </div>
+        </form>
       </div>
     </MainLayout>
   );

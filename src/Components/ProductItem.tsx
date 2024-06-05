@@ -1,6 +1,5 @@
 // ProductItem: Components containing a visual display of the product metadata
 
-import { useAuthUser } from "@/Services/Hook";
 import {
   addToCartQuery,
   removeCartProduct,
@@ -18,7 +17,6 @@ const ProductItem: React.FC<{
   type: "carts_listing" | "order_listing" | "product_listing";
 }> = ({ product, type }) => {
   const QuantityInputRef = useRef<HTMLInputElement>(null);
-  const { data: AuthUser } = useAuthUser();
   const [, setQuantity] = useState<number>(product.cartQuantity || 1);
 
   return (
@@ -99,7 +97,7 @@ const ProductItem: React.FC<{
                   type="button"
                   onClick={() => {
                     if (product.discount?.name !== "#chameleon") {
-                      updateCartProductDiscount(AuthUser, product, {
+                      updateCartProductDiscount(product, {
                         name: "#chameleon",
                         value: 5,
                       });
@@ -146,7 +144,7 @@ const ProductItem: React.FC<{
                   }`}
                   onClick={() => {
                     if (product.discount?.name !== "#hackathonchameleon") {
-                      updateCartProductDiscount(AuthUser, product, {
+                      updateCartProductDiscount(product, {
                         name: "#hackathonchameleon",
                         value: 10,
                       });
@@ -182,7 +180,7 @@ const ProductItem: React.FC<{
               </div>
               {product?.discount && (
                 <div
-                  onClick={() => removeCartProductDiscount(AuthUser, product)}
+                  onClick={() => removeCartProductDiscount(product)}
                   className="flex items-center gap-0.5 text-sm p-0 cursor-pointer underline underline-offset-2 decoration-dotted"
                 >
                   &times;
@@ -214,7 +212,7 @@ const ProductItem: React.FC<{
                     if (QuantityInputRef.current) {
                       QuantityInputRef.current.value = "";
                     }
-                    updateCartQuantity(AuthUser, product, -1);
+                    updateCartQuantity(product, -1);
                     setQuantity((count) => count - 1);
                   }}
                   className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-s-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
@@ -247,12 +245,7 @@ const ProductItem: React.FC<{
                     const numericValue = Number(value);
 
                     if (!isNaN(numericValue)) {
-                      updateCartQuantity(
-                        AuthUser,
-                        product,
-                        numericValue,
-                        "insert"
-                      );
+                      updateCartQuantity(product, numericValue, "insert");
                       setQuantity(numericValue);
                     }
                   }}
@@ -264,7 +257,7 @@ const ProductItem: React.FC<{
                     if (QuantityInputRef.current) {
                       QuantityInputRef.current.value = "";
                     }
-                    updateCartQuantity(AuthUser, product, 1);
+                    updateCartQuantity(product, 1);
                     setQuantity((count) => count + 1);
                   }}
                   className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-e-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
@@ -295,9 +288,9 @@ const ProductItem: React.FC<{
             onClick={() => {
               if (type === "carts_listing") {
                 // remove products from cart
-                removeCartProduct(AuthUser, product).then(() => {});
+                removeCartProduct(product).then(() => {});
               } else {
-                addToCartQuery(AuthUser, product).then(() => {});
+                addToCartQuery(product).then(() => {});
               }
             }}
           />

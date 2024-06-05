@@ -2,11 +2,10 @@ import ProductList from "@/Components/ProductList";
 import { useCartProducts } from "@/Services/Hook";
 import { price } from "@/System/function";
 import _ from "lodash";
-import React from "react";
 import { Link } from "react-router-dom";
 
 // Require the library
-const Carts: React.FC<UserDataLoaderInterface> = () => {
+const Carts = () => {
   const { data } = useCartProducts() as { data: CartMetaItem[] };
   return (
     <>

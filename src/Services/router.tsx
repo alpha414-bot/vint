@@ -1,5 +1,6 @@
 import Button from "@/Components/Button";
 import MainLayout from "@/Layouts/MainLayout";
+import ForgotPassword from "@/Pages/Auth/ForgotPassword";
 import AuthPage from "@/Pages/AuthPage";
 import Checkout from "@/Pages/Checkout";
 import Dashboard from "@/Pages/Dashboard";
@@ -9,20 +10,19 @@ import Carts from "@/Pages/Subpages/Carts";
 import Orders from "@/Pages/Subpages/Orders";
 import Profile from "@/Pages/Subpages/Profile";
 import { DummyData } from "@/System/function";
-import { AuthUserType } from "@/Types/Auth";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import {
+  Navigate,
   RouteObject,
   createBrowserRouter,
   useLocation,
-  useNavigate,
 } from "react-router-dom";
+import { addCollectionDoc } from "./Query";
 import { useAuthUser } from "./Hook";
-import { addCollectionDoc, getUserDataLoader } from "./Query";
 
 // Creating a higher-order component to wrap the router with scroll-to-top functionality
-const withScrollToTop = (routerConfig?: any) => {
-  return routerConfig.map((route?: any) => {
+const withScrollToTop = (routerConfig: RouteObject[]) => {
+  return routerConfig.map((route) => {
     return {
       ...route,
       element: <ScrollToTop>{route.element}</ScrollToTop>,
@@ -35,64 +35,27 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   middlewares,
 }) => {
-  const { user, loading } = useMiddleware(middlewares || []);
-  const navigate = useNavigate();
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (middlewares && middlewares?.length > 0) {
-    if (middlewares?.includes("guest")) {
-      if (user?.uid || user?.isAnonymous) {
-        // user is authenticated or user is not anonymous
-        // redirect to dashboard
-        navigate("/user/orders");
+  const { data: currentUser, isLoading, isFetching } = useAuthUser();
+  const PauseAuthorization = isLoading || isFetching;
+  if (!PauseAuthorization) {
+    if (middlewares && middlewares.includes("auth")) {
+      if (!currentUser?.isAnonymous) {
+        // current user is not anonymous
+        if (!currentUser?.uid) {
+          // user user is not permanently signed in
+          return <Navigate to="/login" />;
+        }
       }
     }
-
-    if (middlewares?.includes("auth")) {
-      if (!(user?.uid || user?.isAnonymous)) {
-        // user is not authenticated
-        // navigate("/login");
+    if (middlewares && middlewares.includes("guest")) {
+      if (currentUser?.uid && !currentUser.isAnonymous) {
+        // user is authenticated and user is not anonymous
+        return <Navigate to="/" />;
       }
     }
   }
 
   return children;
-};
-
-// The useMiddleware hook is used to access the middleware state
-export const useMiddleware = (middleware: MiddlewareItems[]) => {
-  const { data: user } = useAuthUser();
-  const [state, setState] = useState<{
-    loading: boolean;
-    user?: AuthUserType;
-    middleware: MiddlewareItems[];
-  }>({
-    loading: true,
-    middleware: [],
-  });
-  useEffect(() => {
-    // Step 3: Perform your middleware tasks here, e.g., checking authentication status
-    const fetchUser = async () => {
-      // Fetch user data from an API
-      if (user) {
-        setState({
-          loading: false,
-          user: user,
-          middleware: middleware,
-        });
-      } else {
-        setState({
-          loading: false,
-          user: undefined,
-          middleware: middleware,
-        });
-      }
-    };
-
-    fetchUser();
-  }, []);
-  return state;
 };
 
 // Define ScrollToTop component
@@ -126,7 +89,6 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
-    loader: getUserDataLoader,
     children: [
       {
         path: "orders",
@@ -162,11 +124,21 @@ const routes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
   },
+  // forgot password
+  {
+    path: "/forgot-password",
+    element: (
+      <ProtectedRoute middlewares={["guest"]}>
+        <ForgotPassword />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+  },
   // checkout
   {
     path: "/checkout",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute middlewares={["checkout"]}>
         <Checkout />
       </ProtectedRoute>
     ),
@@ -193,6 +165,5 @@ const routes: RouteObject[] = [
   },
 ];
 
-// const router = createBrowserRouter(routes);
 const router = createBrowserRouter(withScrollToTop(routes));
 export default router;

@@ -1,18 +1,23 @@
-import { isURL } from "@/System/function";
-import { AuthUserType } from "@/Types/Auth";
+import { ErrorFilter, isURL } from "@/System/function";
 import { auth, firestore } from "@/firebase-config";
 import { notify } from "@/notify";
 import { getUrl } from "aws-amplify/storage";
-import { signInAnonymously } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  User,
+  linkWithCredential,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import {
   addDoc,
   collection,
   doc,
   getDoc,
-  getDocs,
   onSnapshot,
-  orderBy,
-  query,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -71,31 +76,6 @@ export const getProductData = (listener: any, product_id?: any) =>
     }
   });
 
-export const signInUserIfNotSign = (listener: any) =>
-  new Promise((resolve, reject) => {
-    signInAnonymously(auth)
-      .then((new_user) => {
-        if (!new_user.user.uid) {
-          // failed to authenticate
-          notify.error({
-            title: "Error",
-            text: "[Error #ProblemSignInA]: There was a problem with authorization instance.<br/> Contact administrator or try to login",
-          });
-          reject("No authorized user found.");
-        } else {
-          resolve(new_user);
-          return listener();
-        }
-      })
-      .catch((error) => {
-        notify.error({
-          title: "Error",
-          text: "[Error #ProblemSignInB]: There was a problem with authorization instance.<br/> Contact administrator or try to login",
-        });
-        reject(error);
-      });
-  });
-
 export const addCollectionDoc = (
   CollectionName: any,
   data: ProductItemType[],
@@ -138,13 +118,13 @@ export const addCollectionDoc = (
     }
   });
 
-export const addToCartQuery = (user: AuthUserType, product: ProductItemType) =>
+export const addToCartQuery = (product: ProductItemType) =>
   new Promise((resolve, reject) => {
     try {
-      if (user?.uid) {
+      if (auth.currentUser?.uid) {
         // there is an authenticated user
         const CartCollection = collection(firestore, "Carts");
-        const UserCartDoc = doc(CartCollection, user.uid);
+        const UserCartDoc = doc(CartCollection, auth.currentUser.uid);
         getDoc(UserCartDoc).then((UserProductItems) => {
           const UserCartProducts = UserProductItems.data() as CartProductItem;
           if (UserProductItems.exists() && UserCartProducts.products) {
@@ -235,194 +215,248 @@ export const addToCartQuery = (user: AuthUserType, product: ProductItemType) =>
     }
   });
 
-export const removeCartProduct = (
-  user: AuthUserType,
-  product: ProductItemType
-) =>
+export const removeCartProduct = (product: ProductItemType) =>
   new Promise((resolve, reject) => {
-    const CartCollection = collection(firestore, "Carts");
-    const UserCartDoc = doc(CartCollection, user?.uid);
-    getDoc(UserCartDoc).then((UserProductItems) => {
-      const UserCartProducts = UserProductItems.data() as CartProductItem;
-      if (UserProductItems.exists() && UserCartProducts.products) {
-        const RemainingProductAfterDel = UserCartProducts?.products.filter(
-          (item) => item.productID !== product?.id
-        );
-        updateDoc(UserCartDoc, { products: RemainingProductAfterDel })
-          .then((data) => {
-            notify.success({
-              text: `<strong class="underline underline-offset-2 decoration-dotted">${product.name}</strong> removed from cart.`,
+    try {
+      const CartCollection = collection(firestore, "Carts");
+      const UserCartDoc = doc(CartCollection, auth.currentUser?.uid);
+      getDoc(UserCartDoc).then((UserProductItems) => {
+        const UserCartProducts = UserProductItems.data() as CartProductItem;
+        if (UserProductItems.exists() && UserCartProducts.products) {
+          const RemainingProductAfterDel = UserCartProducts?.products.filter(
+            (item) => item.productID !== product?.id
+          );
+          updateDoc(UserCartDoc, { products: RemainingProductAfterDel })
+            .then((data) => {
+              notify.success({
+                text: `<strong class="underline underline-offset-2 decoration-dotted">${product.name}</strong> removed from cart.`,
+              });
+              resolve(data);
+            })
+            .catch((error) => {
+              notify.error({
+                title: "Error",
+                text: `[Error @Psnx]: Error while configuring products ${JSON.stringify(
+                  error
+                )}.<br/> Contact administrator`,
+              });
+              reject(error);
             });
-            resolve(data);
-          })
-          .catch((error) => {
-            notify.error({
-              title: "Error",
-              text: `[Error @Psnx]: Error while configuring products ${JSON.stringify(
-                error
-              )}.<br/> Contact administrator`,
+        }
+      });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error %snUm]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const clearCartProducts = () =>
+  new Promise((resolve, reject) => {
+    try {
+      const CartCollection = collection(firestore, "Carts");
+      const UserCartDoc = doc(CartCollection, auth.currentUser?.uid);
+      getDoc(UserCartDoc).then((UserProductItems) => {
+        const UserCartProducts = UserProductItems.data() as CartProductItem;
+        if (UserProductItems.exists() && UserCartProducts.products) {
+          updateDoc(UserCartDoc, { products: [] })
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              notify.error({
+                title: "Error",
+                text: `[Error @NuJ]: Error while clearing carts ${JSON.stringify(
+                  error
+                )}.<br/> Contact administrator`,
+              });
+              reject(error);
             });
-            reject(error);
-          });
-      }
-    });
+        }
+      });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error %badGF]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
   });
 
 export const updateCartQuantity = (
-  user: AuthUserType,
   product: ProductItemType,
   quantity?: number,
   operator?: "insert"
 ) =>
   new Promise((resolve, reject) => {
-    const CartCollection = collection(firestore, "Carts");
-    const UserCartDoc = doc(CartCollection, user?.uid);
-    getDoc(UserCartDoc).then((UserProductItems) => {
-      const UserCartProducts = UserProductItems.data() as CartProductItem;
-      if (UserProductItems.exists() && UserCartProducts.products) {
-        const UpdateInUserProducts = UserCartProducts?.products.map((item) => {
-          // check if about to be added products is already there
-          const NewQuantity = Number(
-            operator != "insert"
-              ? Number(item.quantity + (quantity || 0))
-              : quantity
+    try {
+      const CartCollection = collection(firestore, "Carts");
+      const UserCartDoc = doc(CartCollection, auth.currentUser?.uid);
+      getDoc(UserCartDoc).then((UserProductItems) => {
+        const UserCartProducts = UserProductItems.data() as CartProductItem;
+        if (UserProductItems.exists() && UserCartProducts.products) {
+          const UpdateInUserProducts = UserCartProducts?.products.map(
+            (item) => {
+              // check if about to be added products is already there
+              const NewQuantity = Number(
+                operator != "insert"
+                  ? Number(item.quantity + (quantity || 0))
+                  : quantity
+              );
+              return item.productID === product.id
+                ? {
+                    ...item,
+                    quantity: NewQuantity < 2 ? 1 : NewQuantity,
+                    updatedAt: new Date(),
+                  }
+                : item;
+            }
           );
-          return item.productID === product.id
-            ? {
-                ...item,
-                quantity: NewQuantity < 2 ? 1 : NewQuantity,
-                updatedAt: new Date(),
-              }
-            : item;
-        });
-        updateDoc(UserCartDoc, { products: UpdateInUserProducts })
-          .then((data) => {
-            resolve(data);
-          })
-          .catch((error) => {
-            notify.error({
-              title: "Error",
-              text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
-                error
-              )}.<br/> Contact administrator`,
+          updateDoc(UserCartDoc, { products: UpdateInUserProducts })
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              notify.error({
+                title: "Error",
+                text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
+                  error
+                )}.<br/> Contact administrator`,
+              });
+              reject(error);
             });
-            reject(error);
-          });
-      }
-    });
+        }
+      });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #HsfG]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
   });
 
 export const updateCartProductDiscount = (
-  user: AuthUserType,
   product: ProductItemType,
   discount: { name: string; value: number }
 ) =>
   new Promise((resolve, reject) => {
-    const CartCollection = collection(firestore, "Carts");
-    const UserCartDoc = doc(CartCollection, user?.uid);
-    getDoc(UserCartDoc).then((UserProductItems) => {
-      const UserCartProducts = UserProductItems.data() as CartProductItem;
-      if (UserProductItems.exists() && UserCartProducts.products) {
-        const UpdateInUserProducts = UserCartProducts?.products.map((item) => {
-          // check if about to be added products is already there
-          return item.productID === product.id
-            ? {
-                ...item,
-                discount: discount,
-                updatedAt: new Date(),
-              }
-            : item;
-        });
+    try {
+      const CartCollection = collection(firestore, "Carts");
+      const UserCartDoc = doc(CartCollection, auth.currentUser?.uid);
+      getDoc(UserCartDoc).then((UserProductItems) => {
+        const UserCartProducts = UserProductItems.data() as CartProductItem;
+        if (UserProductItems.exists() && UserCartProducts.products) {
+          const UpdateInUserProducts = UserCartProducts?.products.map(
+            (item) => {
+              // check if about to be added products is already there
+              return item.productID === product.id
+                ? {
+                    ...item,
+                    discount: discount,
+                    updatedAt: new Date(),
+                  }
+                : item;
+            }
+          );
 
-        updateDoc(UserCartDoc, { products: UpdateInUserProducts })
-          .then((data) => {
-            notify.success({
-              text: `<strong class="underline underline-offset-4 decoration-dotted">${discount.name}</strong> discount offer has been applied on <strong class="underline underline-offset-4 decoration-dotted">${product.name}</strong> in cart.`,
+          updateDoc(UserCartDoc, { products: UpdateInUserProducts })
+            .then((data) => {
+              notify.success({
+                text: `<strong class="underline underline-offset-4 decoration-dotted">${discount.name}</strong> discount offer has been applied on <strong class="underline underline-offset-4 decoration-dotted">${product.name}</strong> in cart.`,
+              });
+              resolve(data);
+            })
+            .catch((error) => {
+              notify.error({
+                title: "Error",
+                text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
+                  error
+                )}.<br/> Contact administrator`,
+              });
+              reject(error);
             });
-            resolve(data);
-          })
-          .catch((error) => {
-            notify.error({
-              title: "Error",
-              text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
-                error
-              )}.<br/> Contact administrator`,
-            });
-            reject(error);
-          });
-      }
-    });
+        }
+      });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #njUin]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
   });
 
-export const removeCartProductDiscount = (
-  user: AuthUserType,
-  product: ProductItemType
-) =>
-  new Promise((resolve, reject) => {
-    const CartCollection = collection(firestore, "Carts");
-    const UserCartDoc = doc(CartCollection, user?.uid);
-    getDoc(UserCartDoc).then((UserProductItems) => {
-      const UserCartProducts = UserProductItems.data() as CartProductItem;
-      if (UserProductItems.exists() && UserCartProducts.products) {
-        const UpdateInUserProducts = UserCartProducts?.products.map((item) => {
-          // check if about to be added products is already there
-          if (item.productID === product.id) {
-            delete item.discount;
-          }
-          return item.productID === product.id
-            ? {
-                ...item,
-                updatedAt: new Date(),
-              }
-            : item;
-        });
-
-        updateDoc(UserCartDoc, { products: UpdateInUserProducts })
-          .then((data) => {
-            resolve(data);
-          })
-          .catch((error) => {
-            notify.error({
-              title: "Error",
-              text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
-                error
-              )}.<br/> Contact administrator`,
-            });
-            reject(error);
-          });
-      }
-    });
-  });
-
-export const getCartProducts = (
-  listener: any,
-  User?: AuthUserType
-): Promise<CartMetaItem[]> =>
+export const removeCartProductDiscount = (product: ProductItemType) =>
   new Promise((resolve, reject) => {
     try {
       const CartCollection = collection(firestore, "Carts");
-      if (User?.uid) {
-        const UserDocs = doc(CartCollection, User?.uid);
+      const UserCartDoc = doc(CartCollection, auth.currentUser?.uid);
+      getDoc(UserCartDoc).then((UserProductItems) => {
+        const UserCartProducts = UserProductItems.data() as CartProductItem;
+        if (UserProductItems.exists() && UserCartProducts.products) {
+          const UpdateInUserProducts = UserCartProducts?.products.map(
+            (item) => {
+              // check if about to be added products is already there
+              if (item.productID === product.id) {
+                delete item.discount;
+              }
+              return item.productID === product.id
+                ? {
+                    ...item,
+                    updatedAt: new Date(),
+                  }
+                : item;
+            }
+          );
+
+          updateDoc(UserCartDoc, { products: UpdateInUserProducts })
+            .then((data) => {
+              resolve(data);
+            })
+            .catch((error) => {
+              notify.error({
+                title: "Error",
+                text: `[Error @upQA]: Error while updating products  ${JSON.stringify(
+                  error
+                )}.<br/> Contact administrator`,
+              });
+              reject(error);
+            });
+        }
+      });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #BmSd]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const getCartProducts = (listener: any): Promise<CartMetaItem[]> =>
+  new Promise((resolve, reject) => {
+    try {
+      const CartCollection = collection(firestore, "Carts");
+      if (auth.currentUser?.uid) {
+        const UserDocs = doc(CartCollection, auth.currentUser?.uid);
         onSnapshot(
           UserDocs,
           async (snap) => {
             const DocData = snap.data() as CartProductItem;
-            const DocDataProducts = DocData.products;
-            // if (DocDataProducts) {
-            //   DocDataProducts.map((item) => {
-            //     // const ProductCollection = collection(firestore, "Products");
-            //     const Products = getProductData(item.productID);
-            //     RefetchProductsMetadata.push({
-            //       ...item,
-            //       ...{ metadata: Products },
-            //     });
-            //   });
-            //   console.log(
-            //     "products are",
-            //     RefetchProductsMetadata,
-            //     DocDataProducts
-            //   );
-            // }
+            const DocDataProducts = DocData?.products;
             if (DocDataProducts) {
               // Map products to an array of promises
               const productPromises = DocDataProducts.map(async (item) => {
@@ -463,85 +497,289 @@ export const getCartProducts = (
     }
   });
 
-export const getFrontendSliders = (listener: any, slider_id?: any) =>
+export const newOrderQuery = (
+  payment_instance: PaymentOnSuccessProps,
+  carts: CartMetaItem[],
+  billing_info: BillingInputInterface
+) =>
   new Promise((resolve, reject) => {
-    const frontendCollectionRef = collection(firestore, "frontend"); // reference frontend as collection
-    const slidersDocRef = doc(frontendCollectionRef, "sliders"); // reference sliders as doc
-    onSnapshot(
-      slidersDocRef,
-      async (snapshot) => {
-        try {
-          if (slider_id) {
-            const sliderSubCollectionRef = collection(slidersDocRef, slider_id); // reference the slider_id as a collection containing docs
-            const sliderDocsQuery = query(
-              sliderSubCollectionRef,
-              orderBy("id", "asc")
-            );
-            onSnapshot(sliderDocsQuery, async (querySnapshot) => {
-              resolve(
-                listener(querySnapshot.docs.map((doc) => ({ ...doc.data() })))
-              );
-            });
+    try {
+      if (auth.currentUser?.uid) {
+        const OrderCollection = collection(firestore, "Orders");
+        const PaymentReferenceDoc = doc(
+          OrderCollection,
+          payment_instance.reference
+        );
+
+        getDoc(PaymentReferenceDoc).then((UserProductItems) => {
+          const UserOrderProducts =
+            UserProductItems.data() as OrderDataInterface;
+          if (UserProductItems.exists() && UserOrderProducts) {
+            // retrieving the order payment reference
+            resolve(UserProductItems.data());
           } else {
-            const sliders = await Promise.all(
-              snapshot.data()?.sliders_info?.map(async (slider: any) => {
-                const sliderSubCollection = query(
-                  collection(slidersDocRef, slider),
-                  orderBy("id", "asc")
-                );
-                const sliderDocs = await getDocs(sliderSubCollection);
-                return {
-                  slider_name: slider,
-                  banners: sliderDocs.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                  })),
-                };
+            setDoc(PaymentReferenceDoc, {
+              payment_instance: payment_instance,
+              products: carts,
+              billing_info: billing_info,
+              user_uid: auth.currentUser?.uid,
+            })
+              .then((data) => {
+                notify.success({
+                  text: `Payment is successful and order received. You would be redirected to order page to track your products.`,
+                });
+                clearCartProducts();
+                resolve(data);
               })
-            );
-            resolve(sliders);
+              .catch((error) => {
+                notify.error({
+                  title: "Error",
+                  text: `[Error /&Bye]: ${JSON.stringify(
+                    error
+                  )}. <br/> Contact administrator`,
+                });
+                reject(error);
+              });
           }
-        } catch (error) {
+        });
+      } else {
+        notify.error({
+          title: "Error",
+          text: "[Error #ProblemSignInD]: There was a problem with authorization instance.<br/> Contact administrator or try to login",
+        });
+      }
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #njnsm]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const getOrders = (listener: any): Promise<OrderDataInterface[]> =>
+  new Promise((resolve, reject) => {
+    try {
+      const CartCollection = collection(firestore, "Orders");
+      if (auth.currentUser?.uid) {
+        onSnapshot(
+          CartCollection,
+          async (snap) => {
+            const OrderData = snap.docs.map((snapshot) => ({
+              ...(snapshot.data() as OrderDataInterface),
+              ...{ id: snapshot.id },
+            }));
+            resolve(
+              listener(
+                OrderData.filter(
+                  (fresh) => fresh.user_uid == auth.currentUser?.uid
+                )
+              )
+            );
+          },
+          (error) => {
+            notify.error({
+              text: `[Error #DbG]: Problem fetching cart collection. ${error}. <br/> Contact Administrator`,
+            });
+          }
+        );
+      } else {
+        resolve(listener([]));
+      }
+    } catch (error) {
+      notify.error({
+        text: `[Error #NUJ]: Try/catch. <br/> Contact Administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const createUser = (AuthData: UserSignUpFormInput) =>
+  new Promise((resolve, reject) => {
+    try {
+      const Credential = EmailAuthProvider.credential(
+        AuthData.email as string,
+        AuthData.password as string
+      );
+      linkWithCredential(auth.currentUser as User, Credential)
+        .then((newuser) => {
+          notify.success({
+            text: "Your account has successfully being created",
+          });
+          updateProfile(newuser.user, {
+            displayName: AuthData.username,
+          }).catch((error) => {
+            notify.error({
+              text: `[Error @usme]: Account is created successfully, but there was problem with updating user profile. <br/>${JSON.stringify(
+                error
+              )} <br/> Contact administrator`,
+            });
+          });
+          resolve(newuser);
+        })
+        .catch((error) => {
+          notify.error({ text: ErrorFilter(error) });
           reject(error);
-        }
-      },
-      reject
-    );
+        });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #BNmzx]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const loginUser = (AuthData: UserSignInFormInput) =>
+  new Promise((resolve, reject) => {
+    try {
+      signInWithEmailAndPassword(
+        auth,
+        AuthData.email as string,
+        AuthData.password as string
+      )
+        .then((user) => {
+          notify.success({
+            text: "User signed in successfully.",
+          });
+          resolve(user);
+        })
+        .catch((error) => {
+          notify.error({ text: ErrorFilter(error) });
+          reject(error);
+        });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #no_sside]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const logoutUser = () =>
+  new Promise((resolve, reject) => {
+    try {
+      signOut(auth)
+        .then((res) => {
+          notify.success({ text: "You have successfully being logged out." });
+          resolve(res);
+        })
+        .catch((error) => {
+          notify.error({
+            text: `[Error @llg]: There was a problem with logging you out. <br/>${JSON.stringify(
+              error
+            )} <br/> Contact administrator`,
+          });
+          reject(error);
+        });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #kan]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const verifyAccount = () =>
+  new Promise((resolve, reject) => {
+    try {
+      sendEmailVerification(auth.currentUser as User)
+        .then((res) => {
+          notify.success({
+            text: "Email verification sent successfully. Please check your inbox.",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          notify.error({
+            text: `[Error @vemI]: Failed to send email verification. <br/>${JSON.stringify(
+              error
+            )} <br/> Contact administrator`,
+          });
+          reject(error);
+        });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #KinS]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+
+export const resetPasswordStepA = (email: string) =>
+  new Promise((resolve, reject) => {
+    try {
+      sendPasswordResetEmail(auth, email)
+        .then((data) => {
+          notify.success({
+            text: "Password reset email sent successfully. Check your inbox",
+          });
+          resolve(data);
+        })
+        .catch((error) => {
+          notify.error({ text: ErrorFilter(error, "forgot-password") });
+          reject(error);
+        });
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #GnbH]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
   });
 
 export const getAwsMedia = (key: any) =>
   new Promise((resolve, reject) => {
-    if (isURL(key)) {
-      // key is an absolute url, no need for cross checking
-      resolve(key);
-      return key;
-    } else {
-      getUrl({
-        key: key,
-        options: {
-          accessLevel: "guest", // can be 'private', 'protected', or 'guest' but defaults to `guest`
-          // targetIdentityId?: 'XXXXXXX', // id of another user, if `accessLevel` is `guest`
-          validateObjectExistence: false, // defaults to false
-          expiresIn: 1000, // validity of the URL, in seconds. defaults to 900 (15 minutes) and maxes at 3600 (1 hour)
-          useAccelerateEndpoint: false, // Whether to use accelerate endpoint.
-        },
-      })
-        .then((result) => {
-          resolve(result.url.href);
-          return result.url.href;
+    try {
+      if (isURL(key)) {
+        // key is an absolute url, no need for cross checking
+        resolve(key);
+        return key;
+      } else {
+        getUrl({
+          key: key,
+          options: {
+            accessLevel: "guest", // can be 'private', 'protected', or 'guest' but defaults to `guest`
+            // targetIdentityId?: 'XXXXXXX', // id of another user, if `accessLevel` is `guest`
+            validateObjectExistence: false, // defaults to false
+            expiresIn: 1000, // validity of the URL, in seconds. defaults to 900 (15 minutes) and maxes at 3600 (1 hour)
+            useAccelerateEndpoint: false, // Whether to use accelerate endpoint.
+          },
         })
-        .catch((error) => {
-          // notify.error({
-          //   text: `[Error xBaA]: Failed to connect to aws.<br/> Contact administrator`,
-          // });
-          reject(error);
-        });
+          .then((result) => {
+            resolve(result.url.href);
+            return result.url.href;
+          })
+          .catch((error) => {
+            // notify.error({
+            //   text: `[Error xBaA]: Failed to connect to aws.<br/> Contact administrator`,
+            // });
+            reject(error);
+          });
+      }
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #AwsMedia]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
     }
   });
-
-export const getUserDataLoader = async (): Promise<UserDataLoaderInterface> => {
-  // fetching data from firebase and etc...
-  const orders: any = await getProductData((data: any) => data);
-  // const orders: any = await getAwsMedia("/public/hero.svg");
-  return { orders: orders, carts: "my-carts", profile: "my-profile" };
-};

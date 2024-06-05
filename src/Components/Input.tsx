@@ -7,6 +7,7 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   isFocused?: boolean;
   control: Control;
   rules?: RegisterOptions;
+  updateOnChange?: any;
 }
 
 const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
@@ -19,6 +20,7 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
     name,
     rules,
     defaultValue,
+    updateOnChange = (data: any) => data,
     ...props
   },
   ref: any
@@ -78,7 +80,7 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
                     ? `${placeholderTextInput}${rules?.required ? "(*)" : ""}`
                     : undefined
                 }
-                onChange={onChange}
+                onChange={updateOnChange(onChange)}
                 defaultValue={defaultValue}
                 {...props}
               />
