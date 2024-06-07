@@ -44,16 +44,6 @@ const Dashboard = () => {
             >
               My Orders
             </NavLink>
-            <NavLink
-              to="/user/profile"
-              className={({ isActive }) =>
-                `py-1.5 pl-5 pr-20 border-t border-x border-b-2 ${
-                  isActive ? "bg-white bg-opacity-20" : "bg-transparent"
-                } border-gray-300 text-base font-medium whitespace-nowrap rounded-lg transition-all duration-150 ease-in-out hover:shadow-sm hover:shadow-gray-200 inline-flex gap-3`
-              }
-            >
-              Profile
-            </NavLink>
             {auth.currentUser?.uid && !auth.currentUser.isAnonymous && (
               <div
                 className="mt-0 lg:mt-12"

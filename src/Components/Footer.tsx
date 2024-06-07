@@ -5,11 +5,10 @@ import Logo from "./Logo";
 const Footer = () => {
   return (
     <div className="mt-8 px-3 py-5 md:px-10 md:py-3">
-      <hr />
       <div className="pt-9 pb-5 flex flex- items-stretch gap-4 md:px-5 md:gap-28 md:items-start md:flex-row">
         <Logo type="footer-logo" />
         <div>
-          <p className="text-sm font-normal underline underline-offset-2 decoration-double md:decoration-dotted">
+          <p className="text-sm font-mono font-normal underline underline-offset-2 decoration-double md:decoration-dotted">
             Power Up Your Life: The Latest in Laptops, Gadgets, and Software
           </p>
           <div className="mt-5 flex flex-col gap-4 md:mt-12">
@@ -21,7 +20,7 @@ const Footer = () => {
             </NavLink>
             {(auth.currentUser?.uid && !auth.currentUser.isAnonymous && (
               <NavLink to="/user/carts" className="text-base font-medium">
-                My Account
+                Account
               </NavLink>
             )) || (
               <>
@@ -39,6 +38,7 @@ const Footer = () => {
 
       <div className="mt-8">
         <Link
+          target="_blank"
           to="https://app.imperial.learnchameleon.com/"
           className="inline-flex items-center justify-center gap-1 w-full"
         >
@@ -54,7 +54,7 @@ const Footer = () => {
           ></div>
         </Link>
         <p className="text-center text-xs">
-          &copy;&nbsp;Copyright {new Date().getFullYear()}
+          <small>&copy;&nbsp;Copyright {new Date().getFullYear()}</small>
         </p>
       </div>
     </div>

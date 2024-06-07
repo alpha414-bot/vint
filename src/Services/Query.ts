@@ -17,48 +17,96 @@ import {
   collection,
   doc,
   getDoc,
+  limit,
   onSnapshot,
+  orderBy,
+  query,
   setDoc,
   updateDoc,
+  where
 } from "firebase/firestore";
 
 export const getProductData = (listener: any, product_id?: any) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     try {
       const ProductCollection = collection(firestore, "Products");
-      onSnapshot(
-        ProductCollection,
-        async (snap) => {
-          if (product_id) {
-            // return only a single product using the product_id
-            const ProductListDocs = doc(ProductCollection, product_id);
-            onSnapshot(
-              ProductListDocs,
-              async (singleSnap) => {
-                resolve(listener({ ...singleSnap.data(), id: product_id }));
-              },
-              (error) => {
-                notify.error({
-                  title: "Error",
-                  text: `[Error #BtG]: ON_SNAPSHOT_ERROR: ${JSON.stringify(
-                    error
-                  )}. <br/>Contact administrator.`,
-                });
-                reject(error);
-              }
-            );
-          } else {
-            // return all the products in the ProductCollection
+      if (product_id) {
+        // return only a single product using the product_id
+        const ProductDoc = doc(ProductCollection, product_id);
+        onSnapshot(
+          ProductDoc,
+          (singleSnap) => {
+            resolve(listener({ ...singleSnap.data(), id: product_id }));
+          },
+          (error) => {
+            notify.error({
+              title: "Error",
+              text: `[Error #BtG]: ON_SNAPSHOT_ERROR: ${JSON.stringify(
+                error
+              )}. <br/>Contact administrator.`,
+            });
+            reject(error);
+          }
+        );
+      } else {
+        // return all the products in the ProductCollection with pagination
+        let productQuery = query(ProductCollection, orderBy("createdAt"));
+
+        onSnapshot(
+          productQuery,
+          (snap) => {
             resolve(
               listener(snap.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
             );
+          },
+          (error) => {
+            notify.error({
+              title: "Error",
+              text: `[Error ^HSTs]: SNAPSHOT_ERROR_WHILE_RETRIEVING_PRODUCTS: ${JSON.stringify(
+                error
+              )}. <br/>Contact administrator`,
+            });
+            reject(error);
           }
+        );
+      }
+    } catch (error) {
+      notify.error({
+        title: "Error",
+        text: `[Error #BnH]: try/catch: ${JSON.stringify(
+          error
+        )}. <br/>Contact administrator.`,
+      });
+      reject(error);
+    }
+  });
+export const getSimilarProductData = (
+  listener: any,
+  product: ProductItemType
+) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const ProductCollection = collection(firestore, "Products");
+      // return all the products in the ProductCollection with pagination
+      let productQuery = query(
+        ProductCollection,
+        where("name", "!=", product?.name || "non"),
+        where("category", "==", product?.category || "non"),
+        orderBy("createdAt"),
+        limit(3)
+      );
+
+      onSnapshot(
+        productQuery,
+        (snap) => {
+          resolve(
+            listener(snap.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+          );
         },
         (error) => {
-          // snapshot error
           notify.error({
             title: "Error",
-            text: `[Error ^doon]: SNAPSHOT_ERROR_WHILE_RETRIEVING_PRODUCTS: ${JSON.stringify(
+            text: `[Error ^JNSUs]: SNAPSHOT_ERROR_WHILE_RETRIEVING_PRODUCTS: ${JSON.stringify(
               error
             )}. <br/>Contact administrator`,
           });
@@ -482,8 +530,11 @@ export const getCartProducts = (listener: any): Promise<CartMetaItem[]> =>
           },
           (error) => {
             notify.error({
-              text: `[Error #DbG]: Problem fetching cart collection. ${error}. <br/> Contact Administrator`,
+              text: `[Error #DbG]: Problem fetching cart collection. ${JSON.stringify(
+                error
+              )}. <br/> Contact Administrator`,
             });
+            reject(error);
           }
         );
       } else {
@@ -523,6 +574,8 @@ export const newOrderQuery = (
               products: carts,
               billing_info: billing_info,
               user_uid: auth.currentUser?.uid,
+              createdAt: new Date(),
+              updatedAt: new Date(),
             })
               .then((data) => {
                 notify.success({
@@ -562,7 +615,10 @@ export const newOrderQuery = (
 export const getOrders = (listener: any): Promise<OrderDataInterface[]> =>
   new Promise((resolve, reject) => {
     try {
-      const CartCollection = collection(firestore, "Orders");
+      const CartCollection = query(
+        collection(firestore, "Orders"),
+        orderBy("createdAt", "desc")
+      );
       if (auth.currentUser?.uid) {
         onSnapshot(
           CartCollection,
@@ -581,8 +637,11 @@ export const getOrders = (listener: any): Promise<OrderDataInterface[]> =>
           },
           (error) => {
             notify.error({
-              text: `[Error #DbG]: Problem fetching cart collection. ${error}. <br/> Contact Administrator`,
+              text: `[Error #DbG]: Problem fetching cart collection. ${JSON.stringify(
+                error
+              )}. <br/> Contact Administrator`,
             });
+            reject(error);
           }
         );
       } else {
@@ -744,11 +803,12 @@ export const resetPasswordStepA = (email: string) =>
     }
   });
 
-export const getAwsMedia = (key: any) =>
+export const getAwsMedia = (key: any, dont_search: boolean = false) =>
   new Promise((resolve, reject) => {
     try {
-      if (isURL(key)) {
+      if (isURL(key) || dont_search) {
         // key is an absolute url, no need for cross checking
+        // if dont_search is set to true
         resolve(key);
         return key;
       } else {
@@ -756,9 +816,8 @@ export const getAwsMedia = (key: any) =>
           key: key,
           options: {
             accessLevel: "guest", // can be 'private', 'protected', or 'guest' but defaults to `guest`
-            // targetIdentityId?: 'XXXXXXX', // id of another user, if `accessLevel` is `guest`
             validateObjectExistence: false, // defaults to false
-            expiresIn: 1000, // validity of the URL, in seconds. defaults to 900 (15 minutes) and maxes at 3600 (1 hour)
+            expiresIn: 3600, // validity of the URL, in seconds. defaults to 900 (15 minutes) and maxes at 3600 (1 hour)
             useAccelerateEndpoint: false, // Whether to use accelerate endpoint.
           },
         })
@@ -767,9 +826,6 @@ export const getAwsMedia = (key: any) =>
             return result.url.href;
           })
           .catch((error) => {
-            // notify.error({
-            //   text: `[Error xBaA]: Failed to connect to aws.<br/> Contact administrator`,
-            // });
             reject(error);
           });
       }

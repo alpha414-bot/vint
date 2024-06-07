@@ -9,14 +9,21 @@ const ProductList: React.FC<ProductListInterface> = ({
   return (
     <div
       className={`grid ${
-        type === "carts_listing"
-          ? "grid-cols-1"
-          : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
-      } gap-6`}
+        type === "carts_listing" || type === "similar_listing"
+          ? "grid-cols-1 gap-6"
+          : type === "order_listing"
+          ? "grid-cols-1 gap-1.5"
+          : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6"
+      }`}
     >
-      {products.map((product, index) => (
-        <ProductItem key={product.id || index} product={product} type={type} />
-      ))}
+      {products.length > 0 &&
+        products?.map((product, index) => (
+          <ProductItem
+            key={product.id || index}
+            product={product}
+            type={type}
+          />
+        ))}
     </div>
   );
 };

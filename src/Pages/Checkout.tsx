@@ -1,5 +1,6 @@
 import Button from "@/Components/Button";
 import Input from "@/Components/Input";
+import PayDesk from "@/Components/PayDesk";
 import SelectDropdown from "@/Components/SelectDropdown";
 import TextArea from "@/Components/TextArea";
 import MainLayout from "@/Layouts/MainLayout";
@@ -16,14 +17,12 @@ import { auth } from "@/firebase-config";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { PaystackButton } from "react-paystack";
 import { Link, useNavigate } from "react-router-dom";
-import * as ENV from "../../package.json";
 
 const Checkout = () => {
   const { data: carts } = useCartProducts() as { data: CartMetaItem[] };
-  const navigate = useNavigate();
   const [isForm, setIsForm] = useState<number>(0);
+  const navigate = useNavigate();
   const { control, handleSubmit, reset, watch } =
     useForm<BillingInputInterface>({
       mode: "all",
@@ -41,7 +40,7 @@ const Checkout = () => {
           setIsForm((current) => current + 1);
         });
       }
-    } else {
+    } else if (isForm !== 2) {
       // form of where to ship to (not related to profile, as it might different in each orders)
       setIsForm((current) => current + 1);
     }
@@ -56,22 +55,6 @@ const Checkout = () => {
     { title: "Payment and Billing", icon: "payment" },
   ];
 
-  // you can call this function anything
-  const onSuccess = (reference: PaymentOnSuccessProps) => {
-    // Implementation for whatever you want to do with reference and after success call.
-    console.log("success called");
-    newOrderQuery(reference, carts, FormValue).then(() => {
-      reset();
-      navigate("/user/orders");
-    });
-  };
-
-  // you can call this function anything
-  const onClose = () => {
-    // implementation for  whatever you want to do when the Paystack dialog closed.
-    console.log("closed");
-  };
-
   const TotalProductPrice = _.sumBy(carts, (item): any => {
     if (item.metadata) {
       let discountedPrice = item.metadata.price;
@@ -82,7 +65,6 @@ const Checkout = () => {
       return discountedPrice * item.quantity;
     }
   });
-
   return (
     <MainLayout title="Checkout" no_footer>
       <div className="relative flex flex-col-reverse lg:block">
@@ -91,7 +73,7 @@ const Checkout = () => {
           className="w-full px-4 md:w-[75%] md:px-8 py-12"
         >
           <div className="flex">
-            <ol className="flex items-center w-full space-x-2 text-sm font-medium text-center text-gray-500 bg-white shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:space-x-4 rtl:space-x-reverse">
+            <ol className="flex items-center w-full space-x-2 text-sm font-medium text-center bg-gray-800 shadow-sm text-gray-400 sm:text-base sm:space-x-4 rtl:space-x-reverse">
               {CheckoutRoute.map((item, index) => (
                 <button
                   type="submit"
@@ -198,7 +180,7 @@ const Checkout = () => {
                 }}
               >
                 <svg
-                  className="w-6 h-6 text-gray-800 dark:text-white"
+                  className="w-6 h-6 text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -221,7 +203,7 @@ const Checkout = () => {
           <div className="mt-7">
             {isForm == 0 && (
               <div className="pb-32">
-                <h3 className="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+                <h3 className="text-2xl font-bold leading-none text-white">
                   Ship To
                 </h3>
                 <p className="mt-1 text-xs font-medium italic">
@@ -318,12 +300,12 @@ const Checkout = () => {
                       className="text-base font-medium"
                       dangerouslySetInnerHTML={{
                         __html: auth.currentUser.displayName
-                          ? `Hello, <strong>${auth.currentUser.displayName}</strong>`
+                          ? `Hello, <strong>${_.startCase(auth.currentUser.displayName)}</strong>`
                           : "",
                       }}
                     />
                     <p className="text-base font-normal">
-                      You are currently signed in, you can proceed with the next
+                      You are currently signed in, you can proceed to the next
                       step{" "}
                       <span className="underline underline-offset-4 decoration-dotted">
                         (Payment & Billing)
@@ -333,7 +315,7 @@ const Checkout = () => {
                   </div>
                 )) || (
                   <>
-                    <h3 className="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+                    <h3 className="text-2xl font-bold leading-none text-white">
                       Create an account
                     </h3>
                     <p className="mt-1 text-xs font-medium italic">
@@ -426,7 +408,7 @@ const Checkout = () => {
             {/* Payment & Billing */}
             {isForm == 2 && (
               <div className="pb-32">
-                <h3 className="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+                <h3 className="text-2xl font-bold leading-none text-white">
                   Payment & Billing
                 </h3>
                 <p className="mt-1 text-xs font-medium italic">
@@ -438,7 +420,7 @@ const Checkout = () => {
                   <div className="mt-2 border border-gray-2 py-3 px-5 rounded-lg space-y-4">
                     <div className="flex items-start gap-2">
                       <svg
-                        className="w-5 h-5 text-gray-800 dark:text-white"
+                        className="w-5 h-5 text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -466,7 +448,7 @@ const Checkout = () => {
                     </div>
                     <div className="flex items-start gap-2">
                       <svg
-                        className="w-5 h-5 text-gray-800 dark:text-white"
+                        className="w-5 h-5 text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -483,46 +465,16 @@ const Checkout = () => {
                   </div>
                 </div>
                 <div className="mt-8 flex flex-wrap items-stretch gap-4">
-                  <PaystackButton
-                    publicKey={ENV.PayPublicKey}
-                    firstname={FormValue.first_name}
-                    lastname={FormValue.last_name}
-                    email={
-                      FormValue.email ||
-                      auth.currentUser?.email ||
-                      "noclient@gmail.com"
-                    }
-                    amount={Number(TotalProductPrice.toFixed(0)) * 100}
-                    onSuccess={(data) =>
-                      onSuccess({
-                        ...data,
-                        ...{ amount: Number(TotalProductPrice.toFixed(0)) },
-                      })
-                    }
-                    onClose={onClose}
-                    metadata={{
-                      custom_fields: [
-                        {
-                          display_name: JSON.stringify(carts),
-                          variable_name: new Date().toDateString(),
-                          value: "Purchasing Goods",
-                        },
-                        // To pass extra metadata, add an object with the same fields as above
-                      ],
+                  <PayDesk
+                    metadata={carts}
+                    amount={TotalProductPrice}
+                    onSuccess={(reference: any) => {
+                      newOrderQuery(reference, carts, FormValue).then(() => {
+                        reset();
+                        navigate("/user/orders");
+                      });
                     }}
-                    className="flex gap-2 items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-rose-700 hover:bg-rose-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-rose-600"
-                  >
-                    <p>Pay with</p>
-                    <img src="paystack.svg" className="w-16 md:w-24" />
-                  </PaystackButton>
-                  <Button disabled className="flex gap-2">
-                    <p>Pay with</p>
-                    <img src="paypal.svg" className="w-16 md:w-24" />
-                  </Button>
-                  <Button disabled className="flex gap-2">
-                    <p>Pay with</p>
-                    <img src="stripe.svg" className="w-16 md:w-20" />
-                  </Button>
+                  />
                 </div>
               </div>
             )}

@@ -1,14 +1,15 @@
 import Button from "@/Components/Button";
 import MainLayout from "@/Layouts/MainLayout";
+import About from "@/Pages/About";
 import ForgotPassword from "@/Pages/Auth/ForgotPassword";
 import AuthPage from "@/Pages/AuthPage";
 import Checkout from "@/Pages/Checkout";
 import Dashboard from "@/Pages/Dashboard";
 import ErrorPage from "@/Pages/ErrorPage";
 import Home from "@/Pages/Home";
+import Product from "@/Pages/Product";
 import Carts from "@/Pages/Subpages/Carts";
 import Orders from "@/Pages/Subpages/Orders";
-import Profile from "@/Pages/Subpages/Profile";
 import { DummyData } from "@/System/function";
 import { useLayoutEffect } from "react";
 import {
@@ -17,8 +18,8 @@ import {
   createBrowserRouter,
   useLocation,
 } from "react-router-dom";
+import { useAuthUser, useCartProducts } from "./Hook";
 import { addCollectionDoc } from "./Query";
-import { useAuthUser } from "./Hook";
 
 // Creating a higher-order component to wrap the router with scroll-to-top functionality
 const withScrollToTop = (routerConfig: RouteObject[]) => {
@@ -36,7 +37,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   middlewares,
 }) => {
   const { data: currentUser, isLoading, isFetching } = useAuthUser();
-  const PauseAuthorization = isLoading || isFetching;
+  const {
+    data: carts,
+    isLoading: CartIsLoading,
+    isFetching: CartIsFetching,
+  } = useCartProducts();
+  const PauseAuthorization =
+    isLoading || isFetching || CartIsLoading || CartIsFetching;
   if (!PauseAuthorization) {
     if (middlewares && middlewares.includes("auth")) {
       if (!currentUser?.isAnonymous) {
@@ -50,6 +57,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     if (middlewares && middlewares.includes("guest")) {
       if (currentUser?.uid && !currentUser.isAnonymous) {
         // user is authenticated and user is not anonymous
+        return <Navigate to="/" />;
+      }
+    }
+    if (middlewares && middlewares.includes("checkout")) {
+      // check if the checkout contains data
+      if (carts?.length == 0) {
         return <Navigate to="/" />;
       }
     }
@@ -80,6 +93,16 @@ const routes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
   },
+  // about
+  {
+    path: "/about",
+    element: (
+      <ProtectedRoute>
+        <About />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+  },
   // user <main pages>
   {
     path: "/user",
@@ -90,17 +113,15 @@ const routes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
     children: [
+      // orders
       {
         path: "orders",
         element: <Orders />,
       },
+      // carts
       {
         path: "carts",
         element: <Carts />,
-      },
-      {
-        path: "profile",
-        element: <Profile />,
       },
     ],
   },
@@ -133,6 +154,15 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
+  },
+  // products
+  {
+    path: "/products/:product_id",
+    element: (
+      <ProtectedRoute>
+        <Product />
+      </ProtectedRoute>
+    ),
   },
   // checkout
   {

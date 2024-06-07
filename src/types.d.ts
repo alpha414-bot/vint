@@ -1,3 +1,4 @@
+type FirestoreDate = { seconds: string; nanoseconds: string };
 type MiddlewareItems = "auth" | "guest" | "checkout";
 type QueryUseType = {
   data: any;
@@ -8,8 +9,8 @@ type CartMetaItem = {
   productID: string;
   quantity: number;
   discount?: { name: string; value: number };
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: FirestoreDate;
+  updatedAt?: FirestoreDate;
   metadata?: ProductItemType;
 };
 type CartProductItem = {
@@ -20,6 +21,12 @@ type DropdownOptionsType = {
   value: string;
   description?: string;
 };
+
+type ListingProductType =
+  | "carts_listing"
+  | "order_listing"
+  | "product_listing"
+  | "similar_listing";
 
 interface RouteErrorInterface {
   status: string | number;
@@ -36,7 +43,7 @@ interface ProtectedRouteProps extends HtmlHTMLAttributes<HTMLDivElement> {
 
 interface ProductListInterface {
   products: ProductItemType[];
-  type?: "carts_listing" | "order_listing" | "product_listing";
+  type?: ListingProductType;
 }
 
 interface VantaEffectOptions {
@@ -61,57 +68,22 @@ interface ProductItemType {
   name: string;
   description: string;
   category: string;
-  sku: string;
   price: number;
   salePrice?: number;
-  available: boolean;
-  stock: number;
   variants?: ProductVariantType[];
-  images?: string;
   image?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: FirestoreDate | Date;
+  updatedAt?: FirestoreDate | Date;
   weight?: number;
+  star?: number;
   cartQuantity?: number;
   discount?: { name: "#chameleon" | "#hackathonchameleon"; value: number };
-  dimensions?: ProductDimensionsType;
-  reviews?: ProductReviewType[];
-  specifications?: ProductSpecificationType[];
 }
 
 interface ProductVariantType {
   color?: string;
   size?: string;
   material?: string;
-  additionalPrice?: number;
-  stock: number;
-  images?: ProductImageType[];
-}
-
-interface ProductImageType {
-  url: string;
-  altText?: string;
-  isPrimary?: boolean;
-}
-
-interface ProductDimensionsType {
-  length: number;
-  width: number;
-  height: number;
-  unit: string; // e.g., "cm", "inches"
-}
-
-interface ProductReviewType {
-  userId: string;
-  rating: number;
-  title: string;
-  body: string;
-  createdAt: Date;
-}
-
-interface ProductSpecificationType {
-  specName: string;
-  specValue: string;
 }
 
 interface UserDataLoaderInterface {
@@ -165,8 +137,21 @@ interface BillingInputInterface {
 }
 
 interface OrderDataInterface {
+  id?: string;
   payment_instance: PaymentOnSuccessProps;
   products: CartMetaItem[];
   billing_info: BillingInputInterface;
   user_uid: string;
+  createdAt: FirestoreDate;
+  updatedAt: FirestoreDate;
+}
+
+interface ProfileDataInterface {
+  uid?: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  dob: string;
+  address: string;
+  phone_number: string;
 }

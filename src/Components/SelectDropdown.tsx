@@ -175,7 +175,7 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                         }}
                       >
                         <svg
-                          className="w-3.5 h-3.5 text-gray-800 dark:text-white"
+                          className="w-3.5 h-3.5 text-white"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"

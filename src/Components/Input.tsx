@@ -21,6 +21,7 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
     rules,
     defaultValue,
     updateOnChange = (data: any) => data,
+    disabled,
     ...props
   },
   ref: any
@@ -69,10 +70,13 @@ const Input = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
               <input
                 ref={input}
                 id={name}
+                disabled={disabled}
                 type={type}
                 className={`${FieldValue ? "pt-4 pb-1" : "py-2"} ${
                   placeholder ? "focus:pt-4 focus:pb-1" : "focus:py-2"
-                } px-3 pr-10 mb-0.5 bg-gray-700 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${className} `}
+                } px-3 pr-10 mb-0.5 ${
+                  disabled ? "bg-gray-600 cursor-not-allowed" : "bg-gray-700"
+                } border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${className} `}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 placeholder={

@@ -70,7 +70,19 @@ export const priceInPerct = (
  * react query keys for identifying queries
  */
 export const keys = {
-  product_data: (product_id?: string) => ["product_data", product_id || "all"],
+  auth_user_profile: (auth_uid?: string) => [
+    "auth_user_profile",
+    auth_uid || "",
+  ],
+  product_data: (product_id?: string, page_id?: any) => [
+    "product_data",
+    product_id || "all",
+    page_id || "single_query",
+  ],
+  similar_product_data: (except_product_id?: string) => [
+    "product_data",
+    except_product_id || "all",
+  ],
   cart_data: (user_id?: string, cart_id?: string) => [
     "cart_data",
     user_id || "no_user",
@@ -86,101 +98,375 @@ export const keys = {
 
 export const DummyData: ProductItemType[] = [
   {
-    name: "Super Laptop 3000",
+    name: "Super 30",
     description: "A high-performance laptop with the latest features.",
     category: "laptop",
-    sku: "LAP12345",
-    price: 1500,
-    salePrice: 1299.99,
-    available: true,
-    stock: 25,
+    price: 20000,
+    salePrice: 25000,
+    image: "products/laptop1.jpeg",
     variants: [
       {
         color: "Black",
         size: "15 inch",
         material: "Aluminum",
-        additionalPrice: 0,
-        stock: 10,
       },
       {
         color: "Silver",
         size: "13 inch",
         material: "Aluminum",
-        additionalPrice: -50,
-        stock: 15,
       },
     ],
     weight: 1.5,
-    dimensions: { length: 35, width: 25, height: 2, unit: "cm" },
+    star: 4,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    name: "Smartphone Pro X",
-    description: "A flagship smartphone with cutting-edge technology.",
-    category: "mobile",
-    sku: "MOB67890",
-    price: 999.99,
-    salePrice: 899.99,
-    available: true,
-    stock: 100,
-    variants: [
-      { color: "Blue", size: "6.5 inch", stock: 50 },
-      { color: "Black", size: "6.5 inch", stock: 50 },
-    ],
-    weight: 0.2,
-    dimensions: { length: 16, width: 7, height: 0.8, unit: "cm" },
-  },
-  {
-    name: "Wireless Earbuds",
-    description: "Compact and powerful wireless earbuds.",
-    category: "gadgets",
-    sku: "GAD54321",
-    price: 199.99,
-    available: true,
-    stock: 200,
-    variants: [
-      { color: "White", stock: 100 },
-      { color: "Black", stock: 100 },
-    ],
-    weight: 0.05,
-    dimensions: { length: 2, width: 2, height: 3, unit: "cm" },
-  },
-  {
-    name: "Gaming Laptop XT",
-    description: "A laptop designed for gaming with high-end specifications.",
+    name: "Type X",
+    description:
+      "Ultra-thin laptop with a stunning display, fast performance, and all-day battery life. Ideal for on-the-go productivity.",
     category: "laptop",
-    sku: "LAP09876",
-    price: 2000,
-    available: false,
-    stock: 0,
+    price: 90000,
+    salePrice: 100000,
+    image: "products/laptop2.jpeg",
     variants: [
       {
-        color: "Red",
-        size: "17 inch",
+        color: "Black",
+        size: "10 inch",
         material: "Carbon Fiber",
-        additionalPrice: 200,
-        stock: 0,
+      },
+      {
+        color: "Silver",
+        size: "13 inch",
+        material: "Aluminum",
       },
     ],
-    weight: 2.5,
-    dimensions: { length: 40, width: 28, height: 3, unit: "cm" },
+    weight: 1.2,
+    star: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    name: "Fitness Tracker",
+    name: "Power FX",
     description:
-      "A sleek fitness tracker with multiple health monitoring features.",
-    category: "gadgets",
-    sku: "GAD65432",
-    price: 149.99,
-    available: true,
-    stock: 500,
+      "Compact, powerful laptop with vibrant display and long battery life. Perfect for everyday use.",
+    category: "laptop",
+    price: 75000,
+    salePrice: 80000,
+    image: "products/laptop3.jpeg",
     variants: [
-      { color: "Black", size: "Standard", stock: 300 },
-      { color: "Pink", size: "Standard", stock: 200 },
+      {
+        color: "White",
+        size: "10 inch",
+        material: "Carbon Fiber",
+      },
+      {
+        color: "Blue",
+        size: "13 inch",
+        material: "Aluminum",
+      },
     ],
-    weight: 0.1,
-    dimensions: { length: 22, width: 2, height: 0.5, unit: "cm" },
+    weight: 1.0,
+    star: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "XR 3546",
+    description:
+      "Lightweight laptop with sharp display and speedy performance. Ideal for work and travel.",
+    category: "laptop",
+    price: 90000,
+    salePrice: 100000,
+    image: "products/laptop4.jpeg",
+    variants: [
+      {
+        color: "Black",
+        size: "10 inch",
+        material: "Carbon Fiber",
+      },
+    ],
+    weight: 1.2,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "DK PC",
+    description:
+      "Sleek and powerful laptop with a crisp display and extended battery life. Perfect for all your needs.",
+    category: "laptop",
+    price: 12000,
+    salePrice: 10000,
+    image: "products/laptop5.jpeg",
+    variants: [
+      {
+        color: "Black",
+        size: "10 inch",
+        material: "Carbon Fiber",
+      },
+    ],
+    weight: 1.2,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Man KX",
+    description:
+      "High-performance laptop with a vivid display and long-lasting battery. Ideal for productivity and entertainment.",
+    category: "laptop",
+    price: 70000,
+    salePrice: 80000,
+    image: "products/laptop6.jpeg",
+    variants: [
+      {
+        color: "Yellow",
+        size: "11 inch",
+        material: "Carbon Fiber",
+      },
+    ],
+    weight: 1.1,
+    star: 2,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "XR S282",
+    description:
+      "Slim, fast laptop with brilliant display and enduring battery. Perfect for work and play.",
+    category: "laptop",
+    price: 12000,
+    salePrice: 8000,
+    image: "products/laptop7.jpeg",
+    variants: [
+      {
+        color: "Yellow",
+        size: "12 inch",
+        material: "Aluminum",
+      },
+    ],
+    weight: 1.25,
+    star: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Cax Py",
+    description:
+      "Lightweight laptop with fast performance, clear display, and long battery life. Ideal for on-the-go use.",
+    category: "laptop",
+    price: 8000,
+    salePrice: 5000,
+    image: "products/laptop8.jpeg",
+    variants: [
+      {
+        color: "Black",
+        size: "11 inch",
+        material: "Abrasion",
+      },
+    ],
+    weight: 1.5,
+    star: 2,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "iPhone AF",
+    description:
+      "Sleek iPhone with stunning display, powerful performance, and advanced camera technology. Redefining mobile excellence.",
+    category: "mobile",
+    price: 10000,
+    salePrice: 5000,
+    image: "products/mobilei1.jpeg",
+    variants: [
+      {
+        color: "Black",
+        size: "8 inch",
+        material: "Aluminum",
+      },
+    ],
+    weight: 0.7,
+    star: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "iPhone 55",
+    description:
+      "Cutting-edge iPhone with vibrant display, lightning-fast performance, and exceptional camera capabilities. Elevating your mobile experience.",
+    category: "mobile",
+    price: 7000,
+    image: "products/mobilei2.jpeg",
+    variants: [
+      {
+        color: "Black",
+        size: "10 inch",
+        material: "Sulphur Lining",
+      },
+    ],
+    weight: 1,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "iPhone AL",
+    description:
+      "Stylish iPhone with top-notch display, blazing speed, and unmatched camera quality. Redefining mobile innovation.",
+    category: "mobile",
+    price: 12000,
+    image: "products/mobilei3.jpeg",
+    weight: 0.9,
+    star: 4,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "iPhone KB",
+    description:
+      "Premium iPhone with stunning display, lightning-fast performance, and unmatched camera prowess. Setting the standard for mobile excellence.",
+    category: "mobile",
+    price: 7000,
+    image: "products/mobilei4.jpeg",
+    weight: 1.2,
+    star: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Sam JK",
+    description:
+      "Stunning display, lightning-fast performance, and exceptional camera. Unleash your potential.",
+    category: "mobile",
+    price: 5000,
+    image: "products/mobiles1.jpeg",
+    variants: [
+      {
+        color: "Blue",
+        size: "10 inch",
+        material: "Aluminum",
+      },
+      {
+        color: "Black",
+        size: "10 inch",
+        material: "Carbon Fiber",
+      },
+    ],
+    weight: 1.2,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Sam XR",
+    description:
+      "Samsung Galaxy: A fusion of style and power, boasting a stunning display and lightning-fast performance.",
+    category: "mobile",
+    price: 10000,
+    image: "products/mobiles2.jpeg",
+    variants: [
+      {
+        color: "Green",
+        size: "11 inch",
+        material: "Aluminum",
+      },
+      {
+        color: "Black",
+        size: "10 inch",
+        material: "Sulphur Lining",
+      },
+    ],
+    weight: 1.2,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "XR Galaxy",
+    description:
+      "Samsung Galaxy: Sleek design, powerful performance, and vibrant display, all in one pocket-friendly device.",
+    category: "mobile",
+    price: 9500,
+    image: "products/mobiles3.jpeg",
+    variants: [
+      {
+        color: "Green",
+        size: "11 inch",
+        material: "Aluminum",
+      },
+    ],
+    weight: 1.2,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Sam XR",
+    description:
+      "Samsung Galaxy: Sleek design, powerful performance, and vibrant display, setting new standards in mobile excellence.",
+    category: "mobile",
+    price: 8000,
+    image: "products/mobiles4.jpeg",
+    weight: 1.2,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "XR TabA",
+    description:
+      "Tablet: A portable powerhouse with a stunning display, fast performance, and all-day battery life. Redefining versatility.",
+    category: "gadget",
+    price: 10000,
+    image: "products/gadget1.jpeg",
+    weight: 1.4,
+    star: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "TAB GF",
+    description:
+      "Cutting-edge tablet with vibrant display, powerful performance, and long-lasting battery. Redefining portable productivity.",
+    category: "gadget",
+    price: 12000,
+    image: "products/gadget2.jpeg",
+    weight: 1.8,
+    star: 4,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "XR shn",
+    description:
+      "Sleek tablet with stunning display, fast performance, and all-day battery life. Perfect for work and entertainment on the go.",
+    category: "gadget",
+    price: 6700,
+    image: "products/gadget3.jpeg",
+    weight: 1.4,
+    star: 4,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Tab KH",
+    description:
+      "Versatile tablet with vibrant display, fast performance, and long battery life. Ideal for productivity and entertainment.",
+    category: "gadget",
+    price: 24000,
+    salePrice: 22000,
+    image: "products/gadget4.jpeg",
+    weight: 1.1,
+    star: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
+
+export const date = (date: FirestoreDate): Date => {
+  return new Date((date.seconds as any) * 1000);
+};
 
 export const importScript = (resourceUrl: string) => {
   useEffect(() => {
@@ -211,6 +497,18 @@ export const EmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const NOAUTOCOMPLETE =
   "no-quicks" + Math.random() * 299 * Math.random() + " countries randon";
+
+export const short = (
+  description: string,
+  maxLength: number,
+  show_short: boolean = true
+) => {
+  if (description.length <= maxLength) {
+    return description;
+  }
+
+  return `${description.slice(0, maxLength)}${show_short ? "..." : ""}`;
+};
 
 export const NigeriaState = [
   { key: "abia", value: "Abia" },
