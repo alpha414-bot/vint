@@ -1,103 +1,111 @@
-import AwsImage from "@/Components/AwsImage";
-import Button from "@/Components/Button";
-import Input from "@/Components/Input";
-import ProductList from "@/Components/ProductList";
+
+import ProductItem from "@/Components/ProductItem";
 import MainLayout from "@/Layouts/MainLayout";
-import { useProductsData } from "@/Services/Hook";
-import { EmailPattern } from "@/System/function";
 import { notify } from "@/notify";
+import React from "react";
 import { useForm } from "react-hook-form";
 
-const Home = () => {
-  const { data } = useProductsData() as {
-    data: ProductItemType[];
-  };
-  const { control, handleSubmit } = useForm();
-  const JoinNewsletter = () => {
-    notify.success({
-      text: "You have successfully being added to our newsletter",
-    });
-  };
+// Dummy course data
+const courses: ProductItemType[] = [
+  {
+    id: "1",
+    name: "Emerald Ecommerce Mastery",
+    description: "Learn how to build, launch, and scale your own online store with modern tools and strategies.",
+    category: "Beginner",
+    price: 49,
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
+    star: 5,
+    cartQuantity: 1,
+  },
+  {
+    id: "2",
+    name: "Advanced Product Marketing",
+    description: "Master the art of digital marketing for ecommerce products and boost your sales.",
+    category: "Intermediate",
+    price: 69,
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    star: 4,
+    cartQuantity: 1,
+  },
+  {
+    id: "3",
+    name: "Shopify & WooCommerce Bootcamp",
+    description: "Hands-on course to set up and optimize your store using Shopify and WooCommerce.",
+    category: "All Levels",
+    price: 59,
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80",
+    star: 5,
+    cartQuantity: 1,
+  },
+];
+
+const Home: React.FC = () => {
+  const { register, handleSubmit } = useForm();
   return (
     <MainLayout
-      title="Gadget Enterprise"
-      description="The enterprise with the latest in laptops, mobile and gadgets"
+      title="Emerald - Ecommerce Course Platform"
+      description="Emerald: The modern dark-themed platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses."
     >
-      <div className="space-y-5">
-        <div className="relative flex items-center justify-between py-20 gap-8 min-h-[25rem] md:min-h-[30rem] md:py-28">
-          <div className="relative z-50 px-2 space-y-2 w-full md:w-3/4 md:px-10">
-            {/* Text overlay */}
-            <div className="flex flex-col items-start">
-              <p className="p-4 inline-block text-4xl font-extrabold md:text-6xl lg:text-8xl rounded-t-xl bg-gray-400/25">
-                Laptop .
-              </p>
-              <p className="p-4 inline-block text-3xl font-extrabold md:text-6xl lg:text-8xl rounded-es-xl rounded-e-xl bg-gray-400/25">
-                Mobile . Gadgets .
-              </p>
-            </div>
-            <p className="text-sm font-semibold md:text-base">
-              Power Up Your Life: The Latest in Laptops, Mobile, and Gadgets
-            </p>
-          </div>
-          <div className="absolute z-30 w-full top-0 md:right-0">
-            <AwsImage
-              path="hero.svg"
-              height={25}
-              className="w-full h-[30rem] md:h-[30rem]"
-              displayCanva
-            />
-          </div>
-        </div>
-        <div className="py-10 px-3 md:px-10 space-y-10">
-          <div id="shop">
-            <p className="text-xl font-bold md:text-3xl">
-              Best Selling Products
-            </p>
-            <div className="mt-4">
-              <ProductList products={data || []} />
-            </div>
-          </div>
-        </div>
-        {/* newsletter */}
-        <div className="flex items-center justify-center relative py-24 px-3 md:px-10 space-y-0 bg-transparent h-[25rem] overflow-hidden">
-          <div className="relative z-40 md:w-3/4">
-            <p className="text-6xl font-extrabold text-center tracking-wide">
-              Join Our Newsletter
-            </p>
-            <form
-              onSubmit={handleSubmit(JoinNewsletter)}
-              className="mt-8 px-7 flex flex-col items-stretch gap-3 md:flex-row"
-            >
-              <Input
-                control={control}
-                name="email"
-                className="py-12"
-                placeholder="Enter your email address"
-                rules={{
-                  required: "Email is required",
-                  pattern: {
-                    value: EmailPattern,
-                    message: "Ouch, that doesn't look like an email!",
-                  },
-                }}
+      {/* SEO Metadata */}
+      <meta name="description" content="Emerald: The modern dark-themed platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses." />
+      <meta property="og:title" content="Emerald - Ecommerce Course Platform" />
+      <meta property="og:description" content="Emerald: The modern dark-themed platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses." />
+      <meta property="og:image" content="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80" />
+      <meta name="theme-color" content="#0f172a" />
+
+      <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white">
+        {/* Hero Section */}
+        <section className="flex flex-col items-center justify-center py-20 px-4 text-center">
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-rose-400 drop-shadow-lg">Emerald</h1>
+          <p className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto text-gray-300">
+            The modern platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
+          </p>
+          <a href="#courses" className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-200">
+            Explore Courses
+          </a>
+        </section>
+
+        {/* Courses Section */}
+        <section id="courses" className="py-16 px-4 max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-rose-400">Featured Courses</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {courses.map((course) => (
+              <ProductItem
+                key={course.id}
+                product={course}
+                type="product_listing"
               />
-              <div className="grow md:min-w-40 flex justify-end">
-                <Button type="submit">Join Now</Button>
-              </div>
-            </form>
+            ))}
           </div>
-          <div className="absolute z-30 overflow-hidden w-full top-0 md:right-0 h-[25rem]">
-            <AwsImage
-              path="hero.svg"
-              height={25}
-              className="w-full h-[25rem] md:h-[30rem]"
-              displayCanva
-              typeOfCanva="net"
+        </section>
+
+        {/* Newsletter Section */}
+        <section className="py-16 px-4 flex flex-col items-center justify-center bg-[#0f172a]">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-rose-400">Join Our Newsletter</h2>
+          <form onSubmit={handleSubmit(() => {
+            notify.success({
+              text: "You have successfully being added to our newsletter",
+            });
+          })}
+            className="flex flex-col md:flex-row gap-4 w-full max-w-lg">
+            <input
+              type="email"
+              {...register("email", { required: "Email is required" })}
+              placeholder="Enter your email address"
+              className="flex-1 px-4 py-3 rounded-lg bg-[#1e293b] text-white border border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-400"
+              required
             />
-          </div>
-        </div>
+            <button
+              type="submit"
+              className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-lg shadow-md transition-all duration-200"
+            >
+              Join Now
+            </button>
+          </form>
+        </section>
       </div>
     </MainLayout>
   );
 };
+
 export default Home;

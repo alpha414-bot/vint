@@ -1,6 +1,7 @@
 import Button from "@/Components/Button";
 import MainLayout from "@/Layouts/MainLayout";
 import About from "@/Pages/About";
+import AgentDashboard from "@/Pages/agent";
 import ForgotPassword from "@/Pages/Auth/ForgotPassword";
 import AuthPage from "@/Pages/AuthPage";
 import Checkout from "@/Pages/Checkout";
@@ -193,6 +194,15 @@ const routes: RouteObject[] = [
       </MainLayout>
     ),
   },
+  {
+    path: '/agent',
+    element: (
+      <ProtectedRoute>
+        <AgentDashboard />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+  }
 ];
 
 const router = createBrowserRouter(withScrollToTop(routes));

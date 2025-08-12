@@ -1,0 +1,19 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# 🔒 Disable directory listing
+Options -Indexes
+
+# 🌐 Force trailing slash removal for files (not directories)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# ✅ Handle React Router - serve index.html for all routes that don't match files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule . /index.html [L]
+
+# 📁 Serve static assets directly (js, css, images, etc.)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]

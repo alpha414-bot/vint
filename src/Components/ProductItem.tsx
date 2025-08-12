@@ -2,11 +2,10 @@
 
 import { useAwsImage } from "@/Services/Hook";
 import {
-  addToCartQuery,
   removeCartProduct,
   removeCartProductDiscount,
   updateCartProductDiscount,
-  updateCartQuantity,
+  updateCartQuantity
 } from "@/Services/Query";
 import { price, short } from "@/System/function";
 import _ from "lodash";
@@ -26,25 +25,22 @@ const ProductItem: React.FC<{
   return (
     // TailwindCSS styles in ProductItem Component
     <div
-      className={`flex ${
-        type === "carts_listing" || type === "similar_listing"
-          ? "flex-col items-stretch gap-2 md:flex-row"
-          : "pb-4 flex-col"
-      } justify-start leading-normal rounded-xl ${
-        type === "order_listing" ? "pb-0" : "shadow-sm shadow-gray-600"
-      }`}
+      className={`flex ${type === "carts_listing" || type === "similar_listing"
+        ? "flex-col items-stretch gap-2 md:flex-row"
+        : "pb-4 flex-col"
+        } justify-start leading-normal rounded-xl ${type === "order_listing" ? "pb-0" : "shadow-sm shadow-gray-600"
+        }`}
     >
       <Link to={`/products/${product.id}`}>
         <div
-          className={`bg-no-repeat bg-cover bg-center ${
-            type === "carts_listing"
-              ? "w-full h-60 rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-52 md:min-h-52"
-              : type === "similar_listing"
+          className={`bg-no-repeat bg-cover bg-center ${type === "carts_listing"
+            ? "w-full h-60 rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-52 md:min-h-52"
+            : type === "similar_listing"
               ? "w-full h-32 min-h-full max-h-full rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-32 md:h-24"
               : type === "order_listing"
-              ? "hidden"
-              : "w-full h-80 rounded-t-xl"
-          } bg-white/95`}
+                ? "hidden"
+                : "w-full h-80 rounded-t-xl"
+            } bg-white/95`}
           style={{
             backgroundImage: `url('${image || "/favicon.svg"}')`,
           }}
@@ -52,15 +48,14 @@ const ProductItem: React.FC<{
       </Link>
       {/* Product metadata */}
       <div
-        className={`${
-          type === "carts_listing"
-            ? "px-3 py-4 grow"
-            : type === "similar_listing"
+        className={`${type === "carts_listing"
+          ? "px-3 py-4 grow"
+          : type === "similar_listing"
             ? "px-2 py-1"
             : type === "order_listing"
-            ? "p-0"
-            : "px-2 mt-4 grow"
-        } flex flex-col justify-between`}
+              ? "p-0"
+              : "px-2 mt-4 grow"
+          } flex flex-col justify-between`}
       >
         <div>
           <div className="flex flex-col items-start justify-between gap-1.5 mb-1 lg:flex-row">
@@ -69,13 +64,12 @@ const ProductItem: React.FC<{
               {/* Product name/ <description> */}
               <div>
                 <h3
-                  className={`${
-                    type === "similar_listing"
-                      ? "text-base font-bold"
-                      : type === "order_listing"
+                  className={`${type === "similar_listing"
+                    ? "text-base font-bold"
+                    : type === "order_listing"
                       ? "text-base font-medium"
                       : "text-xl font-bold"
-                  }`}
+                    }`}
                 >
                   {product.name}
                 </h3>
@@ -95,9 +89,8 @@ const ProductItem: React.FC<{
             {type !== "similar_listing" && (
               <div >
                 <p
-                  className={`${
-                    type === "order_listing" ? "text-lg" : "text-2xl"
-                  } text-left text-rose-600 font-bold lg:text-right`}
+                  className={`${type === "order_listing" ? "text-lg" : "text-2xl"
+                    } text-left text-rose-600 font-bold lg:text-right`}
                 >
                   {price(
                     product.price * (product.cartQuantity || 1),
@@ -166,11 +159,10 @@ const ProductItem: React.FC<{
                       });
                     }
                   }}
-                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-sm font-medium text-chameleon rounded-s-lg rounded-e-lg md:rounded-s-lg md:rounded-e-none ${
-                    product.discount?.name == "#chameleon"
-                      ? "bg-white"
-                      : "bg-gray-700"
-                  }`}
+                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-sm font-medium text-chameleon rounded-s-lg rounded-e-lg md:rounded-s-lg md:rounded-e-none ${product.discount?.name == "#chameleon"
+                    ? "bg-white"
+                    : "bg-gray-700"
+                    }`}
                 >
                   {product.discount?.name == "#chameleon" && (
                     <svg
@@ -200,11 +192,10 @@ const ProductItem: React.FC<{
                 </button>
                 <button
                   type="button"
-                  className={`inline-flex items-center gap-2 px-1.5 py-0.5 text-sm font-medium text-chameleon rounded-s-lg rounded-e-lg md:rounded-s-none md:rounded-e-lg md:border-l-2 md:border-gray-300  ${
-                    product.discount?.name == "#hackathonchameleon"
-                      ? "bg-white"
-                      : "bg-gray-700"
-                  }`}
+                  className={`inline-flex items-center gap-2 px-1.5 py-0.5 text-sm font-medium text-chameleon rounded-s-lg rounded-e-lg md:rounded-s-none md:rounded-e-lg md:border-l-2 md:border-gray-300  ${product.discount?.name == "#hackathonchameleon"
+                    ? "bg-white"
+                    : "bg-gray-700"
+                    }`}
                   onClick={() => {
                     if (product.discount?.name !== "#hackathonchameleon") {
                       updateCartProductDiscount(product, {
@@ -255,9 +246,8 @@ const ProductItem: React.FC<{
         )}
         {(type === "carts_listing" || type === "product_listing") && (
           <div
-            className={`mt-3 flex ${
-              type === "carts_listing" ? "justify-between" : "justify-end"
-            } flex-wrap items-start gap-y-2`}
+            className={`mt-3 flex ${type === "carts_listing" ? "justify-between" : "justify-end"
+              } flex-wrap items-start gap-y-2`}
           >
             {/* Product Quantity reading */}
             {type === "carts_listing" && (
@@ -352,9 +342,9 @@ const ProductItem: React.FC<{
               onClick={() => {
                 if (type === "carts_listing") {
                   // remove products from cart
-                  removeCartProduct(product).then(() => {});
+                  removeCartProduct(product).then(() => { });
                 } else {
-                  addToCartQuery(product).then(() => {});
+                  // addToCartQuery(product).then(() => {});
                 }
               }}
             />

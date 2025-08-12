@@ -120,6 +120,7 @@ export const useCartProducts = () => {
     (): Promise<CartMetaItem[]> => getCartProducts(snapshotListener),
     {
       placeholderData: [],
+      initialData: []
     }
   );
 };

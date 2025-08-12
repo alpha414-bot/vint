@@ -11,7 +11,7 @@ type CartMetaItem = {
   discount?: { name: string; value: number };
   createdAt?: FirestoreDate;
   updatedAt?: FirestoreDate;
-  metadata?: ProductItemType;
+  metadata?: CourseItemType;
 };
 type CartProductItem = {
   products: CartMetaItem[];
@@ -21,6 +21,8 @@ type DropdownOptionsType = {
   value: string;
   description?: string;
 };
+
+
 
 type ListingProductType =
   | "carts_listing"
@@ -61,6 +63,15 @@ interface VantaEffectOptions {
   yOffset?: number;
   size: number;
   baseColor?: number;
+}
+
+interface CourseItemType {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  price: string;
+  level: string;
 }
 
 interface ProductItemType {

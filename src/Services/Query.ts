@@ -180,28 +180,28 @@ export const addToCartQuery = (product: ProductItemType) =>
             const UpdateInUserProducts = UserCartProducts?.products.map(
               (item) => {
                 // check if about to be added products is already there
-                return item.productID === product.id
+                return item.productID === (product.id?.toString())
                   ? {
-                      ...item,
-                      quantity: item.quantity + 1,
-                      updatedAt: new Date(),
-                    }
+                    ...item,
+                    quantity: item.quantity + 1,
+                    updatedAt: new Date(),
+                  }
                   : item;
               }
             ); // this might not be necessary
             const NewUserProducts = UserCartProducts?.products.some(
-              (item) => item.productID === product.id
+              (item) => item.productID === product.id?.toString()
             )
               ? UpdateInUserProducts // no new products, work still on old products added
               : [
-                  ...UpdateInUserProducts,
-                  {
-                    productID: product.id,
-                    quantity: 1,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                  },
-                ];
+                ...UpdateInUserProducts,
+                {
+                  productID: product.id,
+                  quantity: 1,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                },
+              ];
             updateDoc(UserCartDoc, { products: NewUserProducts })
               .then((data) => {
                 notify.success({
@@ -359,10 +359,10 @@ export const updateCartQuantity = (
               );
               return item.productID === product.id
                 ? {
-                    ...item,
-                    quantity: NewQuantity < 2 ? 1 : NewQuantity,
-                    updatedAt: new Date(),
-                  }
+                  ...item,
+                  quantity: NewQuantity < 2 ? 1 : NewQuantity,
+                  updatedAt: new Date(),
+                }
                 : item;
             }
           );
@@ -408,10 +408,10 @@ export const updateCartProductDiscount = (
               // check if about to be added products is already there
               return item.productID === product.id
                 ? {
-                    ...item,
-                    discount: discount,
-                    updatedAt: new Date(),
-                  }
+                  ...item,
+                  discount: discount,
+                  updatedAt: new Date(),
+                }
                 : item;
             }
           );
@@ -461,9 +461,9 @@ export const removeCartProductDiscount = (product: ProductItemType) =>
               }
               return item.productID === product.id
                 ? {
-                    ...item,
-                    updatedAt: new Date(),
-                  }
+                  ...item,
+                  updatedAt: new Date(),
+                }
                 : item;
             }
           );
