@@ -46,8 +46,4 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 
-# firebase local deploying
-.firebaserc
-firebase.json
-firestore.indexes.json
-firestore.rules
+/dist*
