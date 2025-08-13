@@ -2,9 +2,8 @@
 
 import { useAwsImage } from "@/Services/Hook";
 import {
+  addToCartQuery,
   removeCartProduct,
-  removeCartProductDiscount,
-  updateCartProductDiscount,
   updateCartQuantity
 } from "@/Services/Query";
 import { price, short } from "@/System/function";
@@ -20,7 +19,7 @@ const ProductItem: React.FC<{
   // const [, setImage] = useState(null);
   const { data: image } = useAwsImage(product.image);
   const QuantityInputRef = useRef<HTMLInputElement>(null);
-  const [, setQuantity] = useState<number>(product.cartQuantity || 1);
+  const [quantity, setQuantity] = useState<number>(product.cartQuantity || 1);
   // const image = getAwsMedia(product.image).then((url: any) => {console.log("") setImage(url)});
   return (
     // TailwindCSS styles in ProductItem Component
@@ -97,20 +96,38 @@ const ProductItem: React.FC<{
                     "currency",
                     0
                   )}
-                  {product?.discount && (
-                    <span
-                      className="align-super ml-1 text-sm whitespace-nowrap"
-                      dangerouslySetInnerHTML={{
-                        __html: `-${product.discount.value}%`,
-                      }}
-                    />
-                  )}
                 </p>
                 {product.salePrice && (
                   <p className="text-sm text-left text-rose-600 font-semibold line-through lg:text-right">
                     {price(product.salePrice, "currency", 0)}
                   </p>
                 )}
+                {
+                  type == "order_listing" && (
+                    <a
+                      href={product.downloadable}
+                      download
+                      onClick={e => {
+                        e.preventDefault();
+                        fetch(product.downloadable)
+                          .then(res => res.blob())
+                          .then(blob => {
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `${product.name}.pdf`;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                            window.URL.revokeObjectURL(url);
+                          });
+                      }}
+                      className="text-sm bg-blue-600 px-2 py-1 text-white rounded hover:underline"
+                    >
+                      Download PDF
+                    </a>
+                  )
+                }
               </div>
             )}
           </div>
@@ -136,114 +153,6 @@ const ProductItem: React.FC<{
             </p>
           )}
         </div>
-        {type === "carts_listing" && (
-          <div className="border-b border-dotted py-2">
-            {/* Discount page */}
-            <p className="text-xs py-2 italic font-medium border-y border-dotted decoration-dotted md:py-1">
-              Use any of the discount code below to receive promo on this
-              product price
-            </p>
-            <div className="flex flex-col-reverse gap-1 items-start justify-start py-2 md:gap-2 md:flex-row">
-              {/* Dicount group button */}
-              <div
-                className="inline-flex flex-col gap-y-3 items-start rounded-md shadow-sm md:flex-row"
-                role="group"
-              >
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (product.discount?.name !== "#chameleon") {
-                      updateCartProductDiscount(product, {
-                        name: "#chameleon",
-                        value: 5,
-                      });
-                    }
-                  }}
-                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-sm font-medium text-chameleon rounded-s-lg rounded-e-lg md:rounded-s-lg md:rounded-e-none ${product.discount?.name == "#chameleon"
-                    ? "bg-white"
-                    : "bg-gray-700"
-                    }`}
-                >
-                  {product.discount?.name == "#chameleon" && (
-                    <svg
-                      className="w-4 h-4 text-chameleon"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="4"
-                        d="M5 11.917 9.724 16.5 19 7.5"
-                      />
-                    </svg>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <span className="italic text-xs">#chameleon</span>
-                    <div className="border text-xs border-chameleon px-1 py-0.5 rounded">
-                      5%
-                    </div>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  className={`inline-flex items-center gap-2 px-1.5 py-0.5 text-sm font-medium text-chameleon rounded-s-lg rounded-e-lg md:rounded-s-none md:rounded-e-lg md:border-l-2 md:border-gray-300  ${product.discount?.name == "#hackathonchameleon"
-                    ? "bg-white"
-                    : "bg-gray-700"
-                    }`}
-                  onClick={() => {
-                    if (product.discount?.name !== "#hackathonchameleon") {
-                      updateCartProductDiscount(product, {
-                        name: "#hackathonchameleon",
-                        value: 10,
-                      });
-                    }
-                  }}
-                >
-                  {product.discount?.name == "#hackathonchameleon" && (
-                    <svg
-                      className="w-4 h-4 text-chameleon"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="4"
-                        d="M5 11.917 9.724 16.5 19 7.5"
-                      />
-                    </svg>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <span className="italic text-xs">#hackathonchameleon</span>
-                    <div className="border text-xs border-chameleon px-1 py-0.5 rounded">
-                      10%
-                    </div>
-                  </div>
-                </button>
-              </div>
-              {product?.discount && (
-                <div
-                  onClick={() => removeCartProductDiscount(product)}
-                  className="flex items-center gap-0.5 text-sm p-0 cursor-pointer underline underline-offset-2 decoration-dotted"
-                >
-                  &times;
-                  <span>clear</span>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         {(type === "carts_listing" || type === "product_listing") && (
           <div
             className={`mt-3 flex ${type === "carts_listing" ? "justify-between" : "justify-end"
@@ -251,23 +160,25 @@ const ProductItem: React.FC<{
           >
             {/* Product Quantity reading */}
             {type === "carts_listing" && (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 invisible">
                 <div className="flex items-center gap-x-1.5">
                   <p className="text-base font-bold underline underline-offset-2 decoration-dotted">
                     Quantity:
                   </p>
-                  <p>{product.cartQuantity}</p>
+                  <p>{quantity || 1}</p>
                 </div>
                 <div className="inline-flex rounded-md shadow-sm" role="group">
                   {/* decrement */}
                   <button
                     type="button"
                     onClick={() => {
-                      if (QuantityInputRef.current) {
-                        QuantityInputRef.current.value = "";
+                      if (quantity > 1) {
+                        if (QuantityInputRef.current) {
+                          QuantityInputRef.current.value = "";
+                        }
+                        updateCartQuantity(product, -1);
+                        setQuantity((count) => count - 1);
                       }
-                      updateCartQuantity(product, -1);
-                      setQuantity((count) => count - 1);
                     }}
                     className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-s-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
                   >
@@ -344,7 +255,7 @@ const ProductItem: React.FC<{
                   // remove products from cart
                   removeCartProduct(product).then(() => { });
                 } else {
-                  // addToCartQuery(product).then(() => {});
+                  addToCartQuery(product).then(() => { });
                 }
               }}
             />

@@ -1,5 +1,8 @@
 import { AuthError } from "firebase/auth";
 import { useEffect } from "react";
+import EmeraldsillustratedGraphicCourse from "../Assets/pdfs/emeraldsillustratedgraphiccourse.pdf";
+import EmeraldsWebBeginnerCourse from "../Assets/pdfs/emeraldswebbeginnercourse.pdf";
+import EmeraldsWebsoftwareDevelopment from "../Assets/pdfs/emeraldswebsoftwaredevelopment.pdf";
 
 export const getErrorMessageViaStatus = (error: RouteErrorInterface) => {
   switch (error.status) {
@@ -95,374 +98,6 @@ export const keys = {
   ],
   amazon_media: (key: string) => ["image_gallery_from_amazon", key],
 };
-
-export const DummyData: ProductItemType[] = [
-  {
-    name: "Super 30",
-    description: "A high-performance laptop with the latest features.",
-    category: "laptop",
-    price: 20000,
-    salePrice: 25000,
-    image: "products/laptop1.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "15 inch",
-        material: "Aluminum",
-      },
-      {
-        color: "Silver",
-        size: "13 inch",
-        material: "Aluminum",
-      },
-    ],
-    weight: 1.5,
-    star: 4,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Type X",
-    description:
-      "Ultra-thin laptop with a stunning display, fast performance, and all-day battery life. Ideal for on-the-go productivity.",
-    category: "laptop",
-    price: 90000,
-    salePrice: 100000,
-    image: "products/laptop2.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "10 inch",
-        material: "Carbon Fiber",
-      },
-      {
-        color: "Silver",
-        size: "13 inch",
-        material: "Aluminum",
-      },
-    ],
-    weight: 1.2,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Power FX",
-    description:
-      "Compact, powerful laptop with vibrant display and long battery life. Perfect for everyday use.",
-    category: "laptop",
-    price: 75000,
-    salePrice: 80000,
-    image: "products/laptop3.jpeg",
-    variants: [
-      {
-        color: "White",
-        size: "10 inch",
-        material: "Carbon Fiber",
-      },
-      {
-        color: "Blue",
-        size: "13 inch",
-        material: "Aluminum",
-      },
-    ],
-    weight: 1.0,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "XR 3546",
-    description:
-      "Lightweight laptop with sharp display and speedy performance. Ideal for work and travel.",
-    category: "laptop",
-    price: 90000,
-    salePrice: 100000,
-    image: "products/laptop4.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "10 inch",
-        material: "Carbon Fiber",
-      },
-    ],
-    weight: 1.2,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "DK PC",
-    description:
-      "Sleek and powerful laptop with a crisp display and extended battery life. Perfect for all your needs.",
-    category: "laptop",
-    price: 12000,
-    salePrice: 10000,
-    image: "products/laptop5.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "10 inch",
-        material: "Carbon Fiber",
-      },
-    ],
-    weight: 1.2,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Man KX",
-    description:
-      "High-performance laptop with a vivid display and long-lasting battery. Ideal for productivity and entertainment.",
-    category: "laptop",
-    price: 70000,
-    salePrice: 80000,
-    image: "products/laptop6.jpeg",
-    variants: [
-      {
-        color: "Yellow",
-        size: "11 inch",
-        material: "Carbon Fiber",
-      },
-    ],
-    weight: 1.1,
-    star: 2,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "XR S282",
-    description:
-      "Slim, fast laptop with brilliant display and enduring battery. Perfect for work and play.",
-    category: "laptop",
-    price: 12000,
-    salePrice: 8000,
-    image: "products/laptop7.jpeg",
-    variants: [
-      {
-        color: "Yellow",
-        size: "12 inch",
-        material: "Aluminum",
-      },
-    ],
-    weight: 1.25,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Cax Py",
-    description:
-      "Lightweight laptop with fast performance, clear display, and long battery life. Ideal for on-the-go use.",
-    category: "laptop",
-    price: 8000,
-    salePrice: 5000,
-    image: "products/laptop8.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "11 inch",
-        material: "Abrasion",
-      },
-    ],
-    weight: 1.5,
-    star: 2,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "iPhone AF",
-    description:
-      "Sleek iPhone with stunning display, powerful performance, and advanced camera technology. Redefining mobile excellence.",
-    category: "mobile",
-    price: 10000,
-    salePrice: 5000,
-    image: "products/mobilei1.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "8 inch",
-        material: "Aluminum",
-      },
-    ],
-    weight: 0.7,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "iPhone 55",
-    description:
-      "Cutting-edge iPhone with vibrant display, lightning-fast performance, and exceptional camera capabilities. Elevating your mobile experience.",
-    category: "mobile",
-    price: 7000,
-    image: "products/mobilei2.jpeg",
-    variants: [
-      {
-        color: "Black",
-        size: "10 inch",
-        material: "Sulphur Lining",
-      },
-    ],
-    weight: 1,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "iPhone AL",
-    description:
-      "Stylish iPhone with top-notch display, blazing speed, and unmatched camera quality. Redefining mobile innovation.",
-    category: "mobile",
-    price: 12000,
-    image: "products/mobilei3.jpeg",
-    weight: 0.9,
-    star: 4,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "iPhone KB",
-    description:
-      "Premium iPhone with stunning display, lightning-fast performance, and unmatched camera prowess. Setting the standard for mobile excellence.",
-    category: "mobile",
-    price: 7000,
-    image: "products/mobilei4.jpeg",
-    weight: 1.2,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Sam JK",
-    description:
-      "Stunning display, lightning-fast performance, and exceptional camera. Unleash your potential.",
-    category: "mobile",
-    price: 5000,
-    image: "products/mobiles1.jpeg",
-    variants: [
-      {
-        color: "Blue",
-        size: "10 inch",
-        material: "Aluminum",
-      },
-      {
-        color: "Black",
-        size: "10 inch",
-        material: "Carbon Fiber",
-      },
-    ],
-    weight: 1.2,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Sam XR",
-    description:
-      "Samsung Galaxy: A fusion of style and power, boasting a stunning display and lightning-fast performance.",
-    category: "mobile",
-    price: 10000,
-    image: "products/mobiles2.jpeg",
-    variants: [
-      {
-        color: "Green",
-        size: "11 inch",
-        material: "Aluminum",
-      },
-      {
-        color: "Black",
-        size: "10 inch",
-        material: "Sulphur Lining",
-      },
-    ],
-    weight: 1.2,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "XR Galaxy",
-    description:
-      "Samsung Galaxy: Sleek design, powerful performance, and vibrant display, all in one pocket-friendly device.",
-    category: "mobile",
-    price: 9500,
-    image: "products/mobiles3.jpeg",
-    variants: [
-      {
-        color: "Green",
-        size: "11 inch",
-        material: "Aluminum",
-      },
-    ],
-    weight: 1.2,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Sam XR",
-    description:
-      "Samsung Galaxy: Sleek design, powerful performance, and vibrant display, setting new standards in mobile excellence.",
-    category: "mobile",
-    price: 8000,
-    image: "products/mobiles4.jpeg",
-    weight: 1.2,
-    star: 3,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "The Midnight Library",
-    description:
-      "A captivating novel about life's infinite possibilities. Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived.",
-    category: "ebook",
-    price: 1500,
-    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop&crop=center",
-    weight: 0.001,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Think and Grow Rich",
-    description:
-      "Napoleon Hill's timeless classic on achieving success and wealth. This inspirational masterpiece reveals the secret to financial independence and personal achievement through the power of thought.",
-    category: "ebook",
-    price: 1200,
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=600&fit=crop&crop=center",
-    weight: 0.001,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "The Alchemist",
-    description:
-      "Paulo Coelho's inspiring tale of Santiago, an Andalusian shepherd boy who travels from Spain to Egypt in search of treasure. A story about following your dreams and listening to your heart.",
-    category: "ebook",
-    price: 1800,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=center",
-    weight: 0.001,
-    star: 4,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    name: "Atomic Habits",
-    description:
-      "James Clear's groundbreaking book on building good habits and breaking bad ones. Learn how tiny changes can make a remarkable difference in your life through proven strategies.",
-    category: "ebook",
-    price: 2200,
-    salePrice: 1800,
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop&crop=center",
-    weight: 0.001,
-    star: 5,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
 
 export const date = (date: FirestoreDate): Date => {
   return new Date((date.seconds as any) * 1000);
@@ -578,3 +213,39 @@ export const ErrorFilter = (
       return "Failed to complete operation. Pleast try again later, if issue persist, please contact administrator.";
   }
 };
+
+export const courses: ProductItemType[] = [
+  {
+    id: "03d59254-b182",
+    downloadable: EmeraldsWebsoftwareDevelopment,
+    name: "Web Software Development",
+    description: "Learn the fundamentals of web development with a focus on modern technologies and best practices.",
+    category: "Beginner",
+    price: 10000,
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
+    star: 5,
+    cartQuantity: 1,
+  },
+  {
+    id: "7bc4dc1e-b39c",
+    downloadable: EmeraldsWebBeginnerCourse,
+    name: "Web3 Beginner Course",
+    description: "A comprehensive introduction to Web3 technologies and their applications.",
+    category: "Intermediate",
+    price: 5000,
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    star: 4,
+    cartQuantity: 1,
+  },
+  {
+    id: "9535be98-df7e",
+    downloadable: EmeraldsillustratedGraphicCourse,
+    name: "Illustrated Graphic",
+    description: "Learn the principles of graphic design and how to create stunning visuals.",
+    category: "All Levels",
+    price: 15000,
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80",
+    star: 5,
+    cartQuantity: 1,
+  },
+];

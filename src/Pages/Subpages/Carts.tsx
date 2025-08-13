@@ -10,7 +10,7 @@ const Carts = () => {
   return (
     <>
       <h3 className="text-4xl font-bold tracking-wider">
-        My Carts [{data.length}]
+        My Carts [{data?.length}]
       </h3>
       {(data.length > 0 && (
         <>
@@ -19,11 +19,8 @@ const Carts = () => {
               type="carts_listing"
               products={data.map((item) => {
                 let data = {
-                  ...{
-                    cartQuantity: item.quantity,
-                    discount: item.discount,
-                  },
                   ...item.metadata,
+                  cartQuantity: item.quantity,
                 } as ProductItemType;
                 return data;
               })}
@@ -57,10 +54,10 @@ const Carts = () => {
           </div>
         </>
       )) || (
-        <div className="mt-9 bg-gray-200 bg-opacity-50 rounded px-2 py-6">
-          <p className="font-bold text-center">No item in cart</p>
-        </div>
-      )}
+          <div className="mt-9 bg-gray-200 bg-opacity-50 rounded px-2 py-6">
+            <p className="font-bold text-center">No item in cart</p>
+          </div>
+        )}
     </>
   );
 };

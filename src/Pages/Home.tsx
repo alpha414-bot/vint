@@ -2,42 +2,9 @@
 import ProductItem from "@/Components/ProductItem";
 import MainLayout from "@/Layouts/MainLayout";
 import { notify } from "@/notify";
+import { courses } from "@/System/function";
 import React from "react";
 import { useForm } from "react-hook-form";
-
-// Dummy course data
-const courses: ProductItemType[] = [
-  {
-    id: "1",
-    name: "Emerald Ecommerce Mastery",
-    description: "Learn how to build, launch, and scale your own online store with modern tools and strategies.",
-    category: "Beginner",
-    price: 49,
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
-    star: 5,
-    cartQuantity: 1,
-  },
-  {
-    id: "2",
-    name: "Advanced Product Marketing",
-    description: "Master the art of digital marketing for ecommerce products and boost your sales.",
-    category: "Intermediate",
-    price: 69,
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
-    star: 4,
-    cartQuantity: 1,
-  },
-  {
-    id: "3",
-    name: "Shopify & WooCommerce Bootcamp",
-    description: "Hands-on course to set up and optimize your store using Shopify and WooCommerce.",
-    category: "All Levels",
-    price: 59,
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80",
-    star: 5,
-    cartQuantity: 1,
-  },
-];
 
 const Home: React.FC = () => {
   const { register, handleSubmit } = useForm();
@@ -55,7 +22,7 @@ const Home: React.FC = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white">
         {/* Hero Section */}
-        <section className="flex flex-col items-center justify-center py-20 px-4 text-center">
+        <section className="flex flex-col items-center justify-center pt-20 pb-8 px-4 text-center">
           <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-rose-400 drop-shadow-lg">Emerald</h1>
           <p className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto text-gray-300">
             The modern platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
@@ -66,7 +33,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* Courses Section */}
-        <section id="courses" className="py-16 px-4 max-w-6xl mx-auto">
+        <section id="courses" className="py-6 px-4 max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-rose-400">Featured Courses</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {courses.map((course) => (

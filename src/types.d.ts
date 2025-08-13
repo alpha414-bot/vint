@@ -11,7 +11,7 @@ type CartMetaItem = {
   discount?: { name: string; value: number };
   createdAt?: FirestoreDate;
   updatedAt?: FirestoreDate;
-  metadata?: CourseItemType;
+  metadata?: ProductItemType;
 };
 type CartProductItem = {
   products: CartMetaItem[];
@@ -65,15 +65,6 @@ interface VantaEffectOptions {
   baseColor?: number;
 }
 
-interface CourseItemType {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  price: string;
-  level: string;
-}
-
 interface ProductItemType {
   id?: string;
   name: string;
@@ -81,20 +72,12 @@ interface ProductItemType {
   category: string;
   price: number;
   salePrice?: number;
-  variants?: ProductVariantType[];
   image?: string;
   createdAt?: FirestoreDate | Date;
   updatedAt?: FirestoreDate | Date;
-  weight?: number;
   star?: number;
+  downloadable: any;
   cartQuantity?: number;
-  discount?: { name: "#chameleon" | "#hackathonchameleon"; value: number };
-}
-
-interface ProductVariantType {
-  color?: string;
-  size?: string;
-  material?: string;
 }
 
 interface UserDataLoaderInterface {
@@ -123,14 +106,9 @@ interface UserSignInFormInput {
 }
 
 interface PaymentOnSuccessProps {
-  message: string;
-  redirecturl: string;
   reference: string;
-  status: string;
-  trans: string;
-  transaction: string;
-  trxref: string;
-  amount: any;
+  gateway?: string;
+  amount?: any;
 }
 
 interface BillingInputInterface {
@@ -142,7 +120,7 @@ interface BillingInputInterface {
   phone_number?: string;
   state?: DropdownOptionsType;
   username?: string;
-  email?: string;
+  email?: any;
   password?: string;
   confirm_password?: string;
 }

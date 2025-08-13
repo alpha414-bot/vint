@@ -1,4 +1,4 @@
-# Enable rewrite engine
+# Enable rewrite engine (for ReactJS)
 RewriteEngine On
 
 # 🔒 Disable directory listing

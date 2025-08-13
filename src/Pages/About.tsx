@@ -7,14 +7,40 @@ const About = () => {
   const PartnerSliderSettings = {
     dots: false,
     infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+    slidesToShow: 4,
+    slidesToScroll: 2,
     autoplay: true,
     arrows: false,
+    centerMode: true,
   } as Settings;
   const PartnerData = [
-    { img: "https://learnchameleon.com/assets/text-logo-udJ6imDo.svg" },
+    {
+      img: "https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw"
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Flutterwave_Logo.png" // Flutterwave
+    },
+    {
+      img: "https://seeklogo.com/images/P/paystack-logo-0B2E8C0C0E-seeklogo.com.png" // Paystack
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png" // Flutter
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" // Microsoft
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" // Google
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" // React
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" // JavaScript
+    },
+    {
+      img: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Cib-github.svg" // GitHub
+    },
   ];
   return (
     <MainLayout title="About Us">
@@ -22,27 +48,7 @@ const About = () => {
         <div>
           <h2 className="text-4xl font-extrabold tracking-wider">About Us</h2>
           <div className="mt-2 font-normal">
-            Welcome to <strong> Vint Tech Store</strong>, your one-stop
-            destination for all things tech! Whether you're in the market for a
-            new laptop, the latest mobile phone, or cutting-edge gadgets, we've
-            got you covered.
-            <br />
-            <br /> Here, we pride ourselves on offering a seamless shopping
-            experience, combining the best products with exceptional customer
-            service. Our curated selection of laptops, mobiles, and gadgets
-            ensures that you have access to the latest and greatest in
-            technology, all at competitive prices.
-            <br />
-            <br /> This project is a labor of love, dedicated to the{" "}
-            <strong className="underline underline-offset-41 decoration-dotted">
-              Chameleon Hackathon community
-            </strong>
-            . Inspired by the innovation and creativity fostered by Chameleon AI building platform,
-            we strive to bring those values into our store, providing our
-            customers with not just products, but a commitment to quality and
-            excellence. Thank you for choosing <strong> Vint Tech Store</strong>
-            . We're here to help you find the perfect tech solutions to meet
-            your needs. Happy shopping!
+            Welcome to <strong> Emeralds Ventures</strong>, where we are committed to providing the best tech solutions for our customers. Our mission is to empower individuals and businesses with the latest technology, helping them thrive in a fast-paced digital world, and our vision is to be a leading tech company that transforms the way people interact with technology. Together, we can achieve great things and make a positive impact on the world through innovation and collaboration.
           </div>
         </div>
         <div>

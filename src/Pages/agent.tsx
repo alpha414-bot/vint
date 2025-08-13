@@ -1,20 +1,14 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { useState } from "react";
+import { addProduct } from "@/Services/Query";
 import { useForm } from "react-hook-form";
 
-interface Product {
-    name: string;
-    price: number;
-    description: string;
-    image: string;
-}
 
 const AgentDashboard = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit, formState: { errors } } = useForm()
 
     const handleFormSubmit = (data: any) => {
-
+        addProduct(data)
+        console.log("Are you sure you want to add this product?", data);
     };
 
     return (
@@ -25,14 +19,20 @@ const AgentDashboard = () => {
                     <input
                         type="text"
                         placeholder="Product Name"
-                        {...register("name", { required: "Product name is required" })}
+                        {...register("name", { required: "Name is required" })}
                         className="w-full border text-gray-950 px-3 py-2 rounded"
                     />
+                    {
+                        errors.name && <span className="text-rose-500 text-sm mt-2">{errors.name.message as string}</span>
+                    }
                     <textarea
                         placeholder="Description"
                         {...register("description", { required: "Description is required" })}
                         className="w-full border text-gray-950 px-3 py-2 rounded"
                     />
+                    {
+                        errors.description && <span className="text-rose-500 text-sm mt-2">{errors.description.message as string}</span>
+                    }
                     <input
                         type="text"
                         placeholder="Image URL"
@@ -45,9 +45,12 @@ const AgentDashboard = () => {
                         <option value="intermediate">Intermediate</option>
                         <option value="advanced">Advanced</option>
                     </select>
+                    {
+                        errors.category && <span className="text-rose-500 text-sm mt-2">{errors.category.message as string}</span>
+                    }
                     <button
                         type="submit"
-                        className="bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700"
+                        className="block bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700"
                     >
                         Add Product
                     </button>

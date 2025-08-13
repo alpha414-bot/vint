@@ -30,10 +30,7 @@ const OutsideClick: React.FC<OutsideClickInterface> = ({
       document.addEventListener("keydown", (e) => {
         let key = e.key;
         if (
-          key === "Enter" ||
-          key === "Tab" ||
-          key === "Escape" ||
-          key === "Meta"
+          key === "Escape"
         ) {
           handleClickOutside(document);
         }

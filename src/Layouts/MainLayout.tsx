@@ -26,7 +26,7 @@ const MainLayout: React.FC<{
       )}
 
       <meta name="description" content={description} />
-      <title>{title} - Vint</title>
+      <title>{title} - Emeralds Venture</title>
       <div>
         {/* <div className="inline-flex flex-col justify-between w-full min-h-screen "> */}
         {!no_navbar && <Navbar />}

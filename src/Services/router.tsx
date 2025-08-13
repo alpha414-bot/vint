@@ -1,7 +1,4 @@
-import Button from "@/Components/Button";
-import MainLayout from "@/Layouts/MainLayout";
 import About from "@/Pages/About";
-import AgentDashboard from "@/Pages/agent";
 import ForgotPassword from "@/Pages/Auth/ForgotPassword";
 import AuthPage from "@/Pages/AuthPage";
 import Checkout from "@/Pages/Checkout";
@@ -11,7 +8,6 @@ import Home from "@/Pages/Home";
 import Product from "@/Pages/Product";
 import Carts from "@/Pages/Subpages/Carts";
 import Orders from "@/Pages/Subpages/Orders";
-import { DummyData } from "@/System/function";
 import { useLayoutEffect } from "react";
 import {
   Navigate,
@@ -20,7 +16,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useAuthUser, useCartProducts } from "./Hook";
-import { addCollectionDoc } from "./Query";
 
 // Creating a higher-order component to wrap the router with scroll-to-top functionality
 const withScrollToTop = (routerConfig: RouteObject[]) => {
@@ -174,35 +169,6 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
   },
-  // help
-  {
-    path: "/help",
-    element: (
-      <MainLayout
-        title="Help"
-        description="Reach to us for help concerning our site"
-      >
-        <Button
-          onClick={() =>
-            addCollectionDoc("Products", DummyData).then((data) => {
-              console.log("data is added", data);
-            })
-          }
-        >
-          Add product data
-        </Button>
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/agent',
-    element: (
-      <ProtectedRoute>
-        <AgentDashboard />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  }
 ];
 
 const router = createBrowserRouter(withScrollToTop(routes));

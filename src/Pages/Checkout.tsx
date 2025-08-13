@@ -1,6 +1,6 @@
 import Button from "@/Components/Button";
+import GatewayConsumer from "@/Components/Gateway";
 import Input from "@/Components/Input";
-import PayDesk from "@/Components/PayDesk";
 import SelectDropdown from "@/Components/SelectDropdown";
 import TextArea from "@/Components/TextArea";
 import MainLayout from "@/Layouts/MainLayout";
@@ -18,6 +18,8 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import * as ENV from "../../package.json";
+
 
 const Checkout = () => {
   const { data: carts } = useCartProducts() as { data: CartMetaItem[] };
@@ -27,7 +29,7 @@ const Checkout = () => {
     useForm<BillingInputInterface>({
       mode: "all",
     });
-  const FormValue = watch();
+  const formValue = { ...auth.currentUser, ...watch(), };
   const onSubmit: SubmitHandler<BillingInputInterface> = (data) => {
     if (isForm === 1) {
       // about creating an account...
@@ -78,16 +80,14 @@ const Checkout = () => {
                 <button
                   type="submit"
                   key={index}
-                  className={`flex items-center gap-x-1 ${
-                    isForm == index ? "text-rose-600" : ""
-                  }`}
+                  className={`flex items-center gap-x-1 ${isForm == index ? "text-rose-600" : ""
+                    }`}
                 >
                   <div
-                    className={`border p-1 rounded-full ${
-                      isForm == index
-                        ? "bg-rose-600 border-rose-600 text-white"
-                        : "border-gray-200"
-                    }`}
+                    className={`border p-1 rounded-full ${isForm == index
+                      ? "bg-rose-600 border-rose-600 text-white"
+                      : "border-gray-200"
+                      }`}
                   >
                     {item.icon == "store" && (
                       <svg
@@ -209,7 +209,6 @@ const Checkout = () => {
                 <p className="mt-1 text-xs font-medium italic">
                   All asterik (*) are required to be filled.
                 </p>
-
                 <div className="mt-6 w-full space-y-8">
                   {/* first name & last name */}
                   <div className="flex flex-col gap-6 md:gap-12 md:flex-row">
@@ -218,14 +217,14 @@ const Checkout = () => {
                       name="first_name"
                       placeholder="First Name"
                       rules={{ required: "First name is required" }}
-                      defaultValue={FormValue.first_name}
+                      defaultValue={formValue.first_name}
                     />
                     <Input
                       control={control}
                       name="last_name"
                       placeholder="Last Name"
                       rules={{ required: "Last name is required" }}
-                      defaultValue={FormValue.last_name}
+                      defaultValue={formValue.last_name}
                     />
                   </div>
                   {/* street address */}
@@ -235,7 +234,7 @@ const Checkout = () => {
                       name="street_address"
                       placeholder="Street Address"
                       rules={{ required: "Street address is required" }}
-                      defaultValue={FormValue.street_address}
+                      defaultValue={formValue.street_address}
                     />
                   </div>
                   {/* postal code & town/city */}
@@ -245,14 +244,14 @@ const Checkout = () => {
                       name="postal_code"
                       placeholder="Postal Code"
                       rules={{ required: "Postal code is required" }}
-                      defaultValue={FormValue.postal_code}
+                      defaultValue={formValue.postal_code}
                     />
                     <Input
                       control={control}
                       name="town"
                       placeholder="Town/City"
                       rules={{ required: "Town/City is required" }}
-                      defaultValue={FormValue.town}
+                      defaultValue={formValue.town}
                     />
                   </div>
                   {/* state/province */}
@@ -261,7 +260,7 @@ const Checkout = () => {
                       control={control}
                       placeholder="State/Province"
                       name="state"
-                      defaultValue={FormValue.state}
+                      defaultValue={formValue.state}
                       options={NigeriaState}
                       rules={{
                         required:
@@ -283,7 +282,7 @@ const Checkout = () => {
                           message: "Phone number can't contain letters",
                         },
                       }}
-                      defaultValue={FormValue.phone_number}
+                      defaultValue={formValue.phone_number}
                     />
                   </div>
                 </div>
@@ -300,7 +299,7 @@ const Checkout = () => {
                       className="text-base font-medium"
                       dangerouslySetInnerHTML={{
                         __html: auth.currentUser.displayName
-                          ? `Hello, <strong>${_.startCase(auth.currentUser.displayName)}</strong>`
+                          ? `Hello, <strong>${(auth.currentUser.displayName)}</strong>`
                           : "",
                       }}
                     />
@@ -314,87 +313,87 @@ const Checkout = () => {
                     </p>
                   </div>
                 )) || (
-                  <>
-                    <h3 className="text-2xl font-bold leading-none text-white">
-                      Create an account
-                    </h3>
-                    <p className="mt-1 text-xs font-medium italic">
-                      Create an account with us now to easily place order again
-                      and to login at any time.
-                    </p>
-                    <div className="mt-6 space-y-8">
-                      <div>
-                        <Input
-                          control={control}
-                          rules={{
-                            required: "Username field is required",
-                          }}
-                          name="username"
-                          defaultValue={FormValue.username}
-                          placeholder="Username"
-                        />
-                      </div>
-                      <div>
-                        <Input
-                          control={control}
-                          rules={{
-                            required: "Email field is required",
-                            pattern: {
-                              value: EmailPattern,
-                              message: "Ouch, that doesn't look like an email!",
-                            },
-                          }}
-                          name="email"
-                          type="email"
-                          defaultValue={FormValue.email}
-                          placeholder="Email address"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-6 md:gap-12 md:flex-row">
-                        <Input
-                          type="password"
-                          control={control}
-                          name="password"
-                          placeholder="Password"
-                          defaultValue={FormValue.password}
-                          rules={{
-                            required: "Password field is required",
-                            minLength: {
-                              value: 8,
-                              message:
-                                "Password must contain the following: <br/> <em> - a <strong>lowercase</strong> letter <br/> - an <strong>uppercase</strong> letter <br/> - a <strong>number</strong> <br/> - Minimum of 8 characters </em> ",
-                            },
-                            pattern: {
-                              value: PasswordPattern,
-                              message:
-                                "Password must contain the following: <br/> <em> - a <strong>lowercase</strong> letter <br/> - an <strong>uppercase</strong> letter <br/> - a <strong>number</strong> <br/> - Minimum of 8 characters </em> ",
-                            },
-                          }}
-                        />
+                    <>
+                      <h3 className="text-2xl font-bold leading-none text-white">
+                        Create an account
+                      </h3>
+                      <p className="mt-1 text-xs font-medium italic">
+                        Create an account with us now to easily place order again
+                        and to login at any time.
+                      </p>
+                      <div className="mt-6 space-y-8">
+                        <div>
+                          <Input
+                            control={control}
+                            rules={{
+                              required: "Username field is required",
+                            }}
+                            name="username"
+                            defaultValue={formValue.username}
+                            placeholder="Username"
+                          />
+                        </div>
+                        <div>
+                          <Input
+                            control={control}
+                            rules={{
+                              required: "Email field is required",
+                              pattern: {
+                                value: EmailPattern,
+                                message: "Ouch, that doesn't look like an email!",
+                              },
+                            }}
+                            name="email"
+                            type="email"
+                            defaultValue={formValue.email as any}
+                            placeholder="Email address"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-6 md:gap-12 md:flex-row">
+                          <Input
+                            type="password"
+                            control={control}
+                            name="password"
+                            placeholder="Password"
+                            defaultValue={formValue.password}
+                            rules={{
+                              required: "Password field is required",
+                              minLength: {
+                                value: 8,
+                                message:
+                                  "Password must contain the following: <br/> <em> - a <strong>lowercase</strong> letter <br/> - an <strong>uppercase</strong> letter <br/> - a <strong>number</strong> <br/> - Minimum of 8 characters </em> ",
+                              },
+                              pattern: {
+                                value: PasswordPattern,
+                                message:
+                                  "Password must contain the following: <br/> <em> - a <strong>lowercase</strong> letter <br/> - an <strong>uppercase</strong> letter <br/> - a <strong>number</strong> <br/> - Minimum of 8 characters </em> ",
+                              },
+                            }}
+                          />
 
-                        <Input
-                          type="password"
-                          control={control}
-                          name="confirm_password"
-                          placeholder="Confirm Password"
-                          defaultValue={FormValue.confirm_password}
-                          rules={{
-                            required: "Password field is required",
-                            validate: (value) =>
-                              value === FormValue.password
-                                ? true
-                                : "Password is mismatch. Enter the right password",
-                            pattern: {
-                              value: PasswordPattern,
-                              message:
-                                "Password must contain the following: <br/> <em> - a <strong>lowercase</strong> letter <br/> - an <strong>uppercase</strong> letter <br/> - a <strong>number</strong> <br/> - Minimum of 8 characters </em> ",
-                            },
-                          }}
-                        />
+                          <Input
+                            type="password"
+                            control={control}
+                            name="confirm_password"
+                            placeholder="Confirm Password"
+                            defaultValue={formValue.confirm_password}
+                            rules={{
+                              required: "Password field is required",
+                              validate: (value) =>
+                                value === formValue.password
+                                  ? true
+                                  : "Password is mismatch. Enter the right password",
+                              pattern: {
+                                value: PasswordPattern,
+                                message:
+                                  "Password must contain the following: <br/> <em> - a <strong>lowercase</strong> letter <br/> - an <strong>uppercase</strong> letter <br/> - a <strong>number</strong> <br/> - Minimum of 8 characters </em> ",
+                              },
+                            }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )}
                 <div className="mt-5 flex justify-end">
                   <button
                     type="submit"
@@ -436,11 +435,11 @@ const Checkout = () => {
                       </svg>
                       <div>
                         <p className="text-sm tracking-tight">
-                          {FormValue.first_name} {FormValue.last_name}
+                          {formValue.first_name} {formValue.last_name}
                           <br />
-                          {FormValue.street_address}
+                          {formValue.street_address}
                           <br />
-                          {FormValue?.state?.value}, {FormValue.postal_code}
+                          {formValue?.state?.value}, {formValue.postal_code}
                           <br />
                           Nigeria
                         </p>
@@ -459,22 +458,43 @@ const Checkout = () => {
                         <path d="M7.978 4a2.553 2.553 0 0 0-1.926.877C4.233 6.7 3.699 8.751 4.153 10.814c.44 1.995 1.778 3.893 3.456 5.572 1.68 1.679 3.577 3.018 5.57 3.459 2.062.456 4.115-.073 5.94-1.885a2.556 2.556 0 0 0 .001-3.861l-1.21-1.21a2.689 2.689 0 0 0-3.802 0l-.617.618a.806.806 0 0 1-1.14 0l-1.854-1.855a.807.807 0 0 1 0-1.14l.618-.62a2.692 2.692 0 0 0 0-3.803l-1.21-1.211A2.555 2.555 0 0 0 7.978 4Z" />
                       </svg>
                       <p className="text-sm tracking-tight">
-                        {FormValue.phone_number}
+                        {formValue.phone_number}
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="mt-8 flex flex-wrap items-stretch gap-4">
-                  <PayDesk
-                    metadata={carts}
-                    amount={TotalProductPrice}
-                    onSuccess={(reference: any) => {
-                      newOrderQuery(reference, carts, FormValue).then(() => {
+                  <GatewayConsumer
+                    gateway={ENV.gateway as any}
+                    config={{
+                      public_key: ENV.gateway == "flutterwave" ? ENV.FlutterwavePublicKey : ENV.PaystackPublicKey,
+                      amount: TotalProductPrice,
+                      customer: {
+                        name: `${formValue.first_name} ${formValue.last_name}`,
+                        email: formValue.email || "user@gmail.com",
+                        phone_number: formValue.phone_number,
+                      },
+                      reference: `emeralds${new Date().getTime()}_${Math.random()}`,
+                      app: window.location.host,
+                    }}
+                    onSuccess={(reference, gateway) => {
+                      newOrderQuery({ gateway, reference, amount: TotalProductPrice }, carts, watch()).then(() => {
                         reset();
                         navigate("/user/orders");
                       });
                     }}
-                  />
+                  >
+                    {
+                      ({ initializePayment }) => (
+                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-center rounded-lg bg-rose-700 hover:bg-rose-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-rose-600" onClick={() => {
+                          initializePayment();
+                        }}>
+                          Pay Now
+                        </button>
+                      )
+                    }
+                  </GatewayConsumer>
+
                 </div>
               </div>
             )}
@@ -496,22 +516,21 @@ const Checkout = () => {
               {carts.map((item, index) => {
                 const product = item.metadata;
                 return (
-                  <div key={index} className="flex items-start justify-between">
-                    <p className="text-sm font-medium">{product?.name}:</p>
+                  <div key={index} className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-medium">{product?.name}:</p>
                     <div>
                       {price(
                         (product?.price || 1) * (product?.cartQuantity || 1),
                         "currency",
                         0
                       )}
-                      {item.discount && (
-                        <span
-                          className="ml-1 text-xs"
-                          dangerouslySetInnerHTML={{
-                            __html: `-${item.discount.value}%`,
-                          }}
-                        />
-                      )}
+                      <span
+                        className="ml-1 text-xs font-bold"
+                        dangerouslySetInnerHTML={{
+                          __html: `x${item.quantity}`,
+                        }}
+                      />
+
                     </div>
                   </div>
                 );

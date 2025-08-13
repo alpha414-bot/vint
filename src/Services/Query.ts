@@ -1,16 +1,16 @@
-import { ErrorFilter, isURL } from "@/System/function";
+import { courses, ErrorFilter, isURL } from "@/System/function";
 import { auth, firestore } from "@/firebase-config";
 import { notify } from "@/notify";
 import { getUrl } from "aws-amplify/storage";
 import {
   EmailAuthProvider,
-  User,
   linkWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  User,
 } from "firebase/auth";
 import {
   addDoc,
@@ -25,6 +25,7 @@ import {
   updateDoc,
   where
 } from "firebase/firestore";
+import _ from "lodash";
 
 export const getProductData = (listener: any, product_id?: any) =>
   new Promise(async (resolve, reject) => {
@@ -165,7 +166,6 @@ export const addCollectionDoc = (
       reject(error);
     }
   });
-
 export const addToCartQuery = (product: ProductItemType) =>
   new Promise((resolve, reject) => {
     try {
@@ -183,14 +183,14 @@ export const addToCartQuery = (product: ProductItemType) =>
                 return item.productID === (product.id?.toString())
                   ? {
                     ...item,
-                    quantity: item.quantity + 1,
+                    quantity: item.quantity,
                     updatedAt: new Date(),
                   }
                   : item;
               }
             ); // this might not be necessary
             const NewUserProducts = UserCartProducts?.products.some(
-              (item) => item.productID === product.id?.toString()
+              (item) => item.productID.toString() === product.id?.toString()
             )
               ? UpdateInUserProducts // no new products, work still on old products added
               : [
@@ -508,10 +508,7 @@ export const getCartProducts = (listener: any): Promise<CartMetaItem[]> =>
             if (DocDataProducts) {
               // Map products to an array of promises
               const productPromises = DocDataProducts.map(async (item) => {
-                const productData = await getProductData(
-                  (data: any) => listener(data, "product"),
-                  item.productID
-                );
+                const productData = courses.find(e => e.id?.toString() === item.productID.toString())
                 return {
                   ...item,
                   metadata: productData,
@@ -524,6 +521,7 @@ export const getCartProducts = (listener: any): Promise<CartMetaItem[]> =>
                 })
                 .catch((error) => {
                   console.error("Error fetching product data:", error);
+                  reject(error)
                 });
             }
             // resolve(listener(DocDataProducts || []));
@@ -569,14 +567,14 @@ export const newOrderQuery = (
             // retrieving the order payment reference
             resolve(UserProductItems.data());
           } else {
-            setDoc(PaymentReferenceDoc, {
+            setDoc(PaymentReferenceDoc, _.omitBy({
               payment_instance: payment_instance,
               products: carts,
               billing_info: billing_info,
               user_uid: auth.currentUser?.uid,
               createdAt: new Date(),
               updatedAt: new Date(),
-            })
+            }, _.isUndefined))
               .then((data) => {
                 notify.success({
                   text: `Payment is successful and order received. You would be redirected to order page to track your products.`,
