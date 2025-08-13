@@ -30,46 +30,12 @@ import _ from "lodash";
 export const getProductData = (listener: any, product_id?: any) =>
   new Promise(async (resolve, reject) => {
     try {
-      const ProductCollection = collection(firestore, "Products");
       if (product_id) {
         // return only a single product using the product_id
-        const ProductDoc = doc(ProductCollection, product_id);
-        onSnapshot(
-          ProductDoc,
-          (singleSnap) => {
-            resolve(listener({ ...singleSnap.data(), id: product_id }));
-          },
-          (error) => {
-            notify.error({
-              title: "Error",
-              text: `[Error #BtG]: ON_SNAPSHOT_ERROR: ${JSON.stringify(
-                error
-              )}. <br/>Contact administrator.`,
-            });
-            reject(error);
-          }
-        );
+        return resolve(listener(courses.find(e => e.id?.toString() == product_id.toString())))
       } else {
         // return all the products in the ProductCollection with pagination
-        let productQuery = query(ProductCollection, orderBy("createdAt"));
-
-        onSnapshot(
-          productQuery,
-          (snap) => {
-            resolve(
-              listener(snap.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-            );
-          },
-          (error) => {
-            notify.error({
-              title: "Error",
-              text: `[Error ^HSTs]: SNAPSHOT_ERROR_WHILE_RETRIEVING_PRODUCTS: ${JSON.stringify(
-                error
-              )}. <br/>Contact administrator`,
-            });
-            reject(error);
-          }
-        );
+        return resolve(listener(courses))
       }
     } catch (error) {
       notify.error({

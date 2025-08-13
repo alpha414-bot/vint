@@ -75,14 +75,6 @@ const Product = () => {
                         "currency",
                         0
                       )}
-                      {product?.discount && (
-                        <span
-                          className="align-super ml-1 text-sm"
-                          dangerouslySetInnerHTML={{
-                            __html: `-${product.discount.value}%`,
-                          }}
-                        />
-                      )}
                     </p>
                     {product.salePrice && (
                       <p className="text-sm text-left text-rose-600 font-semibold line-through lg:text-right">
@@ -122,7 +114,7 @@ const Product = () => {
                     }
                     className="w-full py-0.5"
                     onClick={() => {
-                      addToCartQuery(product).then(() => {});
+                      addToCartQuery(product).then(() => { });
                     }}
                   />
                 </div>
@@ -183,44 +175,6 @@ const Product = () => {
               <div className="mt-4">
                 <span className="font-bold text-xl">Features:</span>
                 <div className="w-full pt-5 space-y-12">
-                  {product.variants && (
-                    <div className="flex items-start gap-8 justify-between">
-                      <span className="font-semibold text-base">Variants:</span>
-                      <div className="flex flex-col items-start gap-5 lg:flex-row">
-                        {product.variants.map((item, index) => (
-                          <div
-                            key={index}
-                            className="cursor-pointer space-y-2 border border-gray-200 px-2 min-w-44 py-2 rounded-md hover:bg-gray-200/10 group"
-                          >
-                            <p
-                              className="inline-block text-lg font-semibold bg-gray-400/25 pl-3 pr-5 rounded group-hover:font-extrabold"
-                              style={{ color: item.color }}
-                            >
-                              {item.color}
-                            </p>
-                            <div>
-                              <p className="text-sm font-medium font-mono tracking-[0.5rem]">
-                                {item.size}
-                              </p>
-                              <p className="text-sm font-medium">
-                                Material: {item.material}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {product.weight && (
-                    <div className="flex items-start gap-8 justify-between">
-                      <span className="font-semibold text-base">
-                        Weight (kg):
-                      </span>
-                      <p className="inline-block text-lg font-semibold bg-gray-400/25 pl-3 pr-5 rounded">
-                        {product.weight}
-                      </p>
-                    </div>
-                  )}
                   {product.star && (
                     <div className="flex items-start gap-2 justify-between">
                       <span className="font-semibold text-base">Ratings:</span>
@@ -240,22 +194,22 @@ const Product = () => {
                                 <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
                               </svg>
                             )) || (
-                              <svg
-                                className="w-6 h-6 dark:text-yellow-500"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  stroke="currentColor"
-                                  strokeWidth="1.2"
-                                  d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"
-                                />
-                              </svg>
-                            )}
+                                <svg
+                                  className="w-6 h-6 dark:text-yellow-500"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    strokeWidth="1.2"
+                                    d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"
+                                  />
+                                </svg>
+                              )}
                           </div>
                         ))}
                       </div>
@@ -276,12 +230,12 @@ const Product = () => {
                 products={SimilarProducts || []}
               />
             )) || (
-              <div className="bg-gray-600/60 py-2 rounded">
-                <p className="font-bold text-base text-center">
-                  No such entry yet
-                </p>
-              </div>
-            )}
+                <div className="bg-gray-600/60 py-2 rounded">
+                  <p className="font-bold text-base text-center">
+                    No such entry yet
+                  </p>
+                </div>
+              )}
           </div>
         </div>
       </div>
