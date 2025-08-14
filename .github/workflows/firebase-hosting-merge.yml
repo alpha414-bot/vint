@@ -12,6 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
+      - name: 🕒 Write version.txt with upload time
+        run: |
+          echo "Last upload: $(date -u)" > dist/version.txt
+          echo "Version: $(git rev-parse HEAD)" >> dist/version.txt
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

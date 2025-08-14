@@ -34,7 +34,6 @@ const Home: React.FC = () => {
 
         {/* Courses Section */}
         <section id="courses" className="py-6 px-4 max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-rose-400">Featured Courses</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {courses.map((course) => (
               <ProductItem
