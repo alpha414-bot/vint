@@ -5,9 +5,12 @@ import Checkout from "@/Pages/Checkout";
 import Dashboard from "@/Pages/Dashboard";
 import ErrorPage from "@/Pages/ErrorPage";
 import Home from "@/Pages/Home";
+import PrivacyPolicyPage from "@/Pages/PrivacyPolicy";
 import Product from "@/Pages/Product";
+import RefundPolicyPage from "@/Pages/RefundPolicy";
 import Carts from "@/Pages/Subpages/Carts";
 import Orders from "@/Pages/Subpages/Orders";
+import TermsConditionsPage from "@/Pages/TermsConditions";
 import { useLayoutEffect } from "react";
 import {
   Navigate,
@@ -169,6 +172,30 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
   },
+  {
+    path: "/privacy-policy",
+    element: (
+      <ProtectedRoute>
+        <PrivacyPolicyPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/refund-policy",
+    element: (
+      <ProtectedRoute>
+        <RefundPolicyPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/terms-conditions",
+    element: (
+      <ProtectedRoute>
+        <TermsConditionsPage />
+      </ProtectedRoute>
+    )
+  }
 ];
 
 const router = createBrowserRouter(withScrollToTop(routes));

@@ -1,4 +1,5 @@
-import { courses, ErrorFilter, isURL } from "@/System/function";
+import { courses, } from "@/System/courses";
+import { ErrorFilter, isURL } from "@/System/function";
 import { auth, firestore } from "@/firebase-config";
 import { notify } from "@/notify";
 import { getUrl } from "aws-amplify/storage";

@@ -31,7 +31,7 @@ const AuthPage = () => {
       title="Login to your dashboard"
       description="Login to your account to view and track your order"
     >
-      <div className="px-6 py-12 flex flex-col items-start gap-12 md:flex-row">
+      <div className="mx-auto w-full max-w-7xl px-6 py-12 flex flex-col items-start gap-12 md:flex-row">
         {/* SignIn Section */}
         <form
           onSubmit={SignInHandleSubmit(onSignInFormSubmit)}
@@ -115,9 +115,9 @@ const AuthPage = () => {
                 rules={{
                   required: "Username field is required",
                 }}
-                // updateOnChange={(e: BaseSyntheticEvent) => {
-                //   return { ...e, ...{ value: "ola" } };
-                // }}
+              // updateOnChange={(e: BaseSyntheticEvent) => {
+              //   return { ...e, ...{ value: "ola" } };
+              // }}
               />
             </div>
             <div>

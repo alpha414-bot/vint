@@ -2,9 +2,10 @@
 import ProductItem from "@/Components/ProductItem";
 import MainLayout from "@/Layouts/MainLayout";
 import { notify } from "@/notify";
-import { courses } from "@/System/function";
+import { courses } from "@/System/courses";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   const { register, handleSubmit } = useForm();
@@ -23,13 +24,13 @@ const Home: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white">
         {/* Hero Section */}
         <section className="flex flex-col items-center justify-center pt-20 pb-8 px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-rose-400 drop-shadow-lg">Emerald</h1>
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-emerald-400 drop-shadow-lg">Emeralds Digital Ventures</h1>
           <p className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto text-gray-300">
             The modern platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
           </p>
-          <a href="#courses" className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-200">
+          <Link to="/#courses" className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-200">
             Explore Courses
-          </a>
+          </Link>
         </section>
 
         {/* Courses Section */}
@@ -47,7 +48,7 @@ const Home: React.FC = () => {
 
         {/* Newsletter Section */}
         <section className="py-16 px-4 flex flex-col items-center justify-center bg-[#0f172a]">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-rose-400">Join Our Newsletter</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-emerald-400">Join Our Newsletter</h2>
           <form onSubmit={handleSubmit(() => {
             notify.success({
               text: "You have successfully being added to our newsletter",
@@ -58,16 +59,43 @@ const Home: React.FC = () => {
               type="email"
               {...register("email", { required: "Email is required" })}
               placeholder="Enter your email address"
-              className="flex-1 px-4 py-3 rounded-lg bg-[#1e293b] text-white border border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-400"
+              className="flex-1 px-4 py-3 rounded-lg bg-[#1e293b] text-white border border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-400"
               required
             />
             <button
               type="submit"
-              className="bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-lg shadow-md transition-all duration-200"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg shadow-md transition-all duration-200"
             >
               Join Now
             </button>
           </form>
+        </section>
+
+        {/* Company Registration Section */}
+        <section className="py-10 px-4 flex flex-col items-center justify-center rounded-lg mt-8">
+          <h3 className="text-xl md:text-2xl font-bold mb-2 text-emerald-400">Registered Business</h3>
+          <p className="text-gray-300 mb-2 text-center">
+            Emeralds Digital Ventures is a registered business with the Corporate Affairs Commission (CAC) of Nigeria.
+          </p>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="font-semibold text-white">Business Number:</span>
+            <span className="bg-emerald-500 text-white px-3 py-1 rounded font-mono">8007530</span>
+          </div>
+          <div className="gap-3 flex-col flex items-center justify-center">
+            <div className="flex flex-col items-center mt-4">
+              <div className="relative p-2">
+                <img
+                  src="/img/cac.jpeg"
+                  alt="CAC Certificate"
+                  className="rounded-lg w-72 relative z-10 object-cover rotate-6"
+                />
+                <div className="absolute inset-0 border-4 border-emerald-500 rounded-xl shadow-lg bg-[#0f172a] "></div>
+              </div>
+            </div>
+            <span className="inline-block bg-emerald-600 text-white px-4 py-2 rounded-full font-semibold mt-2">
+              No Scam Zone 🚫
+            </span>
+          </div>
         </section>
       </div>
     </MainLayout>

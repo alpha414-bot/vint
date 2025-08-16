@@ -24,21 +24,19 @@ const Dashboard = () => {
             <NavLink
               to="/user/carts"
               className={({ isActive }) =>
-                `py-1.5 pl-5 pr-20 border-t border-x border-b-2 ${
-                  isActive ? "bg-white bg-opacity-20" : "bg-transparent"
+                `py-1.5 pl-5 pr-20 border-t border-x border-b-2 ${isActive ? "bg-white bg-opacity-20" : "bg-transparent"
                 } border-gray-300 text-base font-medium whitespace-nowrap rounded-lg transition-all duration-150 ease-in-out hover:shadow-sm hover:shadow-gray-200 inline-flex gap-3`
               }
             >
               My Carts
-              <span className="border border-white rounded px-1.5 bg-white text-rose-700 text-sm font-bold text-center">
+              <span className="border border-white rounded px-1.5 bg-white text-emerald-700 text-sm font-bold text-center">
                 {carts?.length}
               </span>
             </NavLink>
             <NavLink
               to="/user/orders"
               className={({ isActive }) =>
-                `py-1.5 pl-5 pr-20 border-t border-x border-b-2 ${
-                  isActive ? "bg-white bg-opacity-20" : "bg-transparent"
+                `py-1.5 pl-5 pr-20 border-t border-x border-b-2 ${isActive ? "bg-white bg-opacity-20" : "bg-transparent"
                 } border-gray-300 text-base font-medium whitespace-nowrap rounded-lg transition-all duration-150 ease-in-out hover:shadow-sm hover:shadow-gray-200 inline-flex gap-3`
               }
             >

@@ -80,12 +80,12 @@ const Checkout = () => {
                 <button
                   type="submit"
                   key={index}
-                  className={`flex items-center gap-x-1 ${isForm == index ? "text-rose-600" : ""
+                  className={`flex items-center gap-x-1 ${isForm == index ? "text-emerald-600" : ""
                     }`}
                 >
                   <div
                     className={`border p-1 rounded-full ${isForm == index
-                      ? "bg-rose-600 border-rose-600 text-white"
+                      ? "bg-emerald-600 border-emerald-600 text-white"
                       : "border-gray-200"
                       }`}
                   >
@@ -237,25 +237,8 @@ const Checkout = () => {
                       defaultValue={formValue.street_address}
                     />
                   </div>
-                  {/* postal code & town/city */}
-                  <div className="flex flex-col gap-6 md:gap-12 md:flex-row">
-                    <Input
-                      control={control}
-                      name="postal_code"
-                      placeholder="Postal Code"
-                      rules={{ required: "Postal code is required" }}
-                      defaultValue={formValue.postal_code}
-                    />
-                    <Input
-                      control={control}
-                      name="town"
-                      placeholder="Town/City"
-                      rules={{ required: "Town/City is required" }}
-                      defaultValue={formValue.town}
-                    />
-                  </div>
-                  {/* state/province */}
-                  <div>
+                  {/* state/province & town/city */}
+                  <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 md:flex-row">
                     <SelectDropdown
                       control={control}
                       placeholder="State/Province"
@@ -266,6 +249,13 @@ const Checkout = () => {
                         required:
                           "State is required. <em>Enter the name of state/province and choose from options</em>",
                       }}
+                    />
+                    <Input
+                      control={control}
+                      name="town"
+                      placeholder="Town/City"
+                      rules={{ required: "Town/City is required" }}
+                      defaultValue={formValue.town}
                     />
                   </div>
                   {/* phone number */}
@@ -397,7 +387,7 @@ const Checkout = () => {
                 <div className="mt-5 flex justify-end">
                   <button
                     type="submit"
-                    className="undefined inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-rose-700 hover:bg-rose-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-rose-600"
+                    className="undefined inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-emerald-700 hover:bg-emerald-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-emerald-600"
                   >
                     Next Step: Payment and Billing
                   </button>
@@ -486,7 +476,7 @@ const Checkout = () => {
                   >
                     {
                       ({ initializePayment }) => (
-                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-center rounded-lg bg-rose-700 hover:bg-rose-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-rose-600" onClick={() => {
+                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-center rounded-lg bg-emerald-700 hover:bg-emerald-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-emerald-600" onClick={() => {
                           initializePayment();
                         }}>
                           Pay Now
@@ -507,7 +497,7 @@ const Checkout = () => {
               <h2 className="text-xl font-bold">Order Summary</h2>
               <Link
                 to="/user/carts"
-                className="text-sm text-rose-600 underline underline-offset-4 decoration-rose-600 decoration-dotted"
+                className="text-sm text-emerald-600 underline underline-offset-4 decoration-emerald-600 decoration-dotted"
               >
                 Edit cart
               </Link>

@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+     /* Rich Editor */
+  .rich-editor h1 {
+    @apply text-4xl font-extrabold;
+  }
+  .rich-editor h2 {
+    @apply text-xl font-bold underline;
+  }
+  .rich-editor h3 {
+    @apply text-lg font-bold;
+  }
+  .rich-editor ol {
+    @apply list-inside list-decimal space-y-1.5 pl-4 font-normal;
+  }
+  .rich-editor ul {
+    @apply list-inside list-disc space-y-1.5 pl-4 font-normal;
+  }
+  .rich-editor p {
+    @apply font-normal;
+  }
+  .rich-editor strong {
+    @apply font-bold;
+  }
+  .rich-editor blockquote {
+    @apply ml-5 border-l-2 border-gray-500 pl-2 text-gray-500 italic;
+  }
+  .rich-editor code {
+    @apply my-1 inline-block bg-gray-300 p-0.5 font-mono;
+  }
+  .rich-editor a {
+    @apply font-bold text-gray-300 underline underline-offset-4;
+  }
+  /* Slick */
+.slick-slider {
+  @apply !static;
+}
+.custom-slick-dot {
+  @apply !mt-0 flex w-auto !items-center justify-end gap-x-3 !p-0 !px-4;
+}
+.custom-slick-dot li {
+  @apply bg-emerald-700/75 !m-0 !inline-block !h-3 !w-4 rounded-full !p-0 !transition-all !delay-100 !duration-300 !ease-in-out;
+}
+.custom-slick-dot li.slick-active {
+  @apply bg-emerald-500 !m-0 !inline-block !h-3 !w-16 rounded-full !p-0;
+}
+}

@@ -15,15 +15,13 @@ const Button: React.FC<ButtonProps> = ({
   <button
     {...props}
     disabled={disabled}
-    className={`${className} ${
-      custom
-        ? className + " bg-rose-700 hover:bg-rose-800"
-        : `inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg ${
-            disabled
-              ? "cursor-not-allowed bg-gray-400"
-              : "bg-rose-700 hover:bg-rose-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-rose-600"
-          }  border-4 border-transparent`
-    }`}
+    className={`${className} ${custom
+        ? className + " bg-emerald-700 hover:bg-emerald-800"
+        : `inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg ${disabled
+          ? "cursor-not-allowed bg-gray-400"
+          : "bg-emerald-700 hover:bg-emerald-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-emerald-600"
+        }  border-4 border-transparent`
+      }`}
   >
     {text || children}
   </button>

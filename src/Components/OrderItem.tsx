@@ -40,7 +40,7 @@ const OrderItem = ({ order }: { order: OrderDataInterface }) => {
         <div className="border border-gray-200 p-0.5 rounded group hover:bg-white">
           {(viewProductDetails && (
             <svg
-              className="w-6 h-6  text-white group-hover:text-rose-700"
+              className="w-6 h-6  text-white group-hover:text-emerald-700"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -56,7 +56,7 @@ const OrderItem = ({ order }: { order: OrderDataInterface }) => {
             </svg>
           )) || (
               <svg
-                className="w-6 h-6 text-white group-hover:text-rose-700"
+                className="w-6 h-6 text-white group-hover:text-emerald-700"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

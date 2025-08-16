@@ -73,7 +73,7 @@ const ProductItem: React.FC<{
                   {product.name}
                 </h3>
                 <div className="mt-0.5 flex items-center justify-start gap-2">
-                  <p className="bg-rose-700 px-2 py-0.5 rounded font-medium text-xs">
+                  <p className="bg-emerald-700 px-2 py-0.5 rounded font-medium text-xs">
                     Category:
                   </p>
                   <p className="text-xs font-medium underline underline-offset-4 decoration-double">
@@ -89,7 +89,7 @@ const ProductItem: React.FC<{
               <div >
                 <p
                   className={`${type === "order_listing" ? "text-lg" : "text-2xl"
-                    } text-left text-rose-600 font-bold lg:text-right`}
+                    } text-left text-emerald-600 font-bold lg:text-right`}
                 >
                   {price(
                     product.price * (product.cartQuantity || 1),
@@ -98,14 +98,14 @@ const ProductItem: React.FC<{
                   )}
                 </p>
                 {product.salePrice && (
-                  <p className="text-sm text-left text-rose-600 font-semibold line-through lg:text-right">
+                  <p className="text-sm text-left text-emerald-600 font-semibold line-through lg:text-right">
                     {price(product.salePrice, "currency", 0)}
                   </p>
                 )}
                 {
                   type == "order_listing" && (
-                    <a
-                      href={product.downloadable}
+                    <Link
+                      to={product.downloadable}
                       download
                       onClick={e => {
                         e.preventDefault();
@@ -125,7 +125,7 @@ const ProductItem: React.FC<{
                       className="text-sm bg-blue-600 px-2 py-1 text-white rounded hover:underline"
                     >
                       Download PDF
-                    </a>
+                    </Link>
                   )
                 }
               </div>
@@ -144,7 +144,7 @@ const ProductItem: React.FC<{
             </Link>
           )}
           {type == "similar_listing" && (
-            <p className={`text-lg text-rose-600 font-bold`}>
+            <p className={`text-lg text-emerald-600 font-bold`}>
               {price(
                 product.price * (product.cartQuantity || 1),
                 "currency",

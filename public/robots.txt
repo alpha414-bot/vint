@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /private/
+Disallow: /agent/
+Allow: /
+
+Sitemap: https://emeraldsventures.com.ng/sitemap.xml

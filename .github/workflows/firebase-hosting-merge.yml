@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
+      - run: npm ci && npm run build:all
       - name: 🕒 Write version.txt with upload time
         run: |
           echo "Last upload: $(date -u)" > dist/version.txt

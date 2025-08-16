@@ -68,7 +68,7 @@ const Product = () => {
                 <div className="flex items-start justify-between gap-12 mt-2">
                   <div>
                     <p
-                      className={`text-2xl text-left text-rose-600 font-bold lg:text-right`}
+                      className={`text-2xl text-left text-emerald-600 font-bold lg:text-right`}
                     >
                       {price(
                         product.price * (product.cartQuantity || 1),
@@ -77,13 +77,13 @@ const Product = () => {
                       )}
                     </p>
                     {product.salePrice && (
-                      <p className="text-sm text-left text-rose-600 font-semibold line-through lg:text-right">
+                      <p className="text-sm text-left text-emerald-600 font-semibold line-through lg:text-right">
                         {price(product.salePrice, "currency", 0)}
                       </p>
                     )}
                   </div>
                   <div className="flex items-center justify-end gap-2">
-                    <p className="bg-rose-700 px-2 py-0.5 rounded font-medium text-xs">
+                    <p className="bg-emerald-700 px-2 py-0.5 rounded font-medium text-xs">
                       Category:
                     </p>
                     <p className="text-xs font-medium underline underline-offset-4 decoration-double">

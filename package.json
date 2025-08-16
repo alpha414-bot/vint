@@ -8,9 +8,16 @@
   "FlutterwavePublicKey": "FLWPUBK_TEST-652d535a8757a811da051afb77e43115-X",
   "PaystackPublicKey": "pk_test_adac6802e1b94aad03084f2867102ecfdcfa6993",
   "baseUrl": "https://emeraldsventures.com.ng",
+  "contacts": {
+    "email": "theemeraldchanel@gmail.com",
+    "phone": "(234) 909-097-6720",
+    "address": "1 OGUNKA STREET, WORLD BANK HOUSING ESTATE, ABA, ABIA STATE, NIGERIA"
+  },
   "scripts": {
+    "generate:sitemap": "npx tsx src/Scripts/sitemap.ts",
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:all": "npm run generate:sitemap && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -25,6 +32,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.5",
+    "react-icons": "^5.5.0",
     "react-image": "^4.1.0",
     "react-paystack": "^5.0.0",
     "react-query": "^3.39.3",
