@@ -9,7 +9,7 @@ const ErrorPage = () => {
     getErrorMessageViaStatus(error);
   return (
     <MainLayout title={statusText} description={message}>
-      <div className="max-w-7xl mx-auto py-12">
+      <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="space-y-9">
           <h1 className="text-6xl font-extrabold">Whoops!</h1>
           <div className="row">

@@ -11,7 +11,7 @@ export const TermsPrivacyItem: FC<{ title: String; content: ReactNode }> = ({
   return (
     <div className="space-y-2">
       <h2 className="mt-6 text-3xl font-black">{title}</h2>
-      <p className="rich-editor mb-4 space-y-4">{content}</p>
+      <div className="rich-editor mb-4 space-y-4">{content}</div>
     </div>
   );
 };

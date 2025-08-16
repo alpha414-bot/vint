@@ -48,7 +48,7 @@ const About = () => {
   ];
   return (
     <MainLayout title="About Us">
-      <div className="max-w-7xl mx-auto py-10 space-y-12">
+      <div className="max-w-7xl mx-auto py-10 px-6 space-y-12">
         <div>
           <h2 className="text-4xl font-extrabold tracking-wider">About Us</h2>
           <div className="mt-2 font-normal">

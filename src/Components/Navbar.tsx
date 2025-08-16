@@ -171,40 +171,99 @@ function Navbar() {
             </div>
             <ul className="flex flex-col items-start gap-7 mt-4 px-8">
               <li>
-                <Link
+                <NavLink
                   to="/"
-                  className="underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 font-medium"
+                  className={({ isActive }) =>
+                    `tracking-wide ${isActive
+                      ? "underline underline-offset-4 decoration-dotted"
+                      : ""
+                    } hover:text-gray-100 font-medium`
+                  }
                 >
                   Home
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/about"
-                  className="underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 font-medium"
+                  className={({ isActive }) =>
+                    `tracking-wide ${isActive
+                      ? "underline underline-offset-4 decoration-dotted"
+                      : ""
+                    } hover:text-gray-100 font-medium`
+                  }
                 >
                   About
-                </Link>
+                </NavLink>
               </li>
               {(auth.currentUser?.uid && !auth.currentUser.isAnonymous && (
                 <li>
-                  <Link
+                  <NavLink
                     to="/user/carts"
-                    className="underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 font-medium"
+                    className={({ isActive }) =>
+                      `tracking-wide ${isActive
+                        ? "underline underline-offset-4 decoration-dotted"
+                        : ""
+                      } hover:text-gray-100 font-medium`
+                    }
                   >
                     My account
-                  </Link>
+                  </NavLink>
                 </li>
               )) || (
                   <li>
-                    <Link
+                    <NavLink
                       to="/login"
-                      className="underline underline-offset-4 tracking-wide decoration-dotted hover:text-gray-100 font-medium"
+                      className={({ isActive }) =>
+                        `tracking-wide ${isActive
+                          ? "underline underline-offset-4 decoration-dotted"
+                          : ""
+                        } hover:text-gray-100 font-medium`
+                      }
                     >
                       Sign In/Sign Up
-                    </Link>
+                    </NavLink>
                   </li>
                 )}
+              <li>
+                <NavLink
+                  to="/privacy-policy"
+                  className={({ isActive }) =>
+                    `tracking-wide ${isActive
+                      ? "underline underline-offset-4 decoration-dotted"
+                      : ""
+                    } hover:text-gray-100 font-medium`
+                  }
+                >
+                  Privacy Policy
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/refund-policy"
+                  className={({ isActive }) =>
+                    `tracking-wide ${isActive
+                      ? "underline underline-offset-4 decoration-dotted"
+                      : ""
+                    } hover:text-gray-100 font-medium`
+                  }
+                >
+                  Refund Policy
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="terms-conditions"
+                  className={({ isActive }) =>
+                    `tracking-wide ${isActive
+                      ? "underline underline-offset-4 decoration-dotted"
+                      : ""
+                    } hover:text-gray-100 font-medium`
+                  }
+                >
+                  Terms & Conditions
+                </NavLink>
+              </li>
             </ul>
           </OutsideClick>
 

@@ -7,7 +7,7 @@ const RefundPolicyPage = () => {
     return (
         <MainLayout title="Refund Policy" description="Learn about our refund policy for digital courses">
             <main>
-                <div className="mx-auto max-w-7xl space-y-8 p-6 text-gray-100">
+                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-100">
                     <div className="space-y-2">
                         <h1 className="text-center text-5xl font-bold">
                             Refund Policy

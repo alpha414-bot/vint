@@ -7,7 +7,7 @@ const TermsConditionsPage = () => {
     return (
         <MainLayout title="Terms and Conditions" description="Read our terms and conditions for using Emeralds Digital Ventures services">
             <main>
-                <div className="mx-auto max-w-7xl space-y-8 p-6 text-gray-100">
+                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-100">
                     <div className="space-y-2">
                         <h1 className="text-center text-5xl font-bold">
                             Terms and Conditions

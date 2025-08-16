@@ -8,7 +8,7 @@ const PrivacyPolicyPage = () => {
     return (
         <MainLayout title="Privacy Policy" description="Learn about our privacy practices and how we protect your information.">
             <main>
-                <div className="mx-auto max-w-7xl space-y-8 p-6 text-gray-100">
+                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-100">
                     <div className="space-y-2">
                         <h1 className="text-center text-5xl font-bold">
                             Privacy Policy
