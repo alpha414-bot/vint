@@ -23,3 +23,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VINT_ECOMMERCE }}
           channelId: live
           projectId: vint-ecommerce
+          target: ${{ (github.ref_name == 'emerald_venture' && 'emeraldsventure') || (github.ref_name == 'apollo_venture' && 'pretiumconcept') ||'UNKNOWN' }}
