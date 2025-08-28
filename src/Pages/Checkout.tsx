@@ -69,23 +69,23 @@ const Checkout = () => {
   });
   return (
     <MainLayout title="Checkout" no_footer>
-      <div className="relative flex flex-col-reverse lg:block">
+      <div className="relative flex flex-col-reverse md:px-10 md:flex-row flex-1 min-h-screen md:flex">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full px-4 md:w-[75%] md:px-8 py-12"
         >
           <div className="flex">
-            <ol className="flex items-center w-full space-x-2 text-sm font-medium text-center bg-gray-800 shadow-sm text-gray-400 sm:text-base sm:space-x-4 rtl:space-x-reverse">
+            <ol className="flex items-center w-full space-x-2 text-sm font-medium text-center bg-transparent text-gray-700 sm:text-base sm:space-x-4 rtl:space-x-reverse">
               {CheckoutRoute.map((item, index) => (
                 <button
                   type="submit"
                   key={index}
-                  className={`flex items-center gap-x-1 ${isForm == index ? "text-red-600" : ""
+                  className={`flex items-center gap-x-1 ${isForm == index ? "text-main-600" : ""
                     }`}
                 >
                   <div
                     className={`border p-1 rounded-full ${isForm == index
-                      ? "bg-red-600 border-red-600 text-white"
+                      ? "bg-main-600 border-main-600 text-white"
                       : "border-gray-200"
                       }`}
                   >
@@ -203,7 +203,7 @@ const Checkout = () => {
           <div className="mt-7">
             {isForm == 0 && (
               <div className="pb-32">
-                <h3 className="text-2xl font-bold leading-none text-white">
+                <h3 className="text-2xl font-bold leading-none text-gray-900">
                   Ship To
                 </h3>
                 <p className="mt-1 text-xs font-medium italic">
@@ -215,14 +215,16 @@ const Checkout = () => {
                     <Input
                       control={control}
                       name="first_name"
-                      placeholder="First Name"
                       rules={{ required: "First name is required" }}
                       defaultValue={formValue.first_name}
+                      label="First Name"
+                      placeholder="Enter your first name"
                     />
                     <Input
                       control={control}
                       name="last_name"
-                      placeholder="Last Name"
+                      label="Last Name"
+                      placeholder="Enter your last name"
                       rules={{ required: "Last name is required" }}
                       defaultValue={formValue.last_name}
                     />
@@ -232,7 +234,8 @@ const Checkout = () => {
                     <TextArea
                       control={control}
                       name="street_address"
-                      placeholder="Street Address"
+                      label="Street Address"
+                      placeholder="Enter your street address"
                       rules={{ required: "Street address is required" }}
                       defaultValue={formValue.street_address}
                     />
@@ -241,19 +244,21 @@ const Checkout = () => {
                   <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 md:flex-row">
                     <SelectDropdown
                       control={control}
-                      placeholder="State/Province"
+                      label="State/Province"
+                      placeholder="Enter your state or province"
                       name="state"
                       defaultValue={formValue.state}
                       options={NigeriaState}
                       rules={{
                         required:
-                          "State is required. <em>Enter the name of state/province and choose from options</em>",
+                          "State is required. <em>Enter the name of state/province andchoose from options</em>",
                       }}
                     />
                     <Input
                       control={control}
                       name="town"
-                      placeholder="Town/City"
+                      label="Town/City"
+                      placeholder="Enter your town or city"
                       rules={{ required: "Town/City is required" }}
                       defaultValue={formValue.town}
                     />
@@ -264,7 +269,8 @@ const Checkout = () => {
                       type="tel"
                       control={control}
                       name="phone_number"
-                      placeholder="Phone number"
+                      label="Phone Number"
+                      placeholder="Enter your phone number"
                       rules={{
                         required: "Phone number is required",
                         pattern: {
@@ -304,7 +310,7 @@ const Checkout = () => {
                   </div>
                 )) || (
                     <>
-                      <h3 className="text-2xl font-bold leading-none text-white">
+                      <h3 className="text-2xl font-bold leading-none text-gray-900">
                         Create an account
                       </h3>
                       <p className="mt-1 text-xs font-medium italic">
@@ -320,7 +326,8 @@ const Checkout = () => {
                             }}
                             name="username"
                             defaultValue={formValue.username}
-                            placeholder="Username"
+                            label="Username"
+                            placeholder="Enter your username"
                           />
                         </div>
                         <div>
@@ -336,7 +343,8 @@ const Checkout = () => {
                             name="email"
                             type="email"
                             defaultValue={formValue.email as any}
-                            placeholder="Email address"
+                            label="Email address"
+                            placeholder="Enter your email address"
                           />
                         </div>
                         <div className="flex flex-col gap-6 md:gap-12 md:flex-row">
@@ -344,7 +352,8 @@ const Checkout = () => {
                             type="password"
                             control={control}
                             name="password"
-                            placeholder="Password"
+                            label="Password"
+                            placeholder="Enter your password"
                             defaultValue={formValue.password}
                             rules={{
                               required: "Password field is required",
@@ -365,7 +374,8 @@ const Checkout = () => {
                             type="password"
                             control={control}
                             name="confirm_password"
-                            placeholder="Confirm Password"
+                            label="Confirm Password"
+                            placeholder="Enter your confirm password"
                             defaultValue={formValue.confirm_password}
                             rules={{
                               required: "Password field is required",
@@ -387,7 +397,7 @@ const Checkout = () => {
                 <div className="mt-5 flex justify-end">
                   <button
                     type="submit"
-                    className="undefined inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-red-700 hover:bg-red-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-red-600"
+                    className="undefined inline-flex items-center px-4 py-0.5 text-base font-medium text-white text-center rounded-lg bg-main-700 hover:bg-main-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-main-600"
                   >
                     Next Step: Payment and Billing
                   </button>
@@ -397,7 +407,7 @@ const Checkout = () => {
             {/* Payment & Billing */}
             {isForm == 2 && (
               <div className="pb-32">
-                <h3 className="text-2xl font-bold leading-none text-white">
+                <h3 className="text-2xl font-bold leading-none text-gray-900">
                   Payment & Billing
                 </h3>
                 <p className="mt-1 text-xs font-medium italic">
@@ -409,7 +419,7 @@ const Checkout = () => {
                   <div className="mt-2 border border-gray-2 py-3 px-5 rounded-lg space-y-4">
                     <div className="flex items-start gap-2">
                       <svg
-                        className="w-5 h-5 text-white"
+                        className="w-5 h-5"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -437,7 +447,7 @@ const Checkout = () => {
                     </div>
                     <div className="flex items-start gap-2">
                       <svg
-                        className="w-5 h-5 text-white"
+                        className="w-5 h-5"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -476,7 +486,7 @@ const Checkout = () => {
                   >
                     {
                       ({ initializePayment }) => (
-                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-center rounded-lg bg-red-700 hover:bg-red-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-red-600" onClick={() => {
+                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-white text-center rounded-lg bg-main-700 hover:bg-main-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-main-600" onClick={() => {
                           initializePayment();
                         }}>
                           Pay Now
@@ -491,13 +501,13 @@ const Checkout = () => {
           </div>
         </form>
         {/* Order summary */}
-        <div className="w-full top-[12%] right-0 h-auto bg-gray-600 px-2 pt-5 pb-5 md:fixed lg:px-5 md:pt-20 md:w-[25%] md:min-h-screen md:h-full">
-          <div className="bg-gray-800 px-4 py-3">
+        <div className="w-full top-[12%] right-0 h-auto bg-gray-200 px-2 pt-5 pb-5 lg:px-5 md:pt-20 md:w-[25%] md:min-h-screen md:h-full">
+          <div className="bg-gray-300 px-4 py-3">
             <div className="flex items-start justify-between">
               <h2 className="text-xl font-bold">Order Summary</h2>
               <Link
                 to="/user/carts"
-                className="text-sm text-red-600 underline underline-offset-4 decoration-red-600 decoration-dotted"
+                className="text-sm text-main-600 underline underline-offset-4 decoration-main-600 decoration-dotted"
               >
                 Edit cart
               </Link>

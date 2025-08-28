@@ -53,19 +53,21 @@ const ProductItem: React.FC<{
     }
   };
 
-  const cardStyles = type === "carts_listing" || type === "similar_listing"
-    ? "flex-col items-stretch gap-2 md:flex-row"
-    : "flex-col";
+  const cardStyles = type === "carts_listing"
+    ? "flex-col md:flex-row items-stretch gap-4"
+    : type === "similar_listing"
+      ? "flex-col items-stretch gap-2 md:flex-row"
+      : "flex-col";
 
   const cardClasses = `
     relative overflow-hidden
     ${cardStyles}
     ${type === "order_listing" ? "pb-0" : "pb-6"}
-    bg-gradient-to-br from-white via-red-50/30 to-red-100/50
-    backdrop-blur-lg
-    border border-red-200/30
-    rounded-2xl
-    shadow-lg hover:shadow-2xl
+    bg-gradient-to-br from-white via-main-50/40 to-main-100/60
+    backdrop-blur-xl
+    border border-main-200/40
+    rounded-3xl
+    shadow-xl hover:shadow-2xl
     transition-all duration-500
     group
   `;
@@ -82,7 +84,7 @@ const ProductItem: React.FC<{
     >
       {/* Floating gradient overlay */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-red-400/20 via-transparent to-red-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+        className="absolute inset-0 bg-gradient-to-br from-main-400/20 via-transparent to-main-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
         initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
       />
@@ -95,14 +97,14 @@ const ProductItem: React.FC<{
           className={`
             relative overflow-hidden
             ${type === "carts_listing"
-              ? "w-full h-64 rounded-t-2xl md:rounded-t-none md:rounded-l-2xl md:w-56 md:min-h-64"
+              ? "w-full h-64 rounded-t-3xl md: md:rounded-t-3xl md:w-full md:min-h-64"
               : type === "similar_listing"
-                ? "w-full h-36 rounded-t-2xl md:rounded-t-none md:rounded-l-2xl md:w-36 md:h-28"
+                ? "w-full h-36 rounded-t-3xl md:rounded-t-none md:rounded-l-3xl md:w-36 md:h-28"
                 : type === "order_listing"
                   ? "hidden"
-                  : "w-full h-72 rounded-t-2xl"
+                  : "w-full h-72 rounded-t-3xl"
             }
-            bg-gradient-to-br from-red-100 to-red-200
+            bg-gradient-to-br from-main-100 to-main-200"
           `}
         >
           {/* Image with overlay */}
@@ -123,7 +125,7 @@ const ProductItem: React.FC<{
             transition={{ delay: 0.3, duration: 0.5 }}
             className="absolute top-4 left-4"
           >
-            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-600/90 text-white backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-main-600/90 text-white backdrop-blur-sm border border-white/20 shadow-md">
               {_.startCase(product.category)}
             </span>
           </motion.div>
@@ -135,7 +137,7 @@ const ProductItem: React.FC<{
             transition={{ delay: 0.4, duration: 0.5 }}
             className="absolute top-4 right-4"
           >
-            <div className="flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5">
+            <div className="flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md">
               <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
                 <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
               </svg>
@@ -161,7 +163,7 @@ const ProductItem: React.FC<{
                   <Button
                     variant="primary"
                     size="sm"
-                    className=" text-red-600 hover:bg-red-50 shadow-lg"
+                    className="bg-main-500 text-main-600 hover:bg-main-50 shadow-lg border border-main-200"
                   >
                     Quick View
                   </Button>
@@ -175,12 +177,12 @@ const ProductItem: React.FC<{
       <div
         className={`
           ${type === "carts_listing"
-            ? "px-6 py-5 flex-1"
+            ? "px-8 py-4 flex-1"
             : type === "similar_listing"
               ? "px-4 py-3"
               : type === "order_listing"
-                ? "p-0"
-                : "px-6 py-5 flex-1"
+                ? "px-4 py-3"
+                : "px-8 py-4 flex-1"
           }
           flex flex-col justify-between
         `}
@@ -192,7 +194,7 @@ const ProductItem: React.FC<{
               whileHover={{ x: 2 }}
               transition={{ duration: 0.2 }}
               className={`
-                font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-300
+                font-bold text-gray-900 group-hover:text-main-600 transition-colors duration-300
                 ${type === "similar_listing"
                   ? "text-lg"
                   : type === "order_listing"
@@ -232,7 +234,7 @@ const ProductItem: React.FC<{
                   initial={{ scale: 0.95 }}
                   animate={{ scale: 1 }}
                   className={`
-                    font-bold text-red-600
+                    font-bold text-main-600
                     ${type === "order_listing" ? "text-2xl" : "text-3xl"}
                   `}
                 >
@@ -289,7 +291,7 @@ const ProductItem: React.FC<{
           {type === "similar_listing" && (
             <motion.p
               whileHover={{ scale: 1.05 }}
-              className="text-2xl font-bold text-red-600"
+              className="text-2xl font-bold text-main-600"
             >
               {price(
                 product.price * (product.cartQuantity || 1),
@@ -306,22 +308,22 @@ const ProductItem: React.FC<{
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
             className={`
-              pt-4 border-t border-red-200/50
-              ${type === "carts_listing"
+                mt-3 pt-4 border-t border-main-200/50
+                ${type === "carts_listing"
                 ? "flex items-center justify-between space-x-4"
                 : "flex justify-end"
               }
-            `}
+              `}
           >
             {/* Quantity Controls for Cart */}
             {type === "carts_listing" && (
               <div className="flex flex-col space-y-3">
                 <div className="flex items-center space-x-2">
                   <span className="text-sm font-semibold text-gray-700">Quantity:</span>
-                  <span className="text-lg font-bold text-red-600">{quantity || 1}</span>
+                  <span className="text-lg font-bold text-main-600">{quantity || 1}</span>
                 </div>
 
-                <div className="flex items-center bg-white rounded-xl border border-red-200/50 shadow-sm overflow-hidden">
+                <div className="flex items-center bg-white rounded-xl border border-main-200/50 shadow-sm overflow-hidden">
                   <motion.button
                     whileHover={{ backgroundColor: "#f3f4f6" }}
                     whileTap={{ scale: 0.95 }}
@@ -335,7 +337,7 @@ const ProductItem: React.FC<{
                         setQuantity((count) => count - 1);
                       }
                     }}
-                    className="p-3 text-red-600 hover:text-red-700 transition-colors duration-200"
+                    className="p-3 text-main-600 hover:text-main-700 transition-colors duration-200"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 12H4" />
@@ -370,7 +372,7 @@ const ProductItem: React.FC<{
                       updateCartQuantity(product, 1);
                       setQuantity((count) => count + 1);
                     }}
-                    className="p-3 text-red-600 hover:text-red-700 transition-colors duration-200"
+                    className="p-3 text-main-600 hover:text-main-700 transition-colors duration-200"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -392,8 +394,8 @@ const ProductItem: React.FC<{
                 className={`
                   min-w-[140px] font-semibold shadow-lg
                   ${type === "carts_listing"
-                    ? "border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400"
-                    : "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                    ? "border-main-300 text-main-600 hover:bg-main-50 hover:border-main-400"
+                    : "bg-gradient-to-r from-main-600 to-main-700 hover:from-main-700 hover:to-main-800"
                   }
                 `}
                 onClick={() => {

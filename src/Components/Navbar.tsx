@@ -55,7 +55,7 @@ function Navbar() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-3 relative z-50 text-center space-x-2"
+              className="bg-gradient-to-r from-main-600 to-main-700 px-6 py-3 relative z-50 text-center space-x-2"
             >
               <span className="text-base font-medium text-white">
                 Verify your account to unlock new exciting features
@@ -64,7 +64,7 @@ function Navbar() {
                 onClick={() => {
                   verifyAccount();
                 }}
-                className="px-4 py-0.5 text-sm bg-white text-red-600 hover:bg-red-50"
+                className="px-4 py-0.5 text-sm bg-white !text-main-600 hover:bg-main-50"
               >
                 Verify Now
               </Button>
@@ -77,15 +77,12 @@ function Navbar() {
         variants={navVariants}
         initial="hidden"
         animate="visible"
-        className="sticky top-0 z-50 glass border-b border-red-200/30 px-3 py-3 md:px-10 md:py-4"
+        className="sticky top-0 z-50 glass border-b border-main-200/30 px-3 py-3 md:px-10 md:py-4"
       >
         <div className="mx-auto max-w-7xl flex items-center justify-between">
           <motion.div variants={itemVariants}>
             <Link to="/" className="flex items-center space-x-2">
               <Logo type="navbar-logo" />
-              <span className="text-xl font-bold text-red-600 hidden sm:block">
-                Pretium Concept
-              </span>
             </Link>
           </motion.div>
 
@@ -110,7 +107,7 @@ function Navbar() {
                   <NavLink
                     to={item.to}
                     className={({ isActive }) =>
-                      `relative font-medium text-gray-700 hover:text-red-600 transition-all duration-300 ${isActive ? "text-red-600" : ""
+                      `relative font-medium text-gray-700 hover:text-main-600 transition-all duration-300 ${isActive ? "text-main-600" : ""
                       }`
                     }
                   >
@@ -120,7 +117,7 @@ function Navbar() {
                         {isActive && (
                           <motion.div
                             layoutId="activeTab"
-                            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-red-600 rounded-full"
+                            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-main-600 rounded-full"
                             initial={false}
                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
                           />
@@ -144,7 +141,7 @@ function Navbar() {
                   className="relative inline-flex items-center p-2 rounded-full glass hover:glass-dark transition-all duration-300"
                 >
                   <svg
-                    className="w-6 h-6 text-red-600"
+                    className="w-6 h-6 text-main-600"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -164,7 +161,7 @@ function Navbar() {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
-                        className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full"
+                        className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-main-600 rounded-full"
                       >
                         {CartProducts?.length}
                       </motion.span>
@@ -183,7 +180,7 @@ function Navbar() {
               >
                 <motion.svg
                   animate={{ rotate: showSideBarMenu ? 90 : 0 }}
-                  className="w-6 h-6 text-red-600"
+                  className="w-6 h-6 text-main-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -222,16 +219,16 @@ function Navbar() {
                   outsideClick={() => setShowSideBarMenu(false)}
                   className="h-full"
                 >
-                  <div className="flex items-center justify-between p-6 border-b border-red-200">
-                    <h2 className="text-xl font-bold text-red-600">Menu</h2>
+                  <div className="flex items-center justify-between p-6 border-b border-main-200">
+                    <h2 className="text-xl font-bold text-main-600">Menu</h2>
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setShowSideBarMenu(false)}
-                      className="p-2 rounded-full hover:bg-red-100"
+                      className="p-2 rounded-full hover:bg-main-100"
                     >
                       <svg
-                        className="w-6 h-6 text-red-600"
+                        className="w-6 h-6 text-main-600"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -281,8 +278,8 @@ function Navbar() {
                           onClick={() => setShowSideBarMenu(false)}
                           className={({ isActive }) =>
                             `block px-4 py-3 rounded-lg font-medium transition-all duration-300 ${isActive
-                              ? "bg-red-100 text-red-700 border-l-4 border-red-600"
-                              : "text-gray-700 hover:bg-red-50 hover:text-red-600"
+                              ? "bg-main-100 text-main-700 border-l-4 border-main-600"
+                              : "text-gray-700 hover:bg-main-50 hover:text-main-600"
                             }`
                           }
                         >

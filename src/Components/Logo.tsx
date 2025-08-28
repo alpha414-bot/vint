@@ -4,7 +4,7 @@ const Logo: React.FC<{ type: "footer-logo" | "navbar-logo" }> = ({
   ...props
 }) => {
   return (
-    <img src={type == "footer-logo" ? "/img/logo.png" : "/img/icon.png"} alt="Pretium Concept logo" className={classNames("", {
+    <img src={"/img/logo.png"} alt="Pretium Concept logo" className={classNames("", {
       "w-12": type == "navbar-logo",
       "w-32": type == "footer-logo",
     })} {...props} />

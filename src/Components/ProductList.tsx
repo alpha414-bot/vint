@@ -8,13 +8,14 @@ const ProductList: React.FC<ProductListInterface> = ({
 }) => {
   return (
     <div
-      className={`grid ${
-        type === "carts_listing" || type === "similar_listing"
-          ? "grid-cols-1 gap-6"
-          : type === "order_listing"
-          ? "grid-cols-1 gap-1.5"
-          : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6"
-      }`}
+      className={`grid ${type === "carts_listing"
+          ? "grid-cols-1 md:grid-cols-2 gap-8"
+          : type === "similar_listing"
+            ? "grid-cols-1 gap-6"
+            : type === "order_listing"
+              ? "grid-cols-1 gap-1.5"
+              : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+        }`}
     >
       {products.length > 0 &&
         products?.map((product, index) => (

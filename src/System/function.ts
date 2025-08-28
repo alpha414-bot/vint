@@ -3,6 +3,7 @@ import { AuthError } from "firebase/auth";
 import { useEffect } from "react";
 
 export const baseUrl = (path = "") => new URL(path, app.baseUrl);
+export const businessNo = app.bn
 export const contacts = app.contacts
 
 export const getErrorMessageViaStatus = (error: RouteErrorInterface) => {

@@ -20,7 +20,7 @@ const MainLayout: React.FC<{
   return (
     <>
       {showLoadingBar && (
-        <LoadingBar height={3} color="#ef4444" progress={100} />
+        <LoadingBar height={3} className="!bg-main-500 !text-main-500" progress={100} />
       )}
 
       <meta name="description" content={description} />
@@ -30,7 +30,7 @@ const MainLayout: React.FC<{
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50"
+        className="min-h-screen bg-gradient-to-br from-main-50 via-white to-main-50"
       >
         {!no_navbar && (
           <motion.div

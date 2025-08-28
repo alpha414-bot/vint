@@ -36,7 +36,7 @@ const Product = () => {
 
   return (
     <MainLayout title={`${product?.name} - ${_.startCase(product?.category)} | Pretium Concept`}>
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-100">
+      <div className="min-h-screen bg-gradient-to-br from-main-50 via-white to-main-100">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -86,7 +86,7 @@ const Product = () => {
                   <div className="flex items-start justify-between gap-12 mt-2">
                     <div>
                       <p
-                        className={`text-2xl text-left text-red-600 font-bold lg:text-right`}
+                        className={`text-2xl text-left text-main-600 font-bold lg:text-right`}
                       >
                         {price(
                           product.price * (product.cartQuantity || 1),
@@ -95,13 +95,13 @@ const Product = () => {
                         )}
                       </p>
                       {product.salePrice && (
-                        <p className="text-sm text-left text-red-600 font-semibold line-through lg:text-right">
+                        <p className="text-sm text-left text-main-600 font-semibold line-through lg:text-right">
                           {price(product.salePrice, "currency", 0)}
                         </p>
                       )}
                     </div>
                     <div className="flex items-center justify-end gap-2">
-                      <p className="bg-red-700 px-2 py-0.5 rounded font-medium text-xs">
+                      <p className="bg-main-700 px-2 py-0.5 rounded font-medium text-xs">
                         Category:
                       </p>
                       <p className="text-xs font-medium underline underline-offset-4 decoration-double">

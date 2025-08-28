@@ -13,17 +13,17 @@ const Dashboard = () => {
       title="User Dashboard - Pretium Concept"
       description="Manage your orders, profile and checkout on Pretium Concept"
     >
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-100 px-4 py-10 md:py-20 md:px-8 lg:px-12">
+      <div className="min-h-screen bg-gradient-to-br from-main-50 via-white to-main-100 px-4 py-10 md:py-20 md:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col glass border border-red-200/30 px-6 py-8 rounded-2xl justify-between gap-12 lg:flex-row backdrop-blur-lg shadow-xl"
+          className="flex flex-col glass border border-main-200/30 px-6 py-8 rounded-2xl justify-between gap-12 lg:flex-row backdrop-blur-lg shadow-xl"
         >
           {/* Sidebar */}
           <div className="flex flex-col gap-4 md:py-5">
             {auth.currentUser?.displayName && (
-              <p className="text-lg text-gray-200 font-bold px-3 lg:text-xl">
+              <p className="text-lg text-gray-900 font-bold px-3 lg:text-xl">
                 Welcome, {auth.currentUser?.displayName}
               </p>
             )}
@@ -35,7 +35,7 @@ const Dashboard = () => {
               }
             >
               My Carts
-              <span className="border border-red-600 rounded px-1.5 bg-red-600 text-white text-sm font-bold text-center">
+              <span className="border border-main-600 rounded px-1.5 bg-main-600 text-white text-sm font-bold text-center">
                 {carts?.length}
               </span>
             </NavLink>
@@ -81,7 +81,7 @@ const Dashboard = () => {
             )}
           </div>
           {/* Display */}
-          <div className="grow h-auto border-t border-red-300 py-8 md:px-4 lg:px-12 lg:py-0 lg:border-t-0 lg:border-l lg:border-red-300">
+          <div className="grow h-auto border-t border-main-300 py-8 md:px-4 lg:px-12 lg:py-0 lg:border-t-0 lg:border-l lg:border-main-300">
             <Outlet />
           </div>
         </motion.div>

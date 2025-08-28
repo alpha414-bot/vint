@@ -1,4 +1,5 @@
 import { auth } from "@/firebase-config";
+import { businessNo } from "@/System/function";
 import { motion } from "framer-motion";
 import { FC, ReactNode } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
@@ -42,7 +43,7 @@ const Footer = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="bg-gradient-to-br from-red-100 to-red-200 mt-12 pt-16 pb-8"
+      className="bg-gradient-to-br from-main-100 to-main-200 mt-12 pt-16 pb-8"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -57,7 +58,7 @@ const Footer = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 href="mailto:team@pretiumconcept.com"
-                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                className="p-2 bg-main-600 text-white rounded-full hover:bg-main-700 transition-colors"
               >
                 <FaEnvelope className="w-4 h-4" />
               </motion.a>
@@ -65,7 +66,7 @@ const Footer = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 href="tel:+2349090976720"
-                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                className="p-2 bg-main-600 text-white rounded-full hover:bg-main-700 transition-colors"
               >
                 <FaPhone className="w-4 h-4" />
               </motion.a>
@@ -74,35 +75,35 @@ const Footer = () => {
 
           {/* Column 2: Quick Links */}
           <motion.div variants={itemVariants} className="col-span-1">
-            <h3 className="text-sm font-semibold text-red-600 tracking-wider uppercase mb-4">
+            <h3 className="text-sm font-semibold text-main-600 tracking-wider uppercase mb-4">
               Quick Links
             </h3>
             <ul className="space-y-3">
               <li>
-                <NavLink to="/" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                <NavLink to="/" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                   Home
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/about" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                <NavLink to="/about" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                   About
                 </NavLink>
               </li>
               {(auth.currentUser?.uid && !auth.currentUser.isAnonymous && (
                 <li>
-                  <NavLink to="/user/carts" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                  <NavLink to="/user/carts" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                     Account
                   </NavLink>
                 </li>
               )) || (
                   <>
                     <li>
-                      <NavLink to="/login" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                      <NavLink to="/login" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                         Login
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="/register" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                      <NavLink to="/register" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                         Register
                       </NavLink>
                     </li>
@@ -113,22 +114,22 @@ const Footer = () => {
 
           {/* Column 3: Policies */}
           <motion.div variants={itemVariants} className="col-span-1">
-            <h3 className="text-sm font-semibold text-red-600 tracking-wider uppercase mb-4">
+            <h3 className="text-sm font-semibold text-main-600 tracking-wider uppercase mb-4">
               Policies
             </h3>
             <ul className="space-y-3">
               <li>
-                <NavLink to="/privacy-policy" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                <NavLink to="/privacy-policy" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                   Privacy Policy
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/refund-policy" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                <NavLink to="/refund-policy" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                   Refund Policy
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/terms-conditions" className="text-base text-gray-700 hover:text-red-600 transition duration-150">
+                <NavLink to="/terms-conditions" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
                   Terms & Conditions
                 </NavLink>
               </li>
@@ -137,26 +138,26 @@ const Footer = () => {
 
           {/* Column 4: Contact Information */}
           <motion.div variants={itemVariants} className="col-span-1">
-            <h3 className="text-sm font-semibold text-red-600 tracking-wider uppercase mb-4">
+            <h3 className="text-sm font-semibold text-main-600 tracking-wider uppercase mb-4">
               Contact Us
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start">
-                <FaMapMarkerAlt className="mt-1 mr-3 text-red-600 flex-shrink-0" />
+                <FaMapMarkerAlt className="mt-1 mr-3 text-main-600 flex-shrink-0" />
                 <span className="text-gray-700 text-sm">
                   1 OGUNKA STREET, WORLD BANK HOUSING ESTATE<br />
                   ABA, ABIA STATE, NIGERIA
                 </span>
               </li>
               <li className="flex items-center">
-                <FaPhone className="mr-3 text-red-600 flex-shrink-0" />
-                <Link to="tel:+2349090976720" className="text-gray-700 text-sm hover:text-red-600 transition duration-150">
+                <FaPhone className="mr-3 text-main-600 flex-shrink-0" />
+                <Link to="tel:+2349090976720" className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
                   (234) 909-097-6720
                 </Link>
               </li>
               <li className="flex items-center">
-                <FaEnvelope className="mr-3 text-red-600 flex-shrink-0" />
-                <Link to="mailto:team@pretiumconcept.com" className="text-gray-700 text-sm hover:text-red-600 transition duration-150">
+                <FaEnvelope className="mr-3 text-main-600 flex-shrink-0" />
+                <Link to="mailto:team@pretiumconcept.com" className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
                   team@pretiumconcept.com
                 </Link>
               </li>
@@ -167,10 +168,10 @@ const Footer = () => {
         {/* Bottom Section */}
         <motion.div
           variants={itemVariants}
-          className="mt-12 pt-8 border-t border-red-300 flex flex-col md:flex-row justify-between items-center"
+          className="mt-12 pt-8 border-t border-main-300 flex flex-col md:flex-row justify-between items-center"
         >
           <p className="text-sm text-gray-600 mb-4 md:mb-0">
-            © 2024 Pretium Concept. All rights reserved. | Business Registration: 8007530
+            © {new Date().getFullYear()} Pretium Concept. All rights reserved. | Business Registration: {businessNo}
           </p>
           <motion.div
             className="flex flex-wrap gap-2 justify-center md:justify-end"
@@ -182,7 +183,7 @@ const Footer = () => {
           >
             <motion.span
               variants={itemVariants}
-              className="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium"
+              className="inline-flex items-center px-3 py-1 bg-main-100 text-main-700 rounded-full text-xs font-medium"
             >
               ✅ Verified Business
             </motion.span>
@@ -204,7 +205,7 @@ const Footer = () => {
         {/* Partner Section */}
         <motion.div
           variants={itemVariants}
-          className="mt-8 pt-6 border-t border-red-200 flex flex-col md:flex-row justify-between items-center"
+          className="mt-8 pt-6 border-t border-main-200 flex flex-col md:flex-row justify-between items-center"
         >
           <Link
             target="_blank"

@@ -25,10 +25,10 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
-    primary: "bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl focus:ring-red-500",
-    secondary: "bg-red-100 hover:bg-red-200 text-red-700 shadow-md hover:shadow-lg focus:ring-red-300",
-    outline: "border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white shadow-md hover:shadow-lg focus:ring-red-500",
-    ghost: "text-red-600 hover:bg-red-50 focus:ring-red-300"
+    primary: "bg-main-600 hover:bg-main-700 text-white shadow-lg hover:shadow-xl focus:ring-main-500",
+    secondary: "bg-main-100 hover:bg-main-200 text-main-700 shadow-md hover:shadow-lg focus:ring-main-300",
+    outline: "border-2 border-main-600 text-main-600 hover:bg-main-600 hover:text-white shadow-md hover:shadow-lg focus:ring-main-500",
+    ghost: "text-main-600 hover:bg-main-50 focus:ring-main-300"
   };
 
   const sizes = {

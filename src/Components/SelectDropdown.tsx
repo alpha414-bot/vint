@@ -1,4 +1,3 @@
-import { NOAUTOCOMPLETE } from "@/System/function";
 import _ from "lodash";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
@@ -13,6 +12,7 @@ interface SelectDropdownInterface {
   disableOptionKeys?: string[];
   defaultOptionKey?: string;
   required?: boolean;
+  label: string;
   onChange?: any;
   isFocused?: boolean;
   control?: Control;
@@ -29,33 +29,20 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
       disableOptionKeys,
       defaultOptionKey,
       required,
-      onChange = () => {},
+      onChange = () => { },
       isFocused,
       defaultValue,
       control,
       rules,
+      label,
       ...props
     },
     ref: any
   ) {
     const TextInputRef = !!ref ? ref : useRef<HTMLInputElement>(null);
-    const [focus, setFocus] = useState<boolean>(false);
-    const [, setPlaceholderTextInput] = useState<string | undefined>(
-      placeholder
-    );
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownQuery, setDropdownQuery] = useState<string | null>(null);
     const [dropdownFiltering, setDropdowFiltering] = useState(options);
-
-    useEffect(() => {
-      if (isFocused && TextInputRef?.current) {
-        TextInputRef?.current.focus();
-        setShowDropdown(false);
-      }
-      if (defaultValue) {
-        setFocus(true);
-      }
-    }, []);
 
     useEffect(() => {
       if (dropdownQuery && dropdownQuery?.length > 0) {
@@ -83,50 +70,39 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
             rules={rules}
             defaultValue={defaultValue}
             render={({
-              field: { value, onChange, onBlur },
+              field: { value, onChange },
               fieldState: { error },
             }) => {
-              const FieldValue = value ? value.toString().trim() : value;
-              const handleFocus = () => {
-                setFocus(true);
-                setPlaceholderTextInput(undefined);
-              };
-              const handleBlur = () => {
-                setPlaceholderTextInput(placeholder);
-                if (!FieldValue) {
-                  setFocus(false);
-                  return onBlur();
-                }
-              };
-              // const CompleteFocus = !!value || !!TextInputRef?.current?.value;
-              const CompleteFocus =
-                !!value || focus || !!TextInputRef?.current?.value;
               return (
                 <div className="relative">
                   <div className="relative z-20">
+                    {label && (
+                      <label
+                        htmlFor={name}
+                        className={`text-base font-semibold text-main-500 bg-white/80 px-2 py-0.5 rounded transition-all duration-300 pointer-events-none shadow-sm mb-2`}
+                      >
+                        {label} {rules?.required ? "(*)" : ""}
+                      </label>
+                    )}
                     <div className="relative">
                       <input
                         id={name}
                         ref={TextInputRef}
                         name={name}
-                        className={`${CompleteFocus ? "pt-4 pb-1" : "py-2"} ${
-                          placeholder ? "focus:pt-4 focus:pb-1" : "focus:py-2"
-                        } px-3 pr-10 mb-0.5 bg-gray-700 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+                        className={`peer w-full px-4 py-3 text-base font-normal bg-gray-200 text-black border-none outline-none focus:ring-2 focus:ring-main-400 focus:bg-white/80 rounded-xl transition-all duration-300 accent-main-500`}
                         placeholder={
                           value?.value
                             ? value?.value
                             : !defaultOptionKey
-                            ? `${placeholder}${rules?.required ? "(*)" : ""}`
-                            : _.find(
+                              ? `${placeholder}${rules?.required ? "(*)" : ""}`
+                              : _.find(
                                 options,
                                 (item) => item.key === defaultOptionKey
                               )?.value
                         }
                         onFocus={() => {
                           setShowDropdown(true);
-                          handleFocus();
                         }}
-                        onBlur={handleBlur}
                         onChange={(e) => {
                           const InputValue = e.target.value;
                           setShowDropdown(true);
@@ -134,9 +110,9 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                             options.some(
                               (item) =>
                                 item.value.toLowerCase() ===
-                                  InputValue.toLowerCase() ||
+                                InputValue.toLowerCase() ||
                                 item.key.toLowerCase() ===
-                                  InputValue.toLowerCase()
+                                InputValue.toLowerCase()
                             )
                           ) {
                             onChange({
@@ -162,7 +138,6 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
 
                           setDropdownQuery(InputValue.toLowerCase());
                         }}
-                        autoComplete={NOAUTOCOMPLETE}
                         {...props}
                       />
 
@@ -170,12 +145,11 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                         className="absolute top-0 bottom-0 right-2 flex items-center justify-center cursor-pointer"
                         onClick={() => {
                           setDropdowFiltering(options);
-                          setFocus(true);
                           setShowDropdown(!showDropdown);
                         }}
                       >
                         <svg
-                          className="w-3.5 h-3.5 text-white"
+                          className="w-3.5 h-3.5 text-main-500"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -193,7 +167,7 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                     </div>
                     {error && !focus && (
                       <span
-                        className="block mt-0.5 mb-2.5 text-sm tracking-wider font-medium underline underline-offset-4 decoration-dotted text-red-500"
+                        className="block mt-0.5 mb-2.5 text-sm tracking-wider font-medium underline underline-offset-4 decoration-dotted text-main-500"
                         dangerouslySetInnerHTML={{
                           __html:
                             error?.message ||
@@ -202,7 +176,7 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                       ></span>
                     )}
                     {showDropdown && (
-                      <div className="absolute top-full mt-1 border border-gray-100 left-0 z-50 rounded-lg shadow-md bg-gray-400 space-y-0 w-full max-h-[14rem] overflow-y-auto select-none">
+                      <div className="absolute top-full mt-1 border border-gray-100 left-0 z-50 rounded-lg shadow-md bg-gray-200 space-y-0 w-full max-h-[14rem] overflow-y-auto select-none">
                         {(dropdownFiltering &&
                           ((dropdownFiltering.length > 0 &&
                             dropdownFiltering.map((item, index) => {
@@ -212,11 +186,10 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                               return (
                                 <div
                                   key={index}
-                                  className={`flex items-center gap-x-2 px-3 py-1.5 bg-gray-600 text-white hover:bg-gray-700 ${
-                                    disable
-                                      ? "cursor-not-allowed bg-zinc-200 opacity-70 text-opacity-20"
-                                      : "cursor-pointer"
-                                  }`}
+                                  className={`flex items-center gap-x-2 px-3 py-2 bg-gray-200 text-black hover:bg-gray-300 ${disable
+                                    ? "cursor-not-allowed bg-zinc-200 opacity-70 text-opacity-20"
+                                    : "cursor-pointer"
+                                    }`}
                                   onClick={() => {
                                     if (!disable) {
                                       if (TextInputRef?.current) {
@@ -230,7 +203,7 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                                   }}
                                 >
                                   <div className="flex flex-col items-start gap-0.5">
-                                    <span className="font-semibold text-sm whitespace-nowrap">
+                                    <span className="font-medium text-base whitespace-nowrap">
                                       {item?.value}
                                     </span>
                                     {item?.description && (
@@ -242,35 +215,25 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                                 </div>
                               );
                             })) || (
+                              <div className="w-full text-center">
+                                <span className="text-sm font-bold text-gray-600 text-center">
+                                  No dropdown with value "
+                                  <span className="underline underline-offset-2 decoration-dotted">
+                                    {dropdownQuery}
+                                  </span>
+                                  "
+                                </span>
+                              </div>
+                            ))) || (
                             <div className="w-full text-center">
                               <span className="text-sm font-bold text-gray-600 text-center">
-                                No dropdown with value "
-                                <span className="underline underline-offset-2 decoration-dotted">
-                                  {dropdownQuery}
-                                </span>
-                                "
+                                No options attached
                               </span>
                             </div>
-                          ))) || (
-                          <div className="w-full text-center">
-                            <span className="text-sm font-bold text-gray-600 text-center">
-                              No options attached
-                            </span>
-                          </div>
-                        )}
+                          )}
                       </div>
                     )}
                   </div>
-                  {placeholder && (
-                    <label
-                      htmlFor={name}
-                      className={`absolute z-30 mb-0 text-white bg-gray-700 pl-4 pr-6 py-0.5 rounded-md origin-left transform scale-75 -top-4 left-1.5 transition-all duration-400 text-lg font-semibold shadow-md shadow-gray-500 ${
-                        CompleteFocus ? "opacity-100 -top-4" : "top-8 opacity-0"
-                      }`}
-                    >
-                      {placeholder} {rules?.required ? "(*)" : ""}
-                    </label>
-                  )}
                 </div>
               );
             }}

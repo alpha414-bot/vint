@@ -77,7 +77,7 @@ const GatewayProvider = ({
         },
         meta: { app: app },
         customizations: {
-            title: "Pretium Concept",
+            title: "Pretium Hub Ventures",
             description:
                 "Pay for our amazing plan. If any issue, reach out to our support.",
             logo: `${window.location.origin}/img/icon.png`,

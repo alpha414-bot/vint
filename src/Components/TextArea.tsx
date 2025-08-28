@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useRef } from "react";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
 
 interface TextAreaProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
@@ -7,6 +7,7 @@ interface TextAreaProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   isFocused?: boolean;
   control: Control;
   rules?: RegisterOptions;
+  label: string;
 }
 
 const TextArea = forwardRef<HTMLInputElement, TextAreaProps>(function TextInput(
@@ -18,90 +19,57 @@ const TextArea = forwardRef<HTMLInputElement, TextAreaProps>(function TextInput(
     name,
     rules,
     defaultValue,
+    label,
     ...props
   },
   ref: any
 ) {
-  const [focus, setFocus] = useState<boolean>(false);
-  const [placeholderTextInput, setPlaceholderTextInput] = useState<
-    string | undefined
-  >(placeholder);
-  const input = !!ref ? ref : useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (isFocused && input?.current) {
-      input?.current.focus();
-    }
-    if (defaultValue) {
-      setFocus(true);
-    }
-  }, []);
+  const input = useRef<HTMLTextAreaElement>(ref);
 
   return (
     <div className="relative w-full">
-      {/* Instead of using {...register}. Try to make use of Controller, that would give us upper hand over the onChange, and onBlur */}
       <Controller
         name={name}
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({
-          field: { value, onChange, onBlur },
-          fieldState: { error },
-        }) => {
-          const FieldValue = value ? value.toString().trim() : value;
-          const handleFocus = () => {
-            setFocus(true);
-            setPlaceholderTextInput(undefined);
-          };
-          const handleBlur = () => {
-            setPlaceholderTextInput(placeholder);
-            if (!FieldValue) {
-              setFocus(false);
-              return onBlur();
-            }
-          };
+        render={({ field: { value, onChange }, fieldState: { error } }) => {
           return (
             <>
-              <textarea
-                ref={input}
-                id={name}
-                className={`${FieldValue ? "pt-4 pb-1" : "py-2"} ${
-                  placeholder ? "focus:pt-4 focus:pb-1" : "focus:py-2"
-                } px-3 pr-10 mb-0.5 bg-gray-700 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${className} `}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                placeholder={
-                  placeholderTextInput
-                    ? `${placeholderTextInput}${rules?.required ? "(*)" : ""}`
-                    : undefined
-                }
-                onChange={onChange}
-                defaultValue={defaultValue}
-                {...props}
-              />
-              {error && (
-                <span
-                  className="block mt-0.5 mb-2.5 text-sm tracking-wider font-medium underline underline-offset-4 decoration-dotted text-red-500"
-                  dangerouslySetInnerHTML={{
-                    __html: error.message || "Error encountered with the input",
-                  }}
-                ></span>
-              )}
+              <div
+                className={`relative w-full transition-all duration-300`}
+              >
+                {label && (
+                  <label
+                    htmlFor={name}
+                    className={`text-base font-semibold text-main-500 bg-white/80 px-2 py-0.5 rounded transition-all duration-300 pointer-events-none shadow-sm mb-2`}
+                  >
+                    {label} {rules?.required ? "(*)" : ""}
+                  </label>
+                )}
+                <textarea
+                  ref={input}
+                  id={name}
+                  className={`peer w-full px-4 py-3 text-base font-normal bg-gray-200 text-black border-none outline-none focus:ring-2 focus:ring-main-400 focus:bg-white/80 rounded-xl transition-all duration-300 ${className}`}
+                  placeholder={placeholder}
+                  defaultValue={value}
+                  onChange={onChange}
+                  {...props}
+                />
+
+                {error && (
+                  <span
+                    className="block mt-1 mb-2 text-sm font-medium text-red-500 underline underline-offset-4 decoration-dotted px-2"
+                    dangerouslySetInnerHTML={{
+                      __html: error.message || "Error encountered with the input",
+                    }}
+                  ></span>
+                )}
+              </div>
             </>
           );
         }}
       />
-      {placeholder && (
-        <label
-          htmlFor={name}
-          className={`absolute mb-0 text-white bg-gray-700 pl-4 pr-6 py-0.5 rounded-md origin-left transform scale-75 -top-4 left-1.5 transition-all duration-400 text-lg font-semibold shadow-md shadow-gray-500 ${
-            focus ? "opacity-100 -top-4" : "top-8 opacity-0"
-          }`}
-        >
-          {placeholder} {rules?.required ? "(*)" : ""}
-        </label>
-      )}
     </div>
   );
 });

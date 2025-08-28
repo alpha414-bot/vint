@@ -6,10 +6,11 @@ import "slick-carousel/slick/slick.css";
 const About = () => {
   const PartnerSliderSettings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     slidesToShow: 4,
     slidesToScroll: 2,
-    autoplay: false,
+    autoplay: true,
+    autoplaySpeed: 1500,
     arrows: true,
     centerMode: true,
     swipe: true,
@@ -64,14 +65,8 @@ const About = () => {
           <div className="mt-6 px-18">
             <Slider arrows {...PartnerSliderSettings} className="">
               {PartnerData.map((item, index) => (
-                <div key={index} className={"p-4"}>
+                <div key={index} className={"p-2"}>
                   <img src={item.img} alt={`Partner ${index + 1}`} className="w-full h-40 object-contain" />
-                  {/* <div
-                    className="w-full h-40 bg-no-repeat bg-contain bg-[left_top_50%] rounded-lg"
-                    style={{
-                      backgroundImage: `url("${item.img}")`,
-                    }}
-                  ></div> */}
                 </div>
               ))}
             </Slider>

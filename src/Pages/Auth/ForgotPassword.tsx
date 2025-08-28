@@ -47,7 +47,8 @@ const ForgotPassword = () => {
                 }}
                 name="email"
                 type="email"
-                placeholder="Email address"
+                label="Email address"
+                placeholder="Enter your email address"
               />
             </div>
           </div>

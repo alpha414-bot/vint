@@ -8,10 +8,11 @@
   "FlutterwavePublicKey": "FLWPUBK_TEST-652d535a8757a811da051afb77e43115-X",
   "PaystackPublicKey": "pk_test_adac6802e1b94aad03084f2867102ecfdcfa6993",
   "baseUrl": "https://pretiumconcept.com.ng",
+  "bn": "8671216",
   "contacts": {
-    "email": "pretiumconcept@gmail.com",
-    "phone": "(234) 2346-2992-29929",
-    "address": "1 OGUNKA STREET, WORLD BANK HOUSING ESTATE, ABA, ABIA STATE, NIGERIA"
+    "email": "pretiumconcepts@gmail.com",
+    "phone": "(234) ",
+    "address": ""
   },
   "scripts": {
     "generate:sitemap": "npx tsx src/Scripts/sitemap.ts",
@@ -22,6 +23,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.12",
     "aws-amplify": "^6.3.4",
     "classnames": "^2.5.1",
     "firebase": "^10.12.2",
@@ -52,12 +54,12 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }
