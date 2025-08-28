@@ -80,12 +80,12 @@ const Checkout = () => {
                 <button
                   type="submit"
                   key={index}
-                  className={`flex items-center gap-x-1 ${isForm == index ? "text-emerald-600" : ""
+                  className={`flex items-center gap-x-1 ${isForm == index ? "text-red-600" : ""
                     }`}
                 >
                   <div
                     className={`border p-1 rounded-full ${isForm == index
-                      ? "bg-emerald-600 border-emerald-600 text-white"
+                      ? "bg-red-600 border-red-600 text-white"
                       : "border-gray-200"
                       }`}
                   >
@@ -387,7 +387,7 @@ const Checkout = () => {
                 <div className="mt-5 flex justify-end">
                   <button
                     type="submit"
-                    className="undefined inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-emerald-700 hover:bg-emerald-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-emerald-600"
+                    className="undefined inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-red-700 hover:bg-red-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-red-600"
                   >
                     Next Step: Payment and Billing
                   </button>
@@ -464,7 +464,7 @@ const Checkout = () => {
                         email: formValue.email || "user@gmail.com",
                         phone_number: formValue.phone_number,
                       },
-                      reference: `emeralds${new Date().getTime()}_${Math.random()}`,
+                      reference: `pretium${new Date().getTime()}_${Math.random()}`,
                       app: window.location.host,
                     }}
                     onSuccess={(reference, gateway) => {
@@ -476,7 +476,7 @@ const Checkout = () => {
                   >
                     {
                       ({ initializePayment }) => (
-                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-center rounded-lg bg-emerald-700 hover:bg-emerald-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-emerald-600" onClick={() => {
+                        <button className="flex gap-2 items-center px-4 py-3 text-base font-medium text-center rounded-lg bg-red-700 hover:bg-red-800 hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-red-600" onClick={() => {
                           initializePayment();
                         }}>
                           Pay Now
@@ -497,7 +497,7 @@ const Checkout = () => {
               <h2 className="text-xl font-bold">Order Summary</h2>
               <Link
                 to="/user/carts"
-                className="text-sm text-emerald-600 underline underline-offset-4 decoration-emerald-600 decoration-dotted"
+                className="text-sm text-red-600 underline underline-offset-4 decoration-red-600 decoration-dotted"
               >
                 Edit cart
               </Link>

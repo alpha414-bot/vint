@@ -1,12 +1,13 @@
 // ProductItem: Components containing a visual display of the product metadata
 
-import { useAwsImage } from "@/Services/Hook";
+import { useAuthUser, useAwsImage } from "@/Services/Hook";
 import {
   addToCartQuery,
   removeCartProduct,
   updateCartQuantity
 } from "@/Services/Query";
 import { price, short } from "@/System/function";
+import { AnimatePresence, motion } from "framer-motion";
 import _ from "lodash";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,160 +17,314 @@ const ProductItem: React.FC<{
   product: ProductItemType;
   type: ListingProductType;
 }> = ({ product, type }) => {
-  // const [, setImage] = useState(null);
   const { data: image } = useAwsImage(product.image);
+  const { data: authUser, isLoading: authLoading } = useAuthUser();
   const QuantityInputRef = useRef<HTMLInputElement>(null);
   const [quantity, setQuantity] = useState<number>(product.cartQuantity || 1);
-  // const image = getAwsMedia(product.image).then((url: any) => {console.log("") setImage(url)});
+  const [isHovered, setIsHovered] = useState(false);
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    },
+    hover: {
+      y: -8,
+      scale: 1.02,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const imageVariants = {
+    hover: {
+      scale: 1.1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const cardStyles = type === "carts_listing" || type === "similar_listing"
+    ? "flex-col items-stretch gap-2 md:flex-row"
+    : "flex-col";
+
+  const cardClasses = `
+    relative overflow-hidden
+    ${cardStyles}
+    ${type === "order_listing" ? "pb-0" : "pb-6"}
+    bg-gradient-to-br from-white via-red-50/30 to-red-100/50
+    backdrop-blur-lg
+    border border-red-200/30
+    rounded-2xl
+    shadow-lg hover:shadow-2xl
+    transition-all duration-500
+    group
+  `;
+
   return (
-    // TailwindCSS styles in ProductItem Component
-    <div
-      className={`flex ${type === "carts_listing" || type === "similar_listing"
-        ? "flex-col items-stretch gap-2 md:flex-row"
-        : "pb-4 flex-col"
-        } justify-start leading-normal rounded-xl ${type === "order_listing" ? "pb-0" : "shadow-sm shadow-gray-600"
-        }`}
+    <motion.div
+      transition={containerVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover="hover"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className={cardClasses}
     >
-      <Link to={`/products/${product.id}`}>
-        <div
-          className={`bg-no-repeat bg-cover bg-center ${type === "carts_listing"
-            ? "w-full h-60 rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-52 md:min-h-52"
-            : type === "similar_listing"
-              ? "w-full h-32 min-h-full max-h-full rounded-t-xl md:rounded-t-none md:rounded-ss-xl md:rounded-es-xl md:w-32 md:h-24"
-              : type === "order_listing"
-                ? "hidden"
-                : "w-full h-80 rounded-t-xl"
-            } bg-white/95`}
-          style={{
-            backgroundImage: `url('${image || "/favicon.svg"}')`,
-          }}
-        ></div>
-      </Link>
-      {/* Product metadata */}
-      <div
-        className={`${type === "carts_listing"
-          ? "px-3 py-4 grow"
-          : type === "similar_listing"
-            ? "px-2 py-1"
-            : type === "order_listing"
-              ? "p-0"
-              : "px-2 mt-4 grow"
-          } flex flex-col justify-between`}
-      >
-        <div>
-          <div className="flex flex-col items-start justify-between gap-1.5 mb-1 lg:flex-row">
-            {/* Product name-description and quantity */}
-            <Link to={`/products/${product.id}`}>
-              {/* Product name/ <description> */}
-              <div>
-                <h3
-                  className={`${type === "similar_listing"
-                    ? "text-base font-bold"
-                    : type === "order_listing"
-                      ? "text-base font-medium"
-                      : "text-xl font-bold"
-                    }`}
+      {/* Floating gradient overlay */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-br from-red-400/20 via-transparent to-red-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+      />
+
+      {/* Product Image Section */}
+      <Link to={`/products/${product.id}`} className="relative block">
+        <motion.div
+          transition={imageVariants}
+          whileHover="hover"
+          className={`
+            relative overflow-hidden
+            ${type === "carts_listing"
+              ? "w-full h-64 rounded-t-2xl md:rounded-t-none md:rounded-l-2xl md:w-56 md:min-h-64"
+              : type === "similar_listing"
+                ? "w-full h-36 rounded-t-2xl md:rounded-t-none md:rounded-l-2xl md:w-36 md:h-28"
+                : type === "order_listing"
+                  ? "hidden"
+                  : "w-full h-72 rounded-t-2xl"
+            }
+            bg-gradient-to-br from-red-100 to-red-200
+          `}
+        >
+          {/* Image with overlay */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700"
+            style={{
+              backgroundImage: `url('${image || "/favicon.svg"}')`,
+            }}
+          />
+
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+          {/* Category badge */}
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="absolute top-4 left-4"
+          >
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-600/90 text-white backdrop-blur-sm border border-white/20">
+              {_.startCase(product.category)}
+            </span>
+          </motion.div>
+
+          {/* Star rating */}
+          <motion.div
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="absolute top-4 right-4"
+          >
+            <div className="flex items-center space-x-1 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5">
+              <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+              </svg>
+              <span className="text-sm font-semibold text-gray-800">{product.star || 5}</span>
+            </div>
+          </motion.div>
+
+          {/* Hover overlay with quick actions */}
+          <AnimatePresence>
+            {isHovered && type !== "order_listing" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center"
+              >
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ delay: 0.1 }}
                 >
-                  {product.name}
-                </h3>
-                <div className="mt-0.5 flex items-center justify-start gap-2">
-                  <p className="bg-emerald-700 px-2 py-0.5 rounded font-medium text-xs">
-                    Category:
-                  </p>
-                  <p className="text-xs font-medium underline underline-offset-4 decoration-double">
-                    {_.startCase(product.category)}
-                  </p>
-                </div>
-              </div>
-              {type === "carts_listing" && (
-                <p className={"text-gray-200 text-sm"}>{product.description}</p>
-              )}
-            </Link>
-            {type !== "similar_listing" && (
-              <div >
-                <p
-                  className={`${type === "order_listing" ? "text-lg" : "text-2xl"
-                    } text-left text-emerald-600 font-bold lg:text-right`}
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className=" text-red-600 hover:bg-red-50 shadow-lg"
+                  >
+                    Quick View
+                  </Button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </Link>
+      {/* Product Content Section */}
+      <div
+        className={`
+          ${type === "carts_listing"
+            ? "px-6 py-5 flex-1"
+            : type === "similar_listing"
+              ? "px-4 py-3"
+              : type === "order_listing"
+                ? "p-0"
+                : "px-6 py-5 flex-1"
+          }
+          flex flex-col justify-between
+        `}
+      >
+        <div className="space-y-4">
+          {/* Product Title and Description */}
+          <Link to={`/products/${product.id}`} className="block group">
+            <motion.h3
+              whileHover={{ x: 2 }}
+              transition={{ duration: 0.2 }}
+              className={`
+                font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-300
+                ${type === "similar_listing"
+                  ? "text-lg"
+                  : type === "order_listing"
+                    ? "text-xl"
+                    : "text-2xl"
+                }
+              `}
+            >
+              {product.name}
+            </motion.h3>
+
+            {/* Description */}
+            {type !== "order_listing" && (
+              <motion.p
+                initial={{ opacity: 0.7 }}
+                whileHover={{ opacity: 1 }}
+                className={`
+                  text-gray-600 leading-relaxed mt-2
+                  ${type === "similar_listing" ? "text-sm" : "text-base"}
+                `}
+              >
+                {type === "similar_listing"
+                  ? short(product.description, _.random(50, 80))
+                  : type === "carts_listing"
+                    ? product.description
+                    : short(product.description, 120)
+                }
+              </motion.p>
+            )}
+          </Link>
+
+          {/* Pricing Section */}
+          {type !== "similar_listing" && (
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <motion.p
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  className={`
+                    font-bold text-red-600
+                    ${type === "order_listing" ? "text-2xl" : "text-3xl"}
+                  `}
                 >
                   {price(
                     product.price * (product.cartQuantity || 1),
                     "currency",
                     0
                   )}
-                </p>
+                </motion.p>
                 {product.salePrice && (
-                  <p className="text-sm text-left text-emerald-600 font-semibold line-through lg:text-right">
+                  <p className="text-lg text-gray-400 font-medium line-through">
                     {price(product.salePrice, "currency", 0)}
                   </p>
                 )}
-                {
-                  type == "order_listing" && (
-                    <Link
-                      to={product.downloadable}
-                      download
-                      onClick={e => {
-                        e.preventDefault();
-                        fetch(product.downloadable)
-                          .then(res => res.blob())
-                          .then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement("a");
-                            a.href = url;
-                            a.download = `${product.name}.pdf`;
-                            document.body.appendChild(a);
-                            a.click();
-                            a.remove();
-                            window.URL.revokeObjectURL(url);
-                          });
-                      }}
-                      className="text-sm bg-blue-600 px-2 py-1 text-white rounded hover:underline"
-                    >
-                      Download PDF
-                    </Link>
-                  )
-                }
               </div>
-            )}
-          </div>
-          {type !== "carts_listing" && type !== "order_listing" && (
-            <Link to={`/products/${product.id}`}>
-              <p className="hidden lg:block text-gray-200 text-sm">
-                {type === "similar_listing"
-                  ? short(product.description, _.random(24, 37))
-                  : product.description}
-              </p>
-              <p className="block lg:hidden text-gray-200 text-sm">
-                {product.description}
-              </p>
-            </Link>
+
+              {/* Download button for orders */}
+              {type === "order_listing" && (
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link
+                    to={product.downloadable}
+                    download
+                    onClick={(e) => {
+                      e.preventDefault();
+                      fetch(product.downloadable)
+                        .then(res => res.blob())
+                        .then(blob => {
+                          const url = window.URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = `${product.name}.pdf`;
+                          document.body.appendChild(a);
+                          a.click();
+                          a.remove();
+                          window.URL.revokeObjectURL(url);
+                        });
+                    }}
+                    className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Download PDF</span>
+                  </Link>
+                </motion.div>
+              )}
+            </div>
           )}
-          {type == "similar_listing" && (
-            <p className={`text-lg text-emerald-600 font-bold`}>
+
+          {/* Similar listing price */}
+          {type === "similar_listing" && (
+            <motion.p
+              whileHover={{ scale: 1.05 }}
+              className="text-2xl font-bold text-red-600"
+            >
               {price(
                 product.price * (product.cartQuantity || 1),
                 "currency",
                 0
               )}
-            </p>
+            </motion.p>
           )}
         </div>
+        {/* Action Section */}
         {(type === "carts_listing" || type === "product_listing") && (
-          <div
-            className={`mt-3 flex ${type === "carts_listing" ? "justify-between" : "justify-end"
-              } flex-wrap items-start gap-y-2`}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className={`
+              pt-4 border-t border-red-200/50
+              ${type === "carts_listing"
+                ? "flex items-center justify-between space-x-4"
+                : "flex justify-end"
+              }
+            `}
           >
-            {/* Product Quantity reading */}
+            {/* Quantity Controls for Cart */}
             {type === "carts_listing" && (
-              <div className="flex flex-col gap-2 invisible">
-                <div className="flex items-center gap-x-1.5">
-                  <p className="text-base font-bold underline underline-offset-2 decoration-dotted">
-                    Quantity:
-                  </p>
-                  <p>{quantity || 1}</p>
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm font-semibold text-gray-700">Quantity:</span>
+                  <span className="text-lg font-bold text-red-600">{quantity || 1}</span>
                 </div>
-                <div className="inline-flex rounded-md shadow-sm" role="group">
-                  {/* decrement */}
-                  <button
+
+                <div className="flex items-center bg-white rounded-xl border border-red-200/50 shadow-sm overflow-hidden">
+                  <motion.button
+                    whileHover={{ backgroundColor: "#f3f4f6" }}
+                    whileTap={{ scale: 0.95 }}
                     type="button"
                     onClick={() => {
                       if (quantity > 1) {
@@ -180,26 +335,13 @@ const ProductItem: React.FC<{
                         setQuantity((count) => count - 1);
                       }
                     }}
-                    className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-s-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
+                    className="p-3 text-red-600 hover:text-red-700 transition-colors duration-200"
                   >
-                    <svg
-                      className="w-5 h-5 text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2.5"
-                        d="M5 12h14"
-                      />
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 12H4" />
                     </svg>
-                  </button>
+                  </motion.button>
+
                   <input
                     type="text"
                     min={0}
@@ -214,9 +356,12 @@ const ProductItem: React.FC<{
                         setQuantity(numericValue);
                       }
                     }}
-                    className="inline text-white placeholder:text-gray-400 text-base bg-transparent max-w-12 text-center border border-white focus:outline-none focus:ring-0"
+                    className="w-16 px-2 py-3 text-center text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 font-semibold"
                   />
-                  <button
+
+                  <motion.button
+                    whileHover={{ backgroundColor: "#f3f4f6" }}
+                    whileTap={{ scale: 0.95 }}
                     type="button"
                     onClick={() => {
                       if (QuantityInputRef.current) {
@@ -225,44 +370,84 @@ const ProductItem: React.FC<{
                       updateCartQuantity(product, 1);
                       setQuantity((count) => count + 1);
                     }}
-                    className="inline-flex items-center px-2 py-1 text-sm font-medium bg-transparent border rounded-e-md  focus:z-10 focus:ring-2 focus:ring-gray-500 focus:text-white border-white text-white hover:text-white hover:bg-gray-700 focus:bg-gray-700"
+                    className="p-3 text-red-600 hover:text-red-700 transition-colors duration-200"
                   >
-                    <svg
-                      className="w-5 h-5 text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2.5"
-                        d="M5 12h14m-7 7V5"
-                      />
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                     </svg>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             )}
-            <Button
-              text={type !== "carts_listing" ? "Add to cart" : "Remove"}
-              onClick={() => {
-                if (type === "carts_listing") {
-                  // remove products from cart
-                  removeCartProduct(product).then(() => { });
-                } else {
-                  addToCartQuery(product).then(() => { });
-                }
-              }}
-            />
-          </div>
+
+            {/* Action Button */}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex-shrink-0"
+            >
+              <Button
+                variant={type === "carts_listing" ? "outline" : "primary"}
+                size="lg"
+                className={`
+                  min-w-[140px] font-semibold shadow-lg
+                  ${type === "carts_listing"
+                    ? "border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400"
+                    : "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                  }
+                `}
+                onClick={() => {
+                  console.log("Click me ...")
+                  if (type === "carts_listing") {
+                    removeCartProduct(product).then(() => { });
+                  } else {
+                    // Ensure user is authenticated before adding to cart
+                    if (authLoading) {
+                      // Still loading auth state, show loading message
+                      console.log("Auth still loading...");
+                      return;
+                    }
+
+                    if (!authUser) {
+                      // No user found, should not happen due to useAuthUser hook
+                      console.log("No authenticated user found");
+                      return;
+                    }
+
+                    console.log("Adding to cart for user:", authUser.uid);
+                    console.log("Product:", product);
+
+                    addToCartQuery(product)
+                      .then(() => {
+                        console.log("Successfully added to cart");
+                      })
+                      .catch((error) => {
+                        console.error("Error adding to cart:", error);
+                      });
+                  }
+                }}
+              >
+                {type !== "carts_listing" ? (
+                  <span className="flex items-center space-x-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
+                    </svg>
+                    <span>{authLoading ? "Loading..." : "Add to Cart"}</span>
+                  </span>
+                ) : (
+                  <span className="flex items-center space-x-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span>Remove</span>
+                  </span>
+                )}
+              </Button>
+            </motion.div>
+          </motion.div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

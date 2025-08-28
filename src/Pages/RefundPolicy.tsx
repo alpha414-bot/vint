@@ -7,16 +7,16 @@ const RefundPolicyPage = () => {
     return (
         <MainLayout title="Refund Policy" description="Learn about our refund policy for digital courses">
             <main>
-                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-100">
+                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-900">
                     <div className="space-y-2">
                         <h1 className="text-center text-5xl font-bold">
                             Refund Policy
                         </h1>
                         <p className="mb-0 text-center">
-                            <strong>Effective Date:</strong> 16th August 2025
+                            <strong>Effective Date:</strong> 30th August 2025
                         </p>
                         <p className="text-center">
-                            <strong>Last updated:</strong> 16th August 2025
+                            <strong>Last updated:</strong> 30th August 2025
                         </p>
                     </div>
 
@@ -25,7 +25,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    Thank you for choosing Emeralds Digital Ventures for your ecommerce education needs.
+                                    Thank you for choosing Pretium Concept for your ecommerce education needs.
                                     This Refund Policy outlines our guidelines regarding refunds for our digital
                                     courses and educational content.
                                 </p>
@@ -43,7 +43,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    <strong>Emeralds Digital Ventures has a strict no-refund policy for all digital courses and educational content.</strong>
+                                    <strong>Pretium Concept has a strict no-refund policy for all digital courses and educational content.</strong>
                                     Once a purchase is made and you gain access to our digital content, no refunds will be issued.
                                 </p>
                                 <p>
@@ -112,7 +112,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    Emeralds Digital Ventures uses Flutterwave as our payment processor, and our refund policy
+                                    Pretium Concept uses Flutterwave as our payment processor, and our refund policy
                                     is in compliance with Flutterwave's merchant terms of service regarding digital goods:
                                 </p>
                                 <ul>
@@ -180,7 +180,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    When you purchase a course from Emeralds Digital Ventures:
+                                    When you purchase a course from Pretium Concept:
                                 </p>
                                 <ul>
                                     <li>

@@ -1,5 +1,5 @@
 {
-  "name": "emeraldsventures",
+  "name": "pretiumconcept",
   "private": true,
   "development": true,
   "version": "1.0.0",
@@ -7,10 +7,10 @@
   "gateway": "flutterwave",
   "FlutterwavePublicKey": "FLWPUBK_TEST-652d535a8757a811da051afb77e43115-X",
   "PaystackPublicKey": "pk_test_adac6802e1b94aad03084f2867102ecfdcfa6993",
-  "baseUrl": "https://emeraldsventures.com.ng",
+  "baseUrl": "https://pretiumconcept.com.ng",
   "contacts": {
-    "email": "noreplyhealthcarology@gmail.com",
-    "phone": "(234) 814-965-1464",
+    "email": "pretiumconcept@gmail.com",
+    "phone": "(234) 2346-2992-29929",
     "address": "1 OGUNKA STREET, WORLD BANK HOUSING ESTATE, ABA, ABIA STATE, NIGERIA"
   },
   "scripts": {
@@ -26,6 +26,7 @@
     "classnames": "^2.5.1",
     "firebase": "^10.12.2",
     "flutterwave-react-v3": "^1.3.2",
+    "framer-motion": "^12.23.12",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "momentjs": "^2.0.0",

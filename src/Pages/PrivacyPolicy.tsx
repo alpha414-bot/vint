@@ -8,16 +8,16 @@ const PrivacyPolicyPage = () => {
     return (
         <MainLayout title="Privacy Policy" description="Learn about our privacy practices and how we protect your information.">
             <main>
-                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-100">
+                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-900">
                     <div className="space-y-2">
                         <h1 className="text-center text-5xl font-bold">
                             Privacy Policy
                         </h1>
                         <p className="mb-0 text-center">
-                            <strong>Effective Date:</strong> 16th August 2025
+                            <strong>Effective Date:</strong> 30th August 2025
                         </p>
                         <p className=" text-center">
-                            <strong>Last updated:</strong> 16th August 2025
+                            <strong>Last updated:</strong> 30th August 2025
                         </p>
                     </div>
 
@@ -26,18 +26,18 @@ const PrivacyPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    Welcome to Emeralds Digital Ventures! Your privacy is important to us. This
+                                    Welcome to Pretium Concept! Your privacy is important to us. This
                                     Privacy Policy explains how we collect, use, store, and
                                     protect your information when you use our website, online courses,
                                     and related services.
                                 </p>
                                 <p>
-                                    By using Emeralds Digital Ventures, you agree to this Privacy Policy. If you do
+                                    By using Pretium Concept, you agree to this Privacy Policy. If you do
                                     not agree, please discontinue the use of our services.
                                 </p>
                                 <h3 className="text-xl font-bold">Who We Are</h3>
                                 <p>
-                                    Emeralds Digital Ventures ("we," "us," or "our") is the entity responsible for
+                                    Pretium Concept ("we," "us," or "our") is the entity responsible for
                                     collecting and processing your data. We are a modern platform for mastering
                                     ecommerce through expert-led courses. If you have any
                                     questions, contact us at{" "}

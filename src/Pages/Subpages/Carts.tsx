@@ -13,7 +13,7 @@ const Carts = () => {
         <h3 className="text-2xl font-bold tracking-wider">
           My Carts ({data?.length})
         </h3>
-        <Link to="/" className="font-medium text-lg text-emerald-600 hover:underline">
+        <Link to="/" className="font-medium text-lg text-red-600 hover:underline">
           Continue Shopping
         </Link>
       </div>
@@ -52,7 +52,7 @@ const Carts = () => {
           <div className="flex flex-col items-end mt-8">
             <Link
               to="/checkout"
-              className="inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-emerald-700 hover:bg-emerald-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-emerald-600"
+              className="inline-flex items-center px-4 py-0.5 text-base font-medium text-center rounded-lg bg-red-700 hover:bg-red-800 border-4 border-transparent hover:border-gray-800 hover:ring-2 hover:outline-none hover:ring-red-600"
             >
               Checkout
             </Link>

@@ -3,48 +3,68 @@
 @tailwind utilities;
 
 @layer utilities {
-     /* Rich Editor */
+  /* Rich Editor */
   .rich-editor h1 {
-    @apply text-4xl font-extrabold;
+    @apply text-4xl font-extrabold text-gray-900;
   }
   .rich-editor h2 {
-    @apply text-xl font-bold underline;
+    @apply text-xl font-bold underline text-gray-800;
   }
   .rich-editor h3 {
-    @apply text-lg font-bold;
+    @apply text-lg font-bold text-gray-800;
   }
   .rich-editor ol {
-    @apply list-inside list-decimal space-y-1.5 pl-4 font-normal;
+    @apply list-inside list-decimal space-y-1.5 pl-4 font-normal text-gray-700;
   }
   .rich-editor ul {
-    @apply list-inside list-disc space-y-1.5 pl-4 font-normal;
+    @apply list-inside list-disc space-y-1.5 pl-4 font-normal text-gray-700;
   }
   .rich-editor p {
-    @apply font-normal;
+    @apply font-normal text-gray-700;
   }
   .rich-editor strong {
-    @apply font-bold;
+    @apply font-bold text-gray-900;
   }
   .rich-editor blockquote {
-    @apply ml-5 border-l-2 border-gray-500 pl-2 text-gray-500 italic;
+    @apply ml-5 border-l-2 border-red-300 pl-2 text-red-600 italic;
   }
   .rich-editor code {
-    @apply my-1 inline-block bg-gray-300 p-0.5 font-mono;
+    @apply my-1 inline-block bg-red-100 p-0.5 font-mono text-red-800;
   }
   .rich-editor a {
-    @apply font-bold text-gray-300 underline underline-offset-4;
+    @apply font-bold text-red-600 underline underline-offset-4 hover:text-red-800;
   }
-  /* Slick */
-.slick-slider {
-  @apply !static;
+  
+  /* Custom Slick Dots */
+  .slick-slider {
+    @apply !static;
+  }
+  .custom-slick-dot {
+    @apply !mt-0 flex w-auto !items-center justify-end gap-x-3 !p-0 !px-4;
+  }
+  .custom-slick-dot li {
+    @apply bg-red-300 !m-0 !inline-block !h-3 !w-4 rounded-full !p-0 !transition-all !delay-100 !duration-300 !ease-in-out;
+  }
+  .custom-slick-dot li.slick-active {
+    @apply bg-red-600 !m-0 !inline-block !h-3 !w-16 rounded-full !p-0;
+  }
+
+  /* Glass morphism effects */
+  .glass {
+    @apply backdrop-blur-sm bg-white/80 border border-white/20 shadow-lg;
+  }
+  
+  .glass-dark {
+    @apply backdrop-blur-sm bg-red-50/90 border border-red-200/30 shadow-lg;
+  }
 }
-.custom-slick-dot {
-  @apply !mt-0 flex w-auto !items-center justify-end gap-x-3 !p-0 !px-4;
+
+/* Light theme body */
+body {
+  @apply bg-gradient-to-br from-red-50 via-white to-red-50 text-gray-900;
 }
-.custom-slick-dot li {
-  @apply bg-emerald-700/75 !m-0 !inline-block !h-3 !w-4 rounded-full !p-0 !transition-all !delay-100 !duration-300 !ease-in-out;
-}
-.custom-slick-dot li.slick-active {
-  @apply bg-emerald-500 !m-0 !inline-block !h-3 !w-16 rounded-full !p-0;
-}
+
+/* Smooth transitions for all elements */
+* {
+  @apply transition-colors duration-300 ease-in-out;
 }

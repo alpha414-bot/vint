@@ -14,7 +14,6 @@ const About = () => {
     centerMode: true,
     swipe: true,
     swipeToSlide: true,
-    // rtl: 
     customPaging: () => <div></div>,
     dotsClass: "py-2",
     appendDots: (dots: React.ReactNode[]) => (
@@ -47,12 +46,15 @@ const About = () => {
     },
   ];
   return (
-    <MainLayout title="About Us">
+    <MainLayout
+      title="About Pretium Concept"
+      description="Learn about Pretium Concept's mission to provide premium educational solutions and transform professional learning."
+    >
       <div className="max-w-7xl mx-auto py-10 px-6 space-y-12">
         <div>
           <h2 className="text-4xl font-extrabold tracking-wider">About Us</h2>
           <div className="mt-2 font-normal">
-            Welcome to <strong> Emeralds Digital Ventures</strong>, where we are committed to providing the best tech solutions for our customers. Our mission is to empower individuals and businesses with the latest technology, helping them thrive in a fast-paced digital world, and our vision is to be a leading tech company that transforms the way people interact with technology. Together, we can achieve great things and make a positive impact on the world through innovation and collaboration.
+            Welcome to <strong> Pretium Concept</strong>, where we are committed to providing the best educational solutions for our customers. Our mission is to empower individuals and businesses with cutting-edge knowledge and skills, helping them thrive in a competitive digital economy. Our vision is to be a leading educational platform that transforms how people learn and grow professionally. Together, we can achieve excellence and make a positive impact through premium education and innovation.
           </div>
         </div>
         <div>

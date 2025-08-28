@@ -5,18 +5,18 @@ import { Link } from "react-router-dom";
 
 const TermsConditionsPage = () => {
     return (
-        <MainLayout title="Terms and Conditions" description="Read our terms and conditions for using Emeralds Digital Ventures services">
+        <MainLayout title="Terms and Conditions" description="Read our terms and conditions for using Pretium Concept services">
             <main>
-                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-100">
+                <div className="mx-auto max-w-7xl space-y-8 px-6 py-16 text-gray-900">
                     <div className="space-y-2">
                         <h1 className="text-center text-5xl font-bold">
                             Terms and Conditions
                         </h1>
                         <p className="mb-0 text-center">
-                            <strong>Effective Date:</strong> 16th August 2025
+                            <strong>Effective Date:</strong> 30th August 2025
                         </p>
                         <p className="text-center">
-                            <strong>Last updated:</strong> 16th August 2025
+                            <strong>Last updated:</strong> 30th August 2025
                         </p>
                     </div>
 
@@ -25,7 +25,7 @@ const TermsConditionsPage = () => {
                         content={
                             <>
                                 <p>
-                                    Welcome to Emeralds Digital Ventures. These Terms and Conditions govern your use of our website,
+                                    Welcome to Pretium Concept. These Terms and Conditions govern your use of our website,
                                     services, and digital educational content (collectively, the "Services").
                                 </p>
                                 <p>
@@ -33,7 +33,7 @@ const TermsConditionsPage = () => {
                                     If you do not agree to these terms, please do not use our Services.
                                 </p>
                                 <p>
-                                    Emeralds Digital Ventures is a modern platform for mastering ecommerce through expert-led courses.
+                                    Pretium Concept is a premium platform for mastering ecommerce through expert-led courses.
                                     We provide digital educational content designed to help you learn, launch, and grow your
                                     online business.
                                 </p>
@@ -48,7 +48,7 @@ const TermsConditionsPage = () => {
                                 <p>In these Terms and Conditions:</p>
                                 <ul>
                                     <li>
-                                        <strong>"Emeralds Digital Ventures"</strong>, "we", "us", or "our" refers to Emeralds Digital Ventures,
+                                        <strong>"Pretium Concept"</strong>, "we", "us", or "our" refers to Pretium Concept,
                                         the provider of the Services
                                     </li>
                                     <li>
@@ -191,13 +191,13 @@ const TermsConditionsPage = () => {
                                 <p>
                                     All content, features, and functionality on our Services, including but not limited to
                                     text, graphics, logos, icons, images, audio clips, digital downloads, data compilations,
-                                    and software, are the exclusive property of Emeralds Digital Ventures or our licensors and are
+                                    and software, are the exclusive property of Pretium Concept or our licensors and are
                                     protected by international copyright, trademark, patent, trade secret, and other
                                     intellectual property laws.
                                 </p>
                                 <p>
                                     Our name, logo, and all related names, logos, product and service names, designs, and
-                                    slogans are trademarks of Emeralds Digital Ventures or our affiliates. You must not use such
+                                    slogans are trademarks of Pretium Concept or our affiliates. You must not use such
                                     marks without our prior written permission.
                                 </p>
                                 <p>
@@ -291,7 +291,7 @@ const TermsConditionsPage = () => {
                         content={
                             <>
                                 <p>
-                                    TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, Emeralds Digital Ventures, ITS DIRECTORS,
+                                    TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, Pretium Concept, ITS DIRECTORS,
                                     EMPLOYEES, PARTNERS, AGENTS, SUPPLIERS, OR AFFILIATES SHALL NOT BE LIABLE FOR ANY
                                     INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT
                                     LIMITATION, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:
@@ -323,7 +323,7 @@ const TermsConditionsPage = () => {
                         content={
                             <>
                                 <p>
-                                    You agree to defend, indemnify, and hold harmless Emeralds Digital Ventures, its directors,
+                                    You agree to defend, indemnify, and hold harmless Pretium Concept, its directors,
                                     employees, partners, agents, suppliers, and affiliates from and against any claims,
                                     liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including
                                     reasonable attorneys' fees) arising out of or relating to:
@@ -352,7 +352,7 @@ const TermsConditionsPage = () => {
                             <>
                                 <p>
                                     These Terms and Conditions shall be governed by and construed in accordance with the
-                                    laws of the jurisdiction in which Emeralds Digital Ventures is established, without regard to
+                                    laws of the jurisdiction in which Pretium Concept is established, without regard to
                                     its conflict of law provisions.
                                 </p>
                                 <p>
@@ -402,7 +402,7 @@ const TermsConditionsPage = () => {
                                     Our failure to enforce any right or provision of these Terms and Conditions shall not
                                     be considered a waiver of such right or provision. The waiver of any such right or
                                     provision will be effective only if in writing and signed by a duly authorized
-                                    representative of Emeralds Digital Ventures.
+                                    representative of Pretium Concept.
                                 </p>
                             </>
                         }
@@ -414,9 +414,9 @@ const TermsConditionsPage = () => {
                             <>
                                 <p>
                                     These Terms and Conditions, together with our Privacy Policy and Refund Policy, constitute
-                                    the entire agreement between you and Emeralds Digital Ventures regarding your use of our Services
+                                    the entire agreement between you and Pretium Concept regarding your use of our Services
                                     and supersede all prior and contemporaneous written or oral agreements between you and
-                                    Emeralds Digital Ventures.
+                                    Pretium Concept.
                                 </p>
                                 <p>
                                     Any rights not expressly granted herein are reserved.
