@@ -5,8 +5,8 @@
   "targets": {
     "vint-ecommerce": {
       "hosting": {
-        "emeraldsventure": [
-          "emeraldsventure"
+        "pretiumconcept": [
+          "pretiumconcept"
         ]
       }
     }
