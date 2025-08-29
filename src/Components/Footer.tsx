@@ -1,5 +1,5 @@
 import { auth } from "@/firebase-config";
-import { businessNo } from "@/System/function";
+import { businessNo, contacts } from "@/System/function";
 import { motion } from "framer-motion";
 import { FC, ReactNode } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
@@ -57,7 +57,7 @@ const Footer = () => {
               <motion.a
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                href="mailto:team@pretiumconcept.com"
+                href={`mailto:${contacts.email}`}
                 className="p-2 bg-main-600 text-white rounded-full hover:bg-main-700 transition-colors"
               >
                 <FaEnvelope className="w-4 h-4" />
@@ -65,7 +65,7 @@ const Footer = () => {
               <motion.a
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                href="tel:+2349090976720"
+                href={`tel:${contacts.phone}`}
                 className="p-2 bg-main-600 text-white rounded-full hover:bg-main-700 transition-colors"
               >
                 <FaPhone className="w-4 h-4" />
@@ -145,20 +145,19 @@ const Footer = () => {
               <li className="flex items-start">
                 <FaMapMarkerAlt className="mt-1 mr-3 text-main-600 flex-shrink-0" />
                 <span className="text-gray-700 text-sm">
-                  1 OGUNKA STREET, WORLD BANK HOUSING ESTATE<br />
-                  ABA, ABIA STATE, NIGERIA
+                  {contacts.address}
                 </span>
               </li>
               <li className="flex items-center">
                 <FaPhone className="mr-3 text-main-600 flex-shrink-0" />
-                <Link to="tel:+2349090976720" className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
-                  (234) 909-097-6720
+                <Link to={`tel:${contacts.phone}`} className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
+                  {contacts.phone}
                 </Link>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-main-600 flex-shrink-0" />
-                <Link to="mailto:team@pretiumconcept.com" className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
-                  team@pretiumconcept.com
+                <Link to={`mailto:${contacts.email}`} className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
+                  {contacts.email}
                 </Link>
               </li>
             </ul>
