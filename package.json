@@ -11,8 +11,8 @@
   "bn": "8671216",
   "contacts": {
     "email": "pretiumconcepts@gmail.com",
-    "phone": "(234) ",
-    "address": ""
+    "phone": "(234) 913 010 0579",
+    "address": "100, OKPUMUOBO OFF COMPREHENSIVE SEC. SCHOOL, ABA , ABIA STATE, NIGERIA"
   },
   "scripts": {
     "generate:sitemap": "npx tsx src/Scripts/sitemap.ts",
