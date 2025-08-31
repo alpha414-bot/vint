@@ -52,7 +52,7 @@ const About = () => {
         <div>
           <h2 className="text-4xl font-extrabold tracking-wider">About Us</h2>
           <div className="mt-2 font-normal">
-            Welcome to <strong> Emeralds Digital Ventures</strong>, where we are committed to providing the best tech solutions for our customers. Our mission is to empower individuals and businesses with the latest technology, helping them thrive in a fast-paced digital world, and our vision is to be a leading tech company that transforms the way people interact with technology. Together, we can achieve great things and make a positive impact on the world through innovation and collaboration.
+            Welcome to <strong> EMERALDS DIGITAL VENTURE</strong>, where we are committed to providing the best tech solutions for our customers. Our mission is to empower individuals and businesses with the latest technology, helping them thrive in a fast-paced digital world, and our vision is to be a leading tech company that transforms the way people interact with technology. Together, we can achieve great things and make a positive impact on the world through innovation and collaboration.
           </div>
         </div>
         <div>

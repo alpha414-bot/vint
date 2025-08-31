@@ -26,18 +26,18 @@ const PrivacyPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    Welcome to Emeralds Digital Ventures! Your privacy is important to us. This
+                                    Welcome to EMERALDS DIGITAL VENTURE! Your privacy is important to us. This
                                     Privacy Policy explains how we collect, use, store, and
                                     protect your information when you use our website, online courses,
                                     and related services.
                                 </p>
                                 <p>
-                                    By using Emeralds Digital Ventures, you agree to this Privacy Policy. If you do
+                                    By using EMERALDS DIGITAL VENTURE, you agree to this Privacy Policy. If you do
                                     not agree, please discontinue the use of our services.
                                 </p>
                                 <h3 className="text-xl font-bold">Who We Are</h3>
                                 <p>
-                                    Emeralds Digital Ventures ("we," "us," or "our") is the entity responsible for
+                                    EMERALDS DIGITAL VENTURE ("we," "us," or "our") is the entity responsible for
                                     collecting and processing your data. We are a modern platform for mastering
                                     ecommerce through expert-led courses. If you have any
                                     questions, contact us at{" "}

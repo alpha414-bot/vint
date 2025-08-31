@@ -25,7 +25,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    Thank you for choosing Emeralds Digital Ventures for your ecommerce education needs.
+                                    Thank you for choosing EMERALDS DIGITAL VENTURE for your ecommerce education needs.
                                     This Refund Policy outlines our guidelines regarding refunds for our digital
                                     courses and educational content.
                                 </p>
@@ -43,7 +43,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    <strong>Emeralds Digital Ventures has a strict no-refund policy for all digital courses and educational content.</strong>
+                                    <strong>EMERALDS DIGITAL VENTURE has a strict no-refund policy for all digital courses and educational content.</strong>
                                     Once a purchase is made and you gain access to our digital content, no refunds will be issued.
                                 </p>
                                 <p>
@@ -112,7 +112,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    Emeralds Digital Ventures uses Flutterwave as our payment processor, and our refund policy
+                                    EMERALDS DIGITAL VENTURE uses Flutterwave as our payment processor, and our refund policy
                                     is in compliance with Flutterwave's merchant terms of service regarding digital goods:
                                 </p>
                                 <ul>
@@ -180,7 +180,7 @@ const RefundPolicyPage = () => {
                         content={
                             <>
                                 <p>
-                                    When you purchase a course from Emeralds Digital Ventures:
+                                    When you purchase a course from EMERALDS DIGITAL VENTURE:
                                 </p>
                                 <ul>
                                     <li>

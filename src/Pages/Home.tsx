@@ -24,7 +24,7 @@ const Home: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white">
         {/* Hero Section */}
         <section className="flex flex-col items-center justify-center pt-20 pb-8 px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-emerald-400 drop-shadow-lg">Emeralds Digital Ventures</h1>
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-emerald-400 drop-shadow-lg">EMERALDS DIGITAL VENTURE</h1>
           <p className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto text-gray-300">
             The modern platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
           </p>
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
         <section className="py-10 px-4 flex flex-col items-center justify-center rounded-lg mt-8">
           <h3 className="text-xl md:text-2xl font-bold mb-2 text-emerald-400">Registered Business</h3>
           <p className="text-gray-300 mb-2 text-center">
-            Emeralds Digital Ventures is a registered business with the Corporate Affairs Commission (CAC) of Nigeria.
+            EMERALDS DIGITAL VENTURE is a registered business with the Corporate Affairs Commission (CAC) of Nigeria.
           </p>
           <div className="flex items-center gap-2 mb-2">
             <span className="font-semibold text-white">Business Number:</span>

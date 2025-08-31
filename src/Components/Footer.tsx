@@ -1,4 +1,5 @@
 import { auth } from "@/firebase-config";
+import { contacts } from "@/System/function";
 import { FC, ReactNode } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 import { Link, NavLink } from "react-router-dom";
@@ -24,9 +25,12 @@ const Footer = () => {
           {/* Column 1: Logo and About */}
           <div className="col-span-1 md:col-span-1">
             <Logo type="footer-logo" />
-            <p className="mt-4 text-sm text-gray-300 leading-relaxed">
-              Emeralds is a modern platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
+            <div className="mt-4">
+            <h2 className="text-gray-100 font-bold">EMERALDS DIGITAL VENTURE</h2>
+            <p className="text-sm text-gray-300 leading-relaxed">
+              Emeralds Digital Venture is a modern platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
             </p>
+            </div>
           </div>
 
           {/* Column 2: Quick Links */}
@@ -101,20 +105,19 @@ const Footer = () => {
               <li className="flex items-start">
                 <FaMapMarkerAlt className="mt-1 mr-3 text-emerald-600 flex-shrink-0" />
                 <span className="text-gray-300 text-sm">
-                  1 OGUNKA STREET, WORLD BANK HOUSING ESTATE<br />
-                  ABA, ABIA STATE, NIGERIA
+                 {contacts.address}
                 </span>
               </li>
               <li className="flex items-center">
                 <FaPhone className="mr-3 text-emerald-600 flex-shrink-0" />
-                <Link to="tel:+2349090976720" className="text-gray-300 text-sm hover:text-emerald-600 transition duration-150">
-                  (234) 909-097-6720
+                <Link to={`tel:+${contacts.phone?.replace(/[^\d+]/g, '')}`} className="text-gray-300 text-sm hover:text-emerald-600 transition duration-150">
+                  {contacts.phone}
                 </Link>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-emerald-600 flex-shrink-0" />
-                <Link to="mailto:theemeraldchanel@gmail.com" className="text-gray-300 text-sm hover:text-emerald-600 transition duration-150">
-                  theemeraldchanel@gmail.com
+                <Link to={`mailto:${contacts.email}`} className="text-gray-300 text-sm hover:text-emerald-600 transition duration-150">
+                  {contacts.email}
                 </Link>
               </li>
             </ul>
@@ -140,7 +143,7 @@ const Footer = () => {
             </Link>
 
             <p className="text-sm text-gray-300 mt-4 md:mt-0">
-              &copy; {new Date().getFullYear()} Emeralds Digital Ventures. All rights reserved.
+              &copy; {new Date().getFullYear()} EMERALDS DIGITAL VENTURE. All rights reserved.
             </p>
           </div>
         </div>
