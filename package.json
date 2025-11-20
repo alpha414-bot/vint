@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "type": "module",
   "backend": {
-    "base_url": "http://backend.zenos.com.ng/",
+    "base_url": "https://backend.zenos.com.ng/",
     "send_email_endpoint": "/emails/send"
   },
   "baseUrl": "https://pretiumconcept.com.ng",
