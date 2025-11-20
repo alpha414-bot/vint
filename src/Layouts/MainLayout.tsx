@@ -4,13 +4,16 @@ import { motion } from "framer-motion";
 import React, { useLayoutEffect, useState } from "react";
 import LoadingBar from "react-top-loading-bar";
 
+export const defaultAccentColor = "#4660ff";
+
 const MainLayout: React.FC<{
   children: React.ReactNode;
   title: string;
   description?: string;
   no_navbar?: boolean;
   no_footer?: boolean;
-}> = ({ children, title, description, no_navbar, no_footer }) => {
+  accent_color?: string;
+}> = ({ children, title, description, no_navbar, no_footer, accent_color = defaultAccentColor }) => {
   const [showLoadingBar, setShowLoadingBar] = useState<boolean>(false);
 
   useLayoutEffect(() => {
@@ -20,9 +23,8 @@ const MainLayout: React.FC<{
   return (
     <>
       {showLoadingBar && (
-        <LoadingBar height={3} className="!bg-main-500 !text-main-500" progress={100} />
+        <LoadingBar color={accent_color} height={3} progress={100} style={{ background: `${accent_color}`, color: `${accent_color}` }} />
       )}
-
       <meta name="description" content={description} />
       <title>{title} - Pretium Concept</title>
 

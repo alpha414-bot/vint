@@ -90,13 +90,11 @@ const Product = () => {
                       >
                         {price(
                           product.price * (product.cartQuantity || 1),
-                          "currency",
-                          0
                         )}
                       </p>
                       {product.salePrice && (
                         <p className="text-sm text-left text-main-600 font-semibold line-through lg:text-right">
-                          {price(product.salePrice, "currency", 0)}
+                          {price(product.salePrice)}
                         </p>
                       )}
                     </div>

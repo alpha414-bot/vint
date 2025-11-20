@@ -1,9 +1,10 @@
 interface SpinnerProps {
   className?: string;
   text?: string;
+  accentColor?: string;
 }
 
-const Spinner: React.FC<SpinnerProps> = ({ className = "w-10 h-10", text }) => {
+const Spinner: React.FC<SpinnerProps> = ({ className = "w-10 h-10", text, accentColor }) => {
   return (
     <div
       role="status"
@@ -11,7 +12,8 @@ const Spinner: React.FC<SpinnerProps> = ({ className = "w-10 h-10", text }) => {
     >
       <svg
         aria-hidden="true"
-        className={`inline text-white animate-spin fill-red-700 ${className}`}
+        className={`inline text-white animate-spin ${className}`}
+        style={{ fill: accentColor ?? "#b91c1c" }}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -26,9 +28,7 @@ const Spinner: React.FC<SpinnerProps> = ({ className = "w-10 h-10", text }) => {
         />
       </svg>
       <span className="sr-only">Loading...</span>
-      <span className="font-medium text-white underline underline-offset-2 decoration-dotted tracking-wide">
-        {text}
-      </span>
+      <span className="font-medium text-white text-center underline underline-offset-2 decoration-dotted tracking-wide" dangerouslySetInnerHTML={{ __html: text || "" }} />
     </div>
   );
 };

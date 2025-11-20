@@ -19,6 +19,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useAuthUser, useCartProducts } from "./Hook";
+import PaymentPage from "@/Pages/PaymentPage";
 
 // Creating a higher-order component to wrap the router with scroll-to-top functionality
 const withScrollToTop = (routerConfig: RouteObject[]) => {
@@ -92,6 +93,13 @@ const routes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
   },
+  // 
+  {
+    path: "/payment",
+    element: (
+      <PaymentPage />
+    )
+  },
   // about
   {
     path: "/about",
@@ -163,6 +171,7 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
   },
+
   // checkout
   {
     path: "/checkout",

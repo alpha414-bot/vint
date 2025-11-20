@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer utilities {
+  /* Checkout */
+  .input-checkout {
+    @apply cursor-not-allowed bg-gray-300 text-gray-600 font-medium w-full px-4 py-2 rounded-md;
+  }
   /* Rich Editor */
   .rich-editor h1 {
     @apply text-4xl font-extrabold text-gray-900;
@@ -34,7 +38,7 @@
   .rich-editor a {
     @apply font-bold text-main-600 underline underline-offset-4 hover:text-main-800;
   }
-  
+
   /* Custom Slick Dots */
   .slick-slider {
     @apply !static;
@@ -53,7 +57,7 @@
   .glass {
     @apply backdrop-blur-sm bg-white/80 border border-white/20 shadow-lg;
   }
-  
+
   .glass-dark {
     @apply backdrop-blur-sm bg-main-50/90 border border-main-200/30 shadow-lg;
   }

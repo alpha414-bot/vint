@@ -1,10 +1,18 @@
 import app from "@/../package.json";
 import { AuthError } from "firebase/auth";
+import _ from "lodash";
 import { useEffect } from "react";
+import { v5 as uuidv5 } from "uuid";
 
 export const baseUrl = (path = "") => new URL(path, app.baseUrl);
-export const businessNo = app.bn
-export const contacts = app.contacts
+const backend = app.backend;
+export const businessNo = app.bn;
+export const contacts = app.contacts;
+export const NAMESPACE = "693a711e-6ede-569e-b1a6-00841603d325"; // UUIDv1 namespace for tapify
+export const generateUid = (value: string) =>
+  uuidv5(`${value}:pretiumconcept`, NAMESPACE);
+export const crossCheckUid = (value: string, output?: string) =>
+  generateUid(value).toLowerCase() === output?.toLowerCase();
 
 export const getErrorMessageViaStatus = (error: RouteErrorInterface) => {
   switch (error.status) {
@@ -31,17 +39,12 @@ export const getErrorMessageViaStatus = (error: RouteErrorInterface) => {
  * @param value the number to convert valid displayable price
  * @returns string
  */
-export const price = (
-  value: any,
-  style: "currency" | "decimal" | "percent" | "unit" = "currency",
-  minimumFractionDigits: number = 2,
-  maximumFractionDigits: number = 2
-): string => {
+export const price = (value: any): string => {
   let format = new Intl.NumberFormat("en-NG", {
-    style: style,
+    style: "currency",
     currency: "NGN",
-    minimumFractionDigits: minimumFractionDigits,
-    maximumFractionDigits: maximumFractionDigits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(value);
   return isNaN(value) ? "0" : format;
 };
@@ -132,9 +135,6 @@ export const NumberPattern = /^[0-9]*$/;
 export const PasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
 export const EmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const NOAUTOCOMPLETE =
-  "no-quicks" + Math.random() * 299 * Math.random() + " countries randon";
-
 export const short = (
   description: string,
   maxLength: number,
@@ -216,3 +216,67 @@ export const ErrorFilter = (
   }
 };
 
+export const base64encode = (data: any) => {
+  return Buffer.from(data).toString("base64");
+};
+
+export const base64decode = (data: string) => {
+  return atob(data);
+};
+
+export const deepClean = (data: any): any => {
+  return _.cloneDeepWith(data, (value) => {
+    if (_.isObject(value) && !_.isArray(value)) {
+      // For objects, recursively clean and then omit null/undefined properties
+      const cleanedObject = _.omitBy(_.mapValues(value, deepClean), _.isNil);
+      return cleanedObject;
+    } else if (_.isArray(value)) {
+      // For arrays, recursively clean and then filter out null/undefined elements
+      const cleanedArray = _.filter(
+        _.map(value, deepClean),
+        (item) => !_.isNil(item)
+      );
+      return cleanedArray;
+    }
+    // For primitive values, return as is
+    return undefined; // Returning undefined here allows cloneDeepWith to handle the value normally if it's not an object or array
+  });
+};
+interface EmailPayloadInterface {
+  _to: string;
+  recipients: string[];
+  subject: string;
+  name: string;
+  reference: string;
+  paid_date: string;
+  site_name: string;
+  site_accent_color: string;
+  site_logo: string;
+  site_logo_bg_color: string;
+  site_url: string;
+  coupon_code: string;
+  contact_support: string;
+  web_view: boolean;
+  bonus_pdf_url: string;
+  total: number;
+  items: {
+    description: string;
+    qty: number;
+    unit_price: string | number;
+    total: string | number;
+  }[];
+}
+export const sendEmail = (payload: EmailPayloadInterface) =>
+  new Promise((resolve, reject) => {
+    const requestHeaders = new Headers();
+    requestHeaders.append("Content-Type", "application/json");
+    return fetch(new URL(backend.send_email_endpoint, backend.base_url), {
+      method: "POST",
+      headers: requestHeaders,
+      body: JSON.stringify(payload),
+      redirect: "follow",
+    })
+      .then((response) => response.json())
+      .then((result) => resolve(result.message))
+      .catch((error) => reject(error));
+  });

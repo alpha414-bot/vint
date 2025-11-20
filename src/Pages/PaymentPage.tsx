@@ -1,7 +1,7 @@
 import Spinner from "@/Components/Spinner";
 import MainLayout, { defaultAccentColor } from "@/Layouts/MainLayout";
 import { courses } from "@/System/courses";
-import { base64decode, deepClean, generateUid, price, sendEmail } from "@/System/function";
+import { base64decode, contacts, deepClean, generateUid, price, sendEmail } from "@/System/function";
 import classNames from "classnames";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import _ from "lodash";
@@ -22,7 +22,7 @@ const DEBUG = false;
 const PaymentPage = () => {
     const [searchParams] = useSearchParams();
     const [initializeGateway, setInitializeGateway] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<{ status: boolean, text: string }>({ status: false, text: "" });
     const [redirectCountdown, setRedirectCountdown] = useState<number>(5);
     const [paymentStatus, setPaymentStatus] = useState<{
         status: "success" | "failed" | "pending"
@@ -47,12 +47,19 @@ const PaymentPage = () => {
         }).reduce((acc, curr) => ({ ...acc, ...curr }), {}) as any;
     }, [searchParams]);
 
+    const setLoadingState = (next: { status: boolean; text: string }) =>
+        setLoading(prev => {
+            if (prev.status === next.status && prev.text === next.text) return prev;
+            return next;
+        });
+
+
     const payWithPaystack = usePaystackPayment(data?._c);
     const payWithFlutterwave = useFlutterwave(data?._c);
 
     const pay = useCallback(() => {
         const handleSuccess = (ref: any) => {
-            setLoading(true)
+            setLoadingState({ status: true, text: "Please wait, Processing payment...<br/> Do not close window or reload.." })
             const token = generateUid(ref);
             const couponCode = token.replace(/-/g, "").substring(0, 6).toUpperCase();
             // Share bonus course to email
@@ -63,6 +70,7 @@ const PaymentPage = () => {
             // Send Email Notification
             sendEmail({
                 _to: data?._m?.email,
+                recipients: [contacts.email],
                 subject: `${_.upperFirst(data?._m?.appName)} - Payment Invoice & Receipt`,
                 name: `${data?._m?.firstname} ${data?._m?.lastname}`,
                 reference: ref,
@@ -89,26 +97,31 @@ const PaymentPage = () => {
                         unit_price: '0',
                         total: '0',
                     }]
-            }).then(() => {
-                // Redirect to support after 5 seconds
-                setLoading(false);
-                setPaymentStatus({
-                    status: "success",
-                    reference: ref
-                });
-                let countdown = 5;
-                const interval = setInterval(() => {
-                    countdown -= 1;
-                    setRedirectCountdown(countdown);
-                    if (countdown <= 0) {
-                        clearInterval(interval);
-                        if (!DEBUG) {
-                            window.location.replace(supportLink);
+            }).then((res) => {
+                console.log("Email sent successfully:", res);
+                if (res == "ok") {
+                    // 
+                    // Redirect to support after 5 seconds
+                    setLoadingState({ status: false, text: "" });
+                    setPaymentStatus({
+                        status: "success",
+                        reference: ref
+                    });
+                    let countdown = 5;
+                    const interval = setInterval(() => {
+                        countdown -= 1;
+                        setRedirectCountdown(countdown);
+                        if (countdown <= 0) {
+                            clearInterval(interval);
+                            if (!DEBUG) {
+                                console.log("Redirecting to support...");
+                                window.location.replace(supportLink);
+                            }
                         }
-                    }
-                }, 1000);
+                    }, 1000);
+                }
             }).catch((err) => {
-                setLoading(false);
+                setLoadingState({ status: false, text: "" });
                 setPaymentStatus({
                     status: "success",
                     reference: ref
@@ -155,9 +168,9 @@ const PaymentPage = () => {
 
     useEffect(() => {
         if (initializeGateway || paymentStatus.status != "pending") return;
-        setLoading(true);
+        setLoadingState({ status: true, text: "Initializing..." });
         setTimeout(() => {
-            setLoading(false);
+            setLoadingState({ status: false, text: "" });
             if (!DEBUG) {
                 pay();
             }
@@ -211,7 +224,7 @@ const PaymentPage = () => {
                                     <h1 className="text-4xl font-bold">Checkout</h1>
                                     <p>Pay securely on the web for {_.upperFirst(data?._m?.appName)}. </p>
                                 </div>
-                                <img src={data?._m?.app?.logo} className={classNames("w-12 h-12 object-contain object-center rounded-full p-0.5")} style={{ backgroundColor: data?._m?.accentColor }} />
+                                <img src={data?._m?.app?.logo} className={classNames("w-12 h-12 object-contain object-center rounded-full p-0.5")} style={{ backgroundColor: data?._m?.logoBgColor }} />
                             </div>
                             <input type="text" placeholder="Enter Amount" className="input-checkout !text-gray-800 font-bold" value={`${data?._m?.activePlanTitle} for ${_.upperFirst(data?._m?.appName)} @ ${price(data?._m?.amount)}`} disabled name="amount" />
                             <input type="text" placeholder="Enter first name" className="input-checkout" value={data?._m?.firstname} disabled name="firstname" />
@@ -277,10 +290,9 @@ const PaymentPage = () => {
                     )
                 }
                 {
-                    loading && (
-                        // false && (
+                    loading.status && (
                         <div className="fixed inset-0 z-50 bg-gray-900/70 flex items-center justify-center" >
-                            <Spinner className="w-12 h-12" accentColor={data?._m?.accentColor} />
+                            <Spinner className="w-12 h-12" accentColor={data?._m?.accentColor} text={loading.text} />
                         </div>
                     )
                 }
