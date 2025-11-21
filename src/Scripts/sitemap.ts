@@ -1,56 +1,55 @@
 // scripts/generate-sitemap.ts
-import { baseUrl } from "@/System/function";
+import { baseUrl as domain } from "../../package.json";
 import fs from "fs";
 import moment from "moment";
 import path from "path";
 
-
 const staticRoutes = [
-    "",
-    "about",
-    "login",
-    "register",
-    "forgot-password",
-    "terms-conditions",
-    "refund-policy",
-    "privacy-policy",
-
+  "",
+  "about",
+  "login",
+  "register",
+  "forgot-password",
+  "terms-conditions",
+  "refund-policy",
+  "privacy-policy",
 ];
 
+const getBaseUrl = (path = "") => new URL(path, domain);
+
 const staticXml = staticRoutes
-    .map(
-        (path) => `
+  .map(
+    (path) => `
   <url>
-    <loc>${baseUrl(path)}</loc>
+    <loc>${getBaseUrl(path)}</loc>
       <lastmod>${moment().utc().format("YYYY-MM-DDTHH:mm:ssZ")}</lastmod>
     <changefreq>yearly</changefreq>
     <priority>1.0</priority>
-  </url>`,
-    )
-    .join("\n");
+  </url>`
+  )
+  .join("\n");
 export const generateSitemap = async () => {
-
-    const fullSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  const fullSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${staticXml.trim()}
 </urlset>`;
 
-    fs.writeFileSync(path.resolve("public", "sitemap.xml"), fullSitemap.trim());
-    console.log("✅ Sitemap generated!");
+  fs.writeFileSync(path.resolve("public", "sitemap.xml"), fullSitemap.trim());
+  console.log("✅ Sitemap generated!");
 };
 
 const generateRobotsTxt = () => {
-    const content = `
+  const content = `
 User-agent: *
 Disallow: /private/
 Disallow: /agent/
 Allow: /
 
-Sitemap: ${baseUrl("/sitemap.xml")}
+Sitemap: ${getBaseUrl("/sitemap.xml")}
 `.trim();
 
-    fs.writeFileSync(path.resolve("public", "robots.txt"), content);
-    console.log("✅ robots.txt generated!");
+  fs.writeFileSync(path.resolve("public", "robots.txt"), content);
+  console.log("✅ robots.txt generated!");
 };
 
 generateRobotsTxt();

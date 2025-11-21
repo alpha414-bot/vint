@@ -4,13 +4,9 @@
   "development": true,
   "version": "1.0.0",
   "type": "module",
-  "backend": {
-    "base_url": "https://backend.zenos.com.ng/",
-    "send_email_endpoint": "/emails/send"
-  },
   "baseUrl": "https://pretiumconcept.com.ng",
-  "bn": "8671216",
   "contacts": {
+    "bn": "8671216",
     "email": "pretiumconcepts@gmail.com",
     "phone": "(234) 702 536 5226",
     "address": "100, OKPUMUOBO OFF COMPREHENSIVE SEC. SCHOOL, ABA , ABIA STATE, NIGERIA"

@@ -2,7 +2,7 @@ import ProductItem from "@/Components/ProductItem";
 import MainLayout from "@/Layouts/MainLayout";
 import { notify } from "@/notify";
 import { courses } from "@/System/courses";
-import { businessNo } from "@/System/function";
+import { contacts } from "@/System/function";
 import { motion } from "framer-motion";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -15,9 +15,9 @@ const Home: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -26,9 +26,9 @@ const Home: React.FC = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.6
-      }
-    }
+        duration: 0.6,
+      },
+    },
   };
 
   return (
@@ -63,7 +63,8 @@ const Home: React.FC = () => {
                 transition={{ delay: 0.3, duration: 0.6 }}
                 className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed"
               >
-                The premium platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
+                The premium platform for mastering ecommerce. Learn, launch, and
+                grow your online business with expert-led courses.
               </motion.p>
             </motion.div>
 
@@ -77,9 +78,7 @@ const Home: React.FC = () => {
                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-main-600 to-main-700 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <span className="relative z-10">Explore Courses</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-main-700 to-main-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
+                <motion.div className="absolute inset-0 bg-gradient-to-r from-main-700 to-main-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <motion.svg
                   className="ml-2 w-5 h-5 relative z-10"
                   animate={{ x: [0, 5, 0] }}
@@ -88,7 +87,12 @@ const Home: React.FC = () => {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </motion.svg>
               </a>
             </motion.div>
@@ -108,9 +112,12 @@ const Home: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Courses</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Featured Courses
+            </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover our premium collection of courses designed to accelerate your business growth
+              Discover our premium collection of courses designed to accelerate
+              your business growth
             </p>
           </motion.div>
 
@@ -129,10 +136,7 @@ const Home: React.FC = () => {
                 whileHover={{ y: -5 }}
                 transition={{ duration: 0.3 }}
               >
-                <ProductItem
-                  product={course}
-                  type="product_listing"
-                />
+                <ProductItem product={course} type="product_listing" />
               </motion.div>
             ))}
           </motion.div>
@@ -154,7 +158,8 @@ const Home: React.FC = () => {
                 Join Our Newsletter
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Stay updated with the latest courses, tips, and exclusive content delivered to your inbox.
+                Stay updated with the latest courses, tips, and exclusive
+                content delivered to your inbox.
               </p>
             </motion.div>
 
@@ -190,10 +195,7 @@ const Home: React.FC = () => {
         </motion.section>
 
         {/* Company Registration Section */}
-        <motion.section
-          variants={itemVariants}
-          className="py-16 px-4"
-        >
+        <motion.section variants={itemVariants} className="py-16 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ y: 30, opacity: 0 }}
@@ -206,14 +208,17 @@ const Home: React.FC = () => {
                 Registered Business
               </h3>
               <p className="text-gray-600 mb-6">
-                Pretium Concept is a registered business with the Corporate Affairs Commission (CAC) of Nigeria.
+                Pretium Concept is a registered business with the Corporate
+                Affairs Commission (CAC) of Nigeria.
               </p>
 
               <div className="flex flex-col items-center space-y-4">
                 <div className="flex items-center gap-3">
-                  <span className="font-semibold text-gray-700">Business Number:</span>
+                  <span className="font-semibold text-gray-700">
+                    Business Number:
+                  </span>
                   <span className="bg-gradient-to-r from-main-600 to-main-700 text-white px-4 py-2 rounded-full font-mono text-lg shadow-md">
-                    {businessNo}
+                    {contacts.bn}
                   </span>
                 </div>
 
@@ -241,8 +246,16 @@ const Home: React.FC = () => {
                 className="mt-8"
               >
                 <span className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-main-100 to-main-200 text-main-700 rounded-full font-semibold shadow-md">
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   Verified & Trusted
                 </span>
@@ -267,7 +280,8 @@ const Home: React.FC = () => {
                 Secure & Professional Platform
               </h3>
               <p className="text-main-100 text-lg mb-8 max-w-2xl mx-auto">
-                Your learning journey is protected with enterprise-grade security and professional course delivery.
+                Your learning journey is protected with enterprise-grade
+                security and professional course delivery.
               </p>
 
               <motion.div

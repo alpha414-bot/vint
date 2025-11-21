@@ -1,11 +1,10 @@
 import { auth } from "@/firebase-config";
-import { businessNo, contacts } from "@/System/function";
+import { contacts } from "@/System/function";
 import { motion } from "framer-motion";
 import { FC, ReactNode } from "react";
-import { FaEnvelope, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "./Logo";
-
 
 export const TermsPrivacyItem: FC<{ title: String; content: ReactNode }> = ({
   title,
@@ -27,14 +26,14 @@ const Footer = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
@@ -48,10 +47,15 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Column 1: Logo and About */}
-          <motion.div variants={itemVariants} className="col-span-1 md:col-span-1">
+          <motion.div
+            variants={itemVariants}
+            className="col-span-1 md:col-span-1"
+          >
             <Logo type="footer-logo" />
             <p className="mt-4 text-sm text-gray-700 leading-relaxed">
-              Pretium Concept is a premium platform for mastering ecommerce. Learn, launch, and grow your online business with expert-led courses.
+              Pretium Concept is a premium platform for mastering ecommerce.
+              Learn, launch, and grow your online business with expert-led
+              courses.
             </p>
             <div className="mt-6 flex space-x-4">
               <motion.a
@@ -80,35 +84,50 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <NavLink to="/" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
+                <NavLink
+                  to="/"
+                  className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                >
                   Home
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/about" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
+                <NavLink
+                  to="/about"
+                  className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                >
                   About
                 </NavLink>
               </li>
               {(auth.currentUser?.uid && !auth.currentUser.isAnonymous && (
                 <li>
-                  <NavLink to="/user/carts" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
+                  <NavLink
+                    to="/user/carts"
+                    className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                  >
                     Account
                   </NavLink>
                 </li>
               )) || (
-                  <>
-                    <li>
-                      <NavLink to="/login" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
-                        Login
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink to="/register" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
-                        Register
-                      </NavLink>
-                    </li>
-                  </>
-                )}
+                <>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                    >
+                      Login
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/register"
+                      className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                    >
+                      Register
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </motion.div>
 
@@ -119,17 +138,26 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <NavLink to="/privacy-policy" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
+                <NavLink
+                  to="/privacy-policy"
+                  className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                >
                   Privacy Policy
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/refund-policy" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
+                <NavLink
+                  to="/refund-policy"
+                  className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                >
                   Refund Policy
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/terms-conditions" className="text-base text-gray-700 hover:text-main-600 transition duration-150">
+                <NavLink
+                  to="/terms-conditions"
+                  className="text-base text-gray-700 hover:text-main-600 transition duration-150"
+                >
                   Terms & Conditions
                 </NavLink>
               </li>
@@ -150,13 +178,19 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <FaPhone className="mr-3 text-main-600 flex-shrink-0" />
-                <Link to={`tel:${contacts.phone}`} className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
+                <Link
+                  to={`tel:${contacts.phone}`}
+                  className="text-gray-700 text-sm hover:text-main-600 transition duration-150"
+                >
                   {contacts.phone}
                 </Link>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-main-600 flex-shrink-0" />
-                <Link to={`mailto:${contacts.email}`} className="text-gray-700 text-sm hover:text-main-600 transition duration-150">
+                <Link
+                  to={`mailto:${contacts.email}`}
+                  className="text-gray-700 text-sm hover:text-main-600 transition duration-150"
+                >
                   {contacts.email}
                 </Link>
               </li>
@@ -170,14 +204,15 @@ const Footer = () => {
           className="mt-12 pt-8 border-t border-main-300 flex flex-col md:flex-row justify-between items-center"
         >
           <p className="text-sm text-gray-600 mb-4 md:mb-0">
-            © {new Date().getFullYear()} Pretium Concept. All rights reserved. | Business Registration: {businessNo}
+            © {new Date().getFullYear()} Pretium Concept. All rights reserved. |
+            Business Registration: {contacts.bn}
           </p>
           <motion.div
             className="flex flex-wrap gap-2 justify-center md:justify-end"
             variants={{
               visible: {
-                transition: { staggerChildren: 0.1 }
-              }
+                transition: { staggerChildren: 0.1 },
+              },
             }}
           >
             <motion.span
@@ -211,21 +246,19 @@ const Footer = () => {
             to="https://linktr.ee/alphaisx"
             className="inline-flex items-center gap-2 mb-4 md:mb-0"
           >
-            <span className="text-xs font-semibold text-gray-600">Powered By</span>
+            <span className="text-xs font-semibold text-gray-600">
+              Powered By
+            </span>
             <motion.div
               whileHover={{ scale: 1.05 }}
               className="bg-no-repeat bg-contain bg-center w-24 h-10 rounded-xl glass"
               style={{
-                backgroundImage:
-                  "url('/img/alpha.svg')",
+                backgroundImage: "url('/img/alpha.svg')",
               }}
             ></motion.div>
           </Link>
 
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="text-center"
-          >
+          <motion.div whileHover={{ scale: 1.02 }} className="text-center">
             <p className="text-xs text-gray-500 mb-1">
               Built with ❤️ for business growth
             </p>

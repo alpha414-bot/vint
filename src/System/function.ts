@@ -4,13 +4,10 @@ import _ from "lodash";
 import { useEffect } from "react";
 import { v5 as uuidv5 } from "uuid";
 
-export const baseUrl = (path = "") => new URL(path, app.baseUrl);
-const backend = app.backend;
-export const businessNo = app.bn;
 export const contacts = app.contacts;
-export const NAMESPACE = "693a711e-6ede-569e-b1a6-00841603d325"; // UUIDv1 namespace for tapify
+export const NAMESPACE = "5878b89c-6efd-4a79-bd92-096670a3c34f"; // UUIDv1 namespace
 export const generateUid = (value: string) =>
-  uuidv5(`${value}:pretiumconcept`, NAMESPACE);
+  uuidv5(`${value}:emeraldsventures`, NAMESPACE);
 export const crossCheckUid = (value: string, output?: string) =>
   generateUid(value).toLowerCase() === output?.toLowerCase();
 
@@ -266,11 +263,14 @@ interface EmailPayloadInterface {
     total: string | number;
   }[];
 }
-export const sendEmail = (payload: EmailPayloadInterface) =>
+export const sendEmail = (
+  backend_url: string,
+  payload: EmailPayloadInterface
+) =>
   new Promise((resolve, reject) => {
     const requestHeaders = new Headers();
     requestHeaders.append("Content-Type", "application/json");
-    return fetch(new URL(backend.send_email_endpoint, backend.base_url), {
+    return fetch(backend_url, {
       method: "POST",
       headers: requestHeaders,
       body: JSON.stringify(payload),
