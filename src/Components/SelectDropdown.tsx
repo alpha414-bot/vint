@@ -1,4 +1,3 @@
-import { NOAUTOCOMPLETE } from "@/System/function";
 import _ from "lodash";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { Control, Controller, RegisterOptions } from "react-hook-form";
@@ -29,7 +28,7 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
       disableOptionKeys,
       defaultOptionKey,
       required,
-      onChange = () => {},
+      onChange = () => { },
       isFocused,
       defaultValue,
       control,
@@ -109,15 +108,14 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                         id={name}
                         ref={TextInputRef}
                         name={name}
-                        className={`${CompleteFocus ? "pt-4 pb-1" : "py-2"} ${
-                          placeholder ? "focus:pt-4 focus:pb-1" : "focus:py-2"
-                        } px-3 pr-10 mb-0.5 bg-gray-700 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+                        className={`${CompleteFocus ? "pt-4 pb-1" : "py-2"} ${placeholder ? "focus:pt-4 focus:pb-1" : "focus:py-2"
+                          } px-3 pr-10 mb-0.5 bg-gray-700 border border-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
                         placeholder={
                           value?.value
                             ? value?.value
                             : !defaultOptionKey
-                            ? `${placeholder}${rules?.required ? "(*)" : ""}`
-                            : _.find(
+                              ? `${placeholder}${rules?.required ? "(*)" : ""}`
+                              : _.find(
                                 options,
                                 (item) => item.key === defaultOptionKey
                               )?.value
@@ -134,9 +132,9 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                             options.some(
                               (item) =>
                                 item.value.toLowerCase() ===
-                                  InputValue.toLowerCase() ||
+                                InputValue.toLowerCase() ||
                                 item.key.toLowerCase() ===
-                                  InputValue.toLowerCase()
+                                InputValue.toLowerCase()
                             )
                           ) {
                             onChange({
@@ -162,7 +160,6 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
 
                           setDropdownQuery(InputValue.toLowerCase());
                         }}
-                        autoComplete={NOAUTOCOMPLETE}
                         {...props}
                       />
 
@@ -212,11 +209,10 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                               return (
                                 <div
                                   key={index}
-                                  className={`flex items-center gap-x-2 px-3 py-1.5 bg-gray-600 text-white hover:bg-gray-700 ${
-                                    disable
+                                  className={`flex items-center gap-x-2 px-3 py-1.5 bg-gray-600 text-white hover:bg-gray-700 ${disable
                                       ? "cursor-not-allowed bg-zinc-200 opacity-70 text-opacity-20"
                                       : "cursor-pointer"
-                                  }`}
+                                    }`}
                                   onClick={() => {
                                     if (!disable) {
                                       if (TextInputRef?.current) {
@@ -242,31 +238,30 @@ const SelectDropdown = forwardRef<HTMLInputElement, SelectDropdownInterface>(
                                 </div>
                               );
                             })) || (
+                              <div className="w-full text-center">
+                                <span className="text-sm font-bold text-gray-600 text-center">
+                                  No dropdown with value "
+                                  <span className="underline underline-offset-2 decoration-dotted">
+                                    {dropdownQuery}
+                                  </span>
+                                  "
+                                </span>
+                              </div>
+                            ))) || (
                             <div className="w-full text-center">
                               <span className="text-sm font-bold text-gray-600 text-center">
-                                No dropdown with value "
-                                <span className="underline underline-offset-2 decoration-dotted">
-                                  {dropdownQuery}
-                                </span>
-                                "
+                                No options attached
                               </span>
                             </div>
-                          ))) || (
-                          <div className="w-full text-center">
-                            <span className="text-sm font-bold text-gray-600 text-center">
-                              No options attached
-                            </span>
-                          </div>
-                        )}
+                          )}
                       </div>
                     )}
                   </div>
                   {placeholder && (
                     <label
                       htmlFor={name}
-                      className={`absolute z-30 mb-0 text-white bg-gray-700 pl-4 pr-6 py-0.5 rounded-md origin-left transform scale-75 -top-4 left-1.5 transition-all duration-400 text-lg font-semibold shadow-md shadow-gray-500 ${
-                        CompleteFocus ? "opacity-100 -top-4" : "top-8 opacity-0"
-                      }`}
+                      className={`absolute z-30 mb-0 text-white bg-gray-700 pl-4 pr-6 py-0.5 rounded-md origin-left transform scale-75 -top-4 left-1.5 transition-all duration-400 text-lg font-semibold shadow-md shadow-gray-500 ${CompleteFocus ? "opacity-100 -top-4" : "top-8 opacity-0"
+                        }`}
                     >
                       {placeholder} {rules?.required ? "(*)" : ""}
                     </label>

@@ -5,6 +5,7 @@ import Checkout from "@/Pages/Checkout";
 import Dashboard from "@/Pages/Dashboard";
 import ErrorPage from "@/Pages/ErrorPage";
 import Home from "@/Pages/Home";
+import PaymentPage from "@/Pages/PaymentPage";
 import PrivacyPolicyPage from "@/Pages/PrivacyPolicy";
 import Product from "@/Pages/Product";
 import RefundPolicyPage from "@/Pages/RefundPolicy";
@@ -91,6 +92,12 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/payment",
+    element: (
+      <PaymentPage />
+    )
   },
   // about
   {

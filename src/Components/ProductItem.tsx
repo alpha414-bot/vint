@@ -93,13 +93,11 @@ const ProductItem: React.FC<{
                 >
                   {price(
                     product.price * (product.cartQuantity || 1),
-                    "currency",
-                    0
                   )}
                 </p>
                 {product.salePrice && (
                   <p className="text-sm text-left text-emerald-600 font-semibold line-through lg:text-right">
-                    {price(product.salePrice, "currency", 0)}
+                    {price(product.salePrice)}
                   </p>
                 )}
                 {
@@ -147,8 +145,6 @@ const ProductItem: React.FC<{
             <p className={`text-lg text-emerald-600 font-bold`}>
               {price(
                 product.price * (product.cartQuantity || 1),
-                "currency",
-                0
               )}
             </p>
           )}

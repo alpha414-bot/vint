@@ -1,5 +1,5 @@
 // scripts/generate-sitemap.ts
-import { baseUrl } from "@/System/function";
+import { baseUrl as domain } from "../../package.json";
 import fs from "fs";
 import moment from "moment";
 import path from "path";
@@ -16,6 +16,8 @@ const staticRoutes = [
     "privacy-policy",
 
 ];
+
+const baseUrl = (path = "") => new URL(path, domain);
 
 const staticXml = staticRoutes
     .map(

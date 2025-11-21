@@ -4,9 +4,6 @@
   "development": true,
   "version": "1.0.0",
   "type": "module",
-  "gateway": "flutterwave",
-  "FlutterwavePublicKey": "FLWPUBK_TEST-652d535a8757a811da051afb77e43115-X",
-  "PaystackPublicKey": "pk_test_adac6802e1b94aad03084f2867102ecfdcfa6993",
   "baseUrl": "https://emeraldsventures.com.ng",
   "contacts": {
     "email": "chukwubikemnduka@gmail.com",
@@ -19,7 +16,8 @@
     "build": "tsc && vite build",
     "build:all": "npm run generate:sitemap && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "firebase deploy --only hosting:emeraldsventure"
   },
   "dependencies": {
     "aws-amplify": "^6.3.4",

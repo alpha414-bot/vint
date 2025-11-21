@@ -97,7 +97,7 @@ const OrderItem = ({ order }: { order: OrderDataInterface }) => {
             <div className="flex items-center justify-between gap-6">
               <p className="text-base font-semibold lg:text-sm">Amount Paid</p>
               <p className="text-base font-medium lg:text-sm">
-                {price(order.payment_instance.amount, "currency", 0)}
+                {price(order.payment_instance.amount)}
               </p>
             </div>
             {/* transaction fee */}
@@ -108,8 +108,6 @@ const OrderItem = ({ order }: { order: OrderDataInterface }) => {
               <p className="text-base font-medium lg:text-sm">
                 {price(
                   order.payment_instance.amount - TotalProductPrice,
-                  "currency",
-                  0
                 )}
               </p>
             </div>

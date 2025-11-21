@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer utilities {
+  /* Checkout */
+  .input-checkout {
+    @apply cursor-not-allowed bg-gray-300 text-gray-600 font-medium w-full px-4 py-2 rounded-md;
+  }
      /* Rich Editor */
   .rich-editor h1 {
     @apply text-4xl font-extrabold;

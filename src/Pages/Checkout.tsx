@@ -5,7 +5,7 @@ import SelectDropdown from "@/Components/SelectDropdown";
 import TextArea from "@/Components/TextArea";
 import MainLayout from "@/Layouts/MainLayout";
 import { useCartProducts } from "@/Services/Hook";
-import { createUser, newOrderQuery } from "@/Services/Query";
+import { createUser } from "@/Services/Query";
 import {
   EmailPattern,
   NigeriaState,
@@ -17,15 +17,13 @@ import { auth } from "@/firebase-config";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import * as ENV from "../../package.json";
+import { Link } from "react-router-dom";
 
 
 const Checkout = () => {
   const { data: carts } = useCartProducts() as { data: CartMetaItem[] };
   const [isForm, setIsForm] = useState<number>(0);
-  const navigate = useNavigate();
-  const { control, handleSubmit, reset, watch } =
+  const { control, handleSubmit, watch } =
     useForm<BillingInputInterface>({
       mode: "all",
     });
@@ -455,23 +453,11 @@ const Checkout = () => {
                 </div>
                 <div className="mt-8 flex flex-wrap items-stretch gap-4">
                   <GatewayConsumer
-                    gateway={ENV.gateway as any}
-                    config={{
-                      public_key: ENV.gateway == "flutterwave" ? ENV.FlutterwavePublicKey : ENV.PaystackPublicKey,
+                    bankInfo={{
                       amount: TotalProductPrice,
-                      customer: {
-                        name: `${formValue.first_name} ${formValue.last_name}`,
-                        email: formValue.email || "user@gmail.com",
-                        phone_number: formValue.phone_number,
-                      },
-                      reference: `emeralds${new Date().getTime()}_${Math.random()}`,
-                      app: window.location.host,
-                    }}
-                    onSuccess={(reference, gateway) => {
-                      newOrderQuery({ gateway, reference, amount: TotalProductPrice }, carts, watch()).then(() => {
-                        reset();
-                        navigate("/user/orders");
-                      });
+                      account_name: "Ventures Businesses",
+                      account_number: "8149651465",
+                      bank_name: "Palmpay"
                     }}
                   >
                     {
@@ -511,8 +497,6 @@ const Checkout = () => {
                     <div>
                       {price(
                         (product?.price || 1) * (product?.cartQuantity || 1),
-                        "currency",
-                        0
                       )}
                       <span
                         className="ml-1 text-xs font-bold"
