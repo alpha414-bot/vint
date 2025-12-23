@@ -5,6 +5,10 @@
   "version": "1.0.0",
   "type": "module",
   "baseUrl": "https://pretiumconcept.com.ng",
+  "backend": {
+    "base_url": "https://etherealregistration.com/",
+    "send_email_endpoint": "/emails/send"
+  },
   "contacts": {
     "bn": "8671216",
     "email": "pretiumconcepts@gmail.com",

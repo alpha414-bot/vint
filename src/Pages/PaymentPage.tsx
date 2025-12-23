@@ -2,6 +2,7 @@ import Spinner from "@/Components/Spinner";
 import MainLayout, { defaultAccentColor } from "@/Layouts/MainLayout";
 import { courses } from "@/System/courses";
 import {
+  backendEmailUrl,
   base64decode,
   contacts,
   deepClean,
@@ -121,7 +122,7 @@ const PaymentPage = () => {
         )
       );
       // Send Email Notification
-      sendEmail(data?._m?.backend_email_url, {
+      sendEmail(backendEmailUrl.toString(), {
         _to: data?._m?.email,
         recipients: [contacts.email],
         subject: `${_.upperFirst(
@@ -156,7 +157,6 @@ const PaymentPage = () => {
         ],
       })
         .then((res) => {
-          console.log("Email sent successfully:", res);
           if (res == "ok") {
             //
             // Redirect to support after 5 seconds
@@ -192,7 +192,6 @@ const PaymentPage = () => {
         });
     };
     if (data?._m?.gateway === "paystack") {
-      console.log("Paying with Paystack...");
       payWithPaystack({
         onSuccess: (response: any) => {
           if (response.status == "success") {
@@ -202,7 +201,6 @@ const PaymentPage = () => {
         onClose: () => {},
       });
     } else if (data?._m?.gateway === "flutterwave") {
-      console.log("Paying with Flutterwave...");
       payWithFlutterwave({
         callback: (response: any) => {
           if (response.status === "completed") {
