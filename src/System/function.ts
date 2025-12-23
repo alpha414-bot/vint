@@ -6,6 +6,10 @@ import { v5 as uuidv5 } from "uuid";
 
 export const contacts = app.contacts;
 export const NAMESPACE = "5878b89c-6efd-4a79-bd92-096670a3c34f"; // UUIDv1 namespace
+export const backendEmailUrl = new URL(
+  app.backend.send_email_endpoint,
+  app.backend.base_url,
+);
 export const generateUid = (value: string) =>
   uuidv5(`${value}:emeraldsventures`, NAMESPACE);
 export const crossCheckUid = (value: string, output?: string) =>

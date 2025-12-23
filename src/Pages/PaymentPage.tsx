@@ -1,7 +1,7 @@
 import Spinner from "@/Components/Spinner";
 import MainLayout, { defaultAccentColor } from "@/Layouts/MainLayout";
 import { courses } from "@/System/courses";
-import { base64decode, contacts, deepClean, generateUid, price, sendEmail } from "@/System/function";
+import { backendEmailUrl, base64decode, contacts, deepClean, generateUid, price, sendEmail } from "@/System/function";
 import classNames from "classnames";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import _ from "lodash";
@@ -68,7 +68,7 @@ const PaymentPage = () => {
             const supportLink = decodeURIComponent(data?._m?.support).replace("{{message}}", encodeURIComponent(`Hello Support, I have successfully made payment for *${_.upperFirst(data?._m?.appName)} ${data?._m?.activePlanTitle}(NGN${data?._m?.amount})*. Here is my reference invoice number: ${ref
                 } and my email is ${data?._m?.email}.`));
             // Send Email Notification
-            sendEmail(data?._m?.backend_email_url, {
+            sendEmail(backendEmailUrl.toString(), {
                 _to: data?._m?.email,
                 recipients: [contacts.email],
                 subject: `${_.upperFirst(data?._m?.appName)} - Payment Invoice & Receipt`,
@@ -131,7 +131,6 @@ const PaymentPage = () => {
             });
         }
         if (data?._m?.gateway === 'paystack') {
-            console.log("Paying with Paystack...");
             payWithPaystack({
                 onSuccess: (response: any) => {
                     if (response.status == "success") {
@@ -142,7 +141,6 @@ const PaymentPage = () => {
                 }
             });
         } else if (data?._m?.gateway === 'flutterwave') {
-            console.log("Paying with Flutterwave...");
             payWithFlutterwave({
                 callback: (response: any) => {
                     if (response.status === 'completed') {
