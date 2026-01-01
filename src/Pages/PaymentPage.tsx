@@ -7,6 +7,8 @@ import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import _ from "lodash";
 import moment from "moment";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { FaLock } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { usePaystackPayment } from "react-paystack";
 import { Link, useSearchParams } from "react-router-dom";
 
@@ -202,50 +204,54 @@ const PaymentPage = () => {
 
     return (
         <MainLayout title="Payment Checkout" no_navbar no_footer accent_color={data?._m?.accentColor}>
-            <div className={classNames("p-4 md:p-6 lg:p-12 relative w-full h-scren overflow-hidden items-center justify-center flex flex-col gap-6 bg-gray-100 text-gray-900", {
-                "h-screen": !DEBUG
+            <div className={classNames("p-4 md:p-6 lg:p-8 relative w-full h-screen overflow-y-auto flex flex-col gap-6 bg-gray-100 text-gray-900", {
+                "items-center justify-center": paymentStatus.status !== 'pending'
             })}>
                 {
                     paymentStatus.status === 'pending' ? (
-                        <div className="w-full max-w-md space-y-4 mx-auto">
+                        <div className="w-full max-w-md flex flex-col items-end h-full justify-between md:justify-start pb-20 gap-4 mx-auto">
+                            <div className="flex items-center justify-center w-full gap-2 text-sm text-gray-500 font-medium">
+                             <FaLock /> Secure SSL Encrypted Payment
+                            </div>
                             <button onClick={() => {
                                 // go back one index  in history
                                 close()
-                            }} className="p-0.5 rounded-full bg-white/80 hover:bg-white shadow-md inline-flex items-center justify-center mb-2 border-2" style={{ borderColor: data?._m?.accentColor }}>
-                                <svg className="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill={data?._m?.accentColor} viewBox="0 0 24 24">
-                                    <path fillRule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clipRule="evenodd" />
-                                </svg>
-
+                            }} className="py-2 lg:mt-4 px-4 gap-2 text-sm rounded-full font-medium bg-white/80 hover:bg-white shadow-md inline-flex items-center justify-center " style={{ border: `2px solid ${data?._m?.accentColor}` }}>
+                              <FaArrowLeftLong className="w-5 h-5" style={{color:data?._m?.accentColor}}/>
+                                <span>Go Back</span>
                             </button>
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h1 className="text-4xl font-bold">Checkout</h1>
-                                    <p>Pay securely on the web for {_.upperFirst(data?._m?.appName)}. </p>
-                                </div>
-                                <img src={data?._m?.app?.logo} className={classNames("w-12 h-12 object-contain object-center rounded-full p-0.5")} style={{ backgroundColor: data?._m?.logoBgColor }} />
+                            <div className="space-y-6 w-full">
+                              <div className="flex items-start justify-start gap-4">
+                                  <img src={data?._m?.app?.logo} className={classNames("w-20 h-20 object-contain object-center rounded-md p-0.5")} style={{ backgroundColor: data?._m?.logoBgColor }} />
+                                  <div>
+                                      <h1 className="text-4xl font-bold">Checkout</h1>
+                                      <p>Pay securely for {_.upperFirst(data?._m?.appName)}. </p>
+                                  </div>
+                              </div>
+                              <div className="space-y-4">
+                                <input type="text" placeholder="Enter Amount" className="input-checkout !text-gray-800 font-bold" value={`${data?._m?.activePlanTitle} for ${_.upperFirst(data?._m?.appName)} @ ${price(data?._m?.amount)}`} disabled name="amount" />
+                                <input type="text" placeholder="Enter first name" className="input-checkout" value={data?._m?.firstname} disabled name="firstname" />
+                                <input type="text" placeholder="Enter last name" className="input-checkout" value={data?._m?.lastname} disabled name="lastname" />
+                                <input type="text" placeholder="Enter email address" className="input-checkout" value={data?._m?.email} disabled name="email" />
+                              </div>
                             </div>
-                            <input type="text" placeholder="Enter Amount" className="input-checkout !text-gray-800 font-bold" value={`${data?._m?.activePlanTitle} for ${_.upperFirst(data?._m?.appName)} @ ${price(data?._m?.amount)}`} disabled name="amount" />
-                            <input type="text" placeholder="Enter first name" className="input-checkout" value={data?._m?.firstname} disabled name="firstname" />
-                            <input type="text" placeholder="Enter last name" className="input-checkout" value={data?._m?.lastname} disabled name="lastname" />
-                            <input type="text" placeholder="Enter email address" className="input-checkout" value={data?._m?.email} disabled name="email" />
-                            <div className="text-base lg:text-lg font-medium">
+                            
+                            <div className="w-full flex justify-center my-0 lg:my-4">
+                                <button onClick={() => {
+                                    pay();
+                                }} className="text-base py-3.5 text-white px-6 font-bold rounded-md shadow-lg flex items-center gap-1" style={{ backgroundColor: data?._m?.accentColor }}>
+                                    Pay {price(data?._m?.amount)}
+                                </button>
+                            </div>
+                            <div className="text-base w-full lg:text-lg text-center space-x-2 flex flex-col items-center gap-1 md:pb-8 font-medium">
                                 <span>If You Need more Explanation on {_.upperFirst(data?._m?.appName)}, or You have Any Issue with Making Payment, contact support by clicking on the below button</span>
-                                <Link target="_blank" to={decodeURIComponent(data?._m?.support).replace("{{message}}", encodeURIComponent(`Hello Agent, I have issue with making the final payment process for *${_.upperFirst(data?._m?.appName)} ${data?._m?.activePlanTitle}(NGN${data?._m?.amount})*. How can your help me out here?`))} className="inline-flex gap-0.5 items-center bg-red-500/35 underline underline-offset-2 text-sm py-1 text-gray-800 font-semibold px-2 rounded-md"> <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <Link target="_blank" to={decodeURIComponent(data?._m?.support).replace("{{message}}", encodeURIComponent(`Hello Agent, I have issue with making the final payment process for *${_.upperFirst(data?._m?.appName)} ${data?._m?.activePlanTitle}(NGN${data?._m?.amount})*. How can your help me out here?`))} className="inline-flex gap-0.5 items-center bg-emerald-500/25 underline underline-offset-2 text-sm py-1 text-gray-800 font-semibold px-2 rounded-md"> <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                     <path fillRule="evenodd" d="M12 2a7 7 0 0 0-7 7 3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1V9a5 5 0 1 1 10 0v7.083A2.919 2.919 0 0 1 14.083 19H14a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1a2 2 0 0 0 1.732-1h.351a4.917 4.917 0 0 0 4.83-4H19a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3 7 7 0 0 0-7-7Zm1.45 3.275a4 4 0 0 0-4.352.976 1 1 0 0 0 1.452 1.376 2.001 2.001 0 0 1 2.836-.067 1 1 0 1 0 1.386-1.442 4 4 0 0 0-1.321-.843Z" clipRule="evenodd" />
                                 </svg>
                                     Contact Support</Link>
                             </div>
-                            <div className="flex justify-end mt-8">
-                                <button onClick={() => {
-                                    pay();
-                                }} className="text-sm py-2 text-white px-4 rounded-md flex items-center gap-1" style={{ backgroundColor: data?._m?.accentColor }}>
-                                    <svg className="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2" />
-                                    </svg>
 
-                                    Pay Now
-                                </button>
-                            </div>
+                            
                         </div>
 
                     ) : paymentStatus.status === 'success' ? (
